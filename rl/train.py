@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
+from stable_baselines3.common.vec_env import VecNormalize
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -21,10 +22,11 @@ torch.set_num_threads(8)
 
 
 def export_npz(model, path):
-    """Actor weights as plain numpy arrays (deployment needs no torch): tanh MLP 55-256-256-2."""
+    """Actor weights as plain numpy arrays (deployment needs no torch): tanh MLP 59-256-256-45 logits."""
     p = model.policy
     ls = [p.mlp_extractor.policy_net[0], p.mlp_extractor.policy_net[2], p.action_net]
-    np.savez(path, **{f"{k}{i}": getattr(l, k).detach().numpy() for i, l in enumerate(ls) for k in ("weight", "bias")})
+    rms = model.get_vec_normalize_env().obs_rms
+    np.savez(path, obs_mean=rms.mean, obs_var=rms.var, **{f"{k}{i}": getattr(l, k).detach().numpy() for i, l in enumerate(ls) for k in ("weight", "bias")})
 
 
 class EvalCb(BaseCallback):
@@ -34,7 +36,7 @@ class EvalCb(BaseCallback):
         self.log = open(OUT / "eval.csv", "a")
 
     def _act(self, obs):
-        return self.model.predict(obs, deterministic=True)[0]
+        return self.model.predict(self.training_env.normalize_obs(obs), deterministic=True)[0]
 
     def _on_step(self):
         if self.num_timesteps - self.last < self.every:
@@ -57,9 +59,9 @@ if __name__ == "__main__":
     eval_pool = PL.build(PL.EVAL_SEEDS, HERE / "pool_eval.npz")
     base = EV.run_eval(eval_pool, EV.goto_goal, n_layouts=100)
     print("[baseline go-to-goal]", {k: round(v, 3) for k, v in base.items()}, flush=True)
-    env = E.ArenaVecEnv(train_pool, n_worlds=64, seed=0)
-    model = PPO("MlpPolicy", env, n_steps=128, batch_size=4096, n_epochs=4, learning_rate=lambda f: 5e-5 + (3e-4 - 5e-5) * f,
-                gamma=0.99, gae_lambda=0.95, ent_coef=0.002, clip_range=0.2, vf_coef=0.5, max_grad_norm=0.5,
+    env = VecNormalize(E.ArenaVecEnv(train_pool, n_worlds=64, seed=0), norm_obs=True, norm_reward=True, gamma=0.99, clip_obs=10.0)  # obs mean/var are exported with the weights; deploy.Policy applies them
+    model = PPO("MlpPolicy", env, n_steps=128, batch_size=2048, n_epochs=10, learning_rate=lambda f: 1e-4 + (3e-4 - 1e-4) * f,
+                gamma=0.99, gae_lambda=0.95, ent_coef=0.01, clip_range=0.2, vf_coef=0.5, max_grad_norm=0.5,
                 policy_kwargs=dict(net_arch=dict(pi=[256, 256], vf=[256, 256]), activation_fn=torch.nn.Tanh, log_std_init=-0.5),
                 verbose=1, seed=0, device="cpu")
     t0 = time.time()

@@ -14,6 +14,7 @@ import math
 
 import gymnasium as gym
 import numpy as np
+import shield as SH
 from stable_baselines3.common.vec_env import VecEnv
 
 DT, VMAX, WMAX = 0.1, 0.20, 2.5
@@ -22,7 +23,7 @@ ARENA_W, ARENA_H = 4.0, 3.0
 N_AG, N_OTH, N_POOL = 4, 3, 36
 RANGE_MIN, RANGE_MAX = 0.15, 2.0
 GOAL_TOL, GOAL_MIN_DIST = 0.12, 1.0
-OBS_DIM = N_POOL + 3 + 2 + 4 * N_OTH + 2   # lidar, goal, own v/w, others (rel pos + rel vel), previous action
+OBS_DIM = N_POOL + 3 + 2 + 4 * N_OTH + 2 + N_AG   # lidar, goal, own v/w, others (rel pos + rel vel, fixed ID order), previous action, own-ID one-hot
 OTHERS = np.array([[b for b in range(N_AG) if b != a] for a in range(N_AG)])
 _STEP = 2 * math.pi / 359  # Gazebo scan: 360 beams over [-pi, pi]
 BEAM_SUBSET = (1, 3, 5, 7, 9)  # beams used inside each 10-beam group; deploy.py reads exactly the same ones
@@ -30,6 +31,7 @@ RAY_IDX = np.array([[10 * j + k for k in BEAM_SUBSET] for j in range(N_POOL)])
 RAY_ANG = (-math.pi + RAY_IDX * _STEP).reshape(-1).astype(np.float32)
 RAYS_PER_GROUP = RAY_IDX.shape[1]
 F32 = np.float32
+from actions import CV, CW, N_ACT, VS, WS  # shared discrete (speed, turn-rate) table
 
 
 def obb_dist(px, py, ob):
@@ -41,12 +43,13 @@ def obb_dist(px, py, ob):
 
 
 class ArenaVecEnv(VecEnv):
-    def __init__(self, pool, n_worlds=64, seed=0, mode="train", max_steps=600, layout_life=3000, randomize=True, eval_idx=None):
+    def __init__(self, pool, n_worlds=64, seed=0, mode="train", max_steps=600, layout_life=3000, randomize=True, eval_idx=None, shield=True):
         self.pool, self.mode, self.max_steps, self.layout_life, self.randomize = pool, mode, max_steps, layout_life, randomize
         self.W = len(eval_idx) if mode == "eval" else n_worlds
+        self.shield, self.overrides = shield, 0.0
         self.rng = np.random.default_rng(seed)
         self.n_layouts = len(pool["obst"])
-        super().__init__(self.W * N_AG, gym.spaces.Box(-1.0, 1.0, (OBS_DIM,), F32), gym.spaces.Box(-1.0, 1.0, (2,), F32))
+        super().__init__(self.W * N_AG, gym.spaces.Box(-1.0, 1.0, (OBS_DIM,), F32), gym.spaces.Discrete(N_ACT))
         W = self.W
         self.lay = np.zeros(W, int)
         self.obst = np.zeros((W, pool["obst"].shape[1], 5), F32)
@@ -180,11 +183,10 @@ class ArenaVecEnv(VecEnv):
         if self.randomize and self.mode == "train":
             relr = relr + self.rng.normal(0, 0.01, relr.shape).astype(F32)
             relvr = relvr + self.rng.normal(0, 0.03, relvr.shape).astype(F32)
-        order = np.argsort(np.hypot(relr[..., 0], relr[..., 1]), axis=1)
         feat = np.concatenate([np.clip(relr / 3.0, -1, 1), np.clip(relvr / 0.4, -1, 1)], -1)
-        others = np.take_along_axis(feat, order[..., None], 1).reshape(P, -1)
+        others = feat.reshape(P, -1)  # fixed slots: other robots in ascending ID order, so a slot always means the same robot
         own = np.stack([self.v[wi, ai] / VMAX, self.w[wi, ai] / WMAX], -1)
-        return np.concatenate([lidar, gl, own, others, self.prev_act[wi, ai]], -1).astype(F32)
+        return np.concatenate([lidar, gl, own, others, self.prev_act[wi, ai], np.eye(N_AG, dtype=F32)[ai]], -1).astype(F32)
 
     def _all_obs(self):
         wi, ai = np.meshgrid(np.arange(self.W), np.arange(N_AG), indexing="ij")
@@ -197,11 +199,24 @@ class ArenaVecEnv(VecEnv):
         return self._all_obs()
 
     def step_async(self, actions):
-        self.actions = np.clip(np.asarray(actions, F32), -1, 1).reshape(self.W, N_AG, 2)
+        """actions: int indices (N,) into the discrete (v, w) table, or continuous (N,2) = (v/VMAX*2-1, w/WMAX) which is snapped to the nearest entry."""
+        a = np.asarray(actions)
+        if a.ndim == 2:
+            v, w = (np.clip(a[:, 0], -1, 1) + 1) / 2 * VMAX, np.clip(a[:, 1], -1, 1) * WMAX
+            a = ((v[:, None] - CV[None]) ** 2 / VMAX ** 2 + (w[:, None] - CW[None]) ** 2 / WMAX ** 2).argmin(1)
+        self.actions = a.reshape(self.W, N_AG).astype(int)
+        if self.shield:  # inter-robot safety layer: same information the overhead camera provides on the real system
+            W, N = self.W, self.W * N_AG
+            widx, oth = np.repeat(np.arange(W), N_AG), OTHERS[np.tile(np.arange(N_AG), W)]
+            ov, oy = self.v[widx[:, None], oth], self.yaw[widx[:, None], oth]
+            new = SH.apply(self.pos.reshape(N, 2), self.yaw.reshape(N), self.pos[widx[:, None], oth], np.stack([ov * np.cos(oy), ov * np.sin(oy)], -1), self.actions.reshape(N))
+            self.overrides = float((new != self.actions.reshape(N)).mean())
+            self.actions = new.reshape(W, N_AG)
 
     def step_wait(self):
-        W, a = self.W, self.actions
-        cmd = np.stack([(a[..., 0] + 1) / 2 * VMAX, a[..., 1] * WMAX], -1) * self.speed_scale[..., None]
+        W, idx = self.W, self.actions
+        a = np.stack([CV[idx] / VMAX * 2 - 1, CW[idx] / WMAX], -1)   # normalised (v, w) of the chosen motion, as used in obs/reward
+        cmd = np.stack([CV[idx], CW[idx]], -1) * self.speed_scale[..., None]
         applied = np.where(self.delay[..., None], self.cmd_prev, cmd)
         self.cmd_prev = cmd
         run = self.active
@@ -218,14 +233,29 @@ class ArenaVecEnv(VecEnv):
         d_wall = np.minimum(ARENA_W / 2 - np.abs(self.pos[..., 0]), ARENA_H / 2 - np.abs(self.pos[..., 1]))
         pd = np.hypot(self.pos[:, :, None, 0] - self.pos[:, None, :, 0], self.pos[:, :, None, 1] - self.pos[:, None, :, 1])
         pd[:, np.arange(N_AG), np.arange(N_AG)] = np.inf
-        d_rob = pd.min(-1) - R_ROBOT                                             # gap between robot surfaces (both radius R)
-        clearance = np.minimum(np.minimum(d_ob, d_wall) - R_ROBOT, d_rob)
+        d_rob = pd.min(-1) - 2 * R_ROBOT                                         # gap between the two chassis surfaces (each radius R)
+        clearance = np.minimum(np.minimum(d_ob, d_wall) - R_ROBOT, d_rob)   # metres between chassis and nearest thing; < 0 = contact
         collided = run & (clearance < 0)
         d_goal = np.hypot(*(self.goal - self.pos).transpose(2, 0, 1))
         reached = run & ~collided & (d_goal < GOAL_TOL)
         timeout = run & ~collided & ~reached & (self.t >= self.max_steps)
 
-        rew = 10.0 * (self.d_prev - d_goal) - 0.01 - 0.15 * np.clip((0.3 - clearance) / 0.3, 0, 1) - 0.01 * np.abs(a[..., 1] - self.prev_act[..., 1])
+        # early-warning shaping: closest approach to each other robot within the next 3 s on current velocities
+        vel = np.stack([self.v * np.cos(self.yaw), self.v * np.sin(self.yaw)], -1)
+        rp = self.pos[:, None, :, :] - self.pos[:, :, None, :]            # position of b relative to a
+        ru = vel[:, None, :, :] - vel[:, :, None, :]
+        uu, pu = (ru * ru).sum(-1), (rp * ru).sum(-1)
+        tstar = np.clip(-pu / np.maximum(uu, 1e-6), 0, 3.0)
+        cpa = np.linalg.norm(rp + ru * tstar[..., None], axis=-1)
+        risk = np.clip((0.45 - cpa) / (0.45 - 2 * R_ROBOT), 0, 1) * ((uu > 1e-4) & (pu < 0))
+        risk[:, np.arange(N_AG), np.arange(N_AG)] = 0
+        ttc_pen = 0.3 * risk.max(-1)
+        # traffic convention (keep right): when another robot ahead is on a collision course, penalise not turning right,
+        # so head-on meetings resolve instead of both robots averaging "left" and "right" into "straight"
+        bearing = np.arctan2(rp[..., 1], rp[..., 0]) - self.yaw[:, :, None]
+        ahead = np.abs((bearing + np.pi) % (2 * np.pi) - np.pi) < math.radians(70)
+        right_pen = 0.15 * (risk * ahead).max(-1) * (1 + a[..., 1]) / 2        # a[...,1] = +1 is full left turn, -1 full right
+        rew = 10.0 * (self.d_prev - d_goal) - 0.01 - 0.15 * np.clip((0.3 - clearance) / 0.3, 0, 1) - ttc_pen - right_pen - 1.0 * np.clip((0.10 - clearance) / 0.10, 0, 1)  # ttc_pen: predicted-collision shaping; 2nd term: stay out of the lidar's 0.15 m blind zone - 0.01 * np.abs(a[..., 1] - self.prev_act[..., 1])
         rew = np.where(reached, rew + 10.0, np.where(collided, -15.0, rew)) * run
         self.d_prev = d_goal.astype(F32)
         self.prev_act = a.copy()

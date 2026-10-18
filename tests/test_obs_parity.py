@@ -17,8 +17,9 @@ worst = 0.0
 for n in range(env.num_envs):
     w, a = divmod(n, E.N_AG)
     vel = lambda ww, aa: np.stack([env.v[ww, aa] * np.cos(env.yaw[ww, aa]), env.v[ww, aa] * np.sin(env.yaw[ww, aa])], -1)
-    dep = D.obs_from_sensors(raw[n], env.pos[w, a], env.yaw[w, a], env.goal[w, a], env.pos[w, E.OTHERS[a]], vel(w, a), vel(w, E.OTHERS[a]), env.v[w, a], env.w[w, a], env.prev_act[w, a])
+    dep = D.obs_from_sensors(raw[n], env.pos[w, a], env.yaw[w, a], env.goal[w, a], env.pos[w, E.OTHERS[a]], vel(w, a), vel(w, E.OTHERS[a]), env.v[w, a], env.w[w, a], env.prev_act[w, a], a)
     worst = max(worst, np.abs(dep - fast[n]).max())
 print(f"deploy obs (from raw 360-beam scan + camera/odom inputs) vs training obs: max abs diff {worst:.2e}")
 assert worst < 1e-4
-print("PARITY OK")
+assert np.array_equal(D.CV, E.CV) and np.array_equal(D.CW, E.CW), "discrete action tables differ"
+print("PARITY OK (observations + action table)")

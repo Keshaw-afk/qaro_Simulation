@@ -77,7 +77,7 @@ def run_layout(policy, seed, video=None):
                 others = np.array([cam[j][:2] for j in range(4) if j != i])
                 others_vel = np.array([vel[j] for j in range(4) if j != i])
                 od = sim.odom(n)
-                obs = D.obs_from_sensors(sim.scan(n), (x, y), yaw, goals[i], others, vel[i], others_vel, od[3], od[4], prev[i])
+                obs = D.obs_from_sensors(sim.scan(n), (x, y), yaw, goals[i], others, vel[i], others_vel, od[3], od[4], prev[i], i)
                 a = policy(obs)[0]
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))

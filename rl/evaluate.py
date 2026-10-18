@@ -4,9 +4,9 @@ import numpy as np
 import arena_env as E
 
 
-def run_eval(pool, act_fn, n_layouts=100, seed=0, max_steps=900):
+def run_eval(pool, act_fn, n_layouts=100, seed=0, max_steps=900, shield=True):
     """act_fn(obs[N,49]) -> actions[N,2]. Returns per-robot rates over n_layouts x 4 robots."""
-    env = E.ArenaVecEnv(pool, mode="eval", eval_idx=np.arange(n_layouts), max_steps=max_steps, seed=seed, randomize=False)
+    env = E.ArenaVecEnv(pool, mode="eval", eval_idx=np.arange(n_layouts), max_steps=max_steps, seed=seed, randomize=False, shield=shield)
     obs = env.reset()
     for _ in range(max_steps):
         env.step_async(act_fn(obs))
