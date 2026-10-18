@@ -2,6 +2,7 @@
 import sys
 
 import layout as L
+import tags
 from robot_sdf import robot_sdf
 
 FOREST_GREEN = "0.13 0.37 0.13 1"
@@ -19,25 +20,34 @@ def _static_box(name, x, y, z, sx, sy, sz, yaw, rgba):
       <collision name="c"><geometry><box><size>{sx} {sy} {sz}</size></box></geometry></collision></link></model>"""
 
 
-def _goal_marker(i, x, y, color):
-    r, g, b = __import__("robot_sdf").COLORS[color]
-    rgba = f"{r} {g} {b} 1"
+GOAL_TAG_SIZE, GOAL_TAG_Z = 0.20, 0.002
+CAM_Z, CAM_HFOV, CAM_W, CAM_H = 2.5, 1.45, 1280, 960
+
+
+def _goal_marker(i, x, y):
     return f"""
-  <model name="goal_{i + 1}"><static>true</static><pose>{x} {y} 0.001 0 0 0</pose>
-    <link name="l"><visual name="v"><geometry><cylinder><radius>0.10</radius><length>0.002</length></cylinder></geometry>
-      <material><ambient>{rgba}</ambient><diffuse>{rgba}</diffuse></material></visual></link></model>"""
+  <model name="goal_{i + 1}"><static>true</static><pose>{x} {y} 0 0 0 0</pose>
+    <link name="l">{tags.board_visual("v", GOAL_TAG_SIZE, 0, 0, GOAL_TAG_Z, 4 + i)}</link></model>"""
+
+
+CAMERA = f"""
+  <model name="overhead_cam"><static>true</static><pose>0 0 {CAM_Z} -1.5707963 1.5707963 0</pose>
+    <link name="l"><sensor name="cam" type="camera"><topic>/overhead/image</topic><update_rate>10</update_rate><always_on>true</always_on>
+      <camera><horizontal_fov>{CAM_HFOV}</horizontal_fov><image><width>{CAM_W}</width><height>{CAM_H}</height><format>R8G8B8</format></image>
+        <clip><near>0.1</near><far>10</far></clip></camera></sensor></link></model>"""
 
 
 def world_sdf(lay, real_time=False):
     w, h = lay.arena
     body = ""
     for i, (x, y, yaw) in enumerate(lay.starts):
-        body += robot_sdf(f"r{i + 1}", ROBOT_COLORS[i], x, y, yaw)
+        body += robot_sdf(f"r{i + 1}", ROBOT_COLORS[i], x, y, yaw, tag_id=i)
     for i, (x, y) in enumerate(lay.goals):
-        body += _goal_marker(i, x, y, ROBOT_COLORS[i])
+        body += _goal_marker(i, x, y)
     for i, ob in enumerate(lay.obstacles):
         x, y, sx, sy, yaw = ob
         body += _static_box(f"obstacle_{i}", x, y, OBSTACLE_H / 2, sx, sy, OBSTACLE_H, yaw, PINK)
+    body += CAMERA
     for name, x, y, sx, sy in [("wall_n", 0, h / 2 + WALL_T / 2, w + 2 * WALL_T, WALL_T),
                                ("wall_s", 0, -h / 2 - WALL_T / 2, w + 2 * WALL_T, WALL_T),
                                ("wall_e", w / 2 + WALL_T / 2, 0, WALL_T, h),

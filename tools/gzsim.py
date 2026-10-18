@@ -8,8 +8,11 @@ import math
 import threading
 import time
 
+import numpy as np
+
 from gz.msgs10.boolean_pb2 import Boolean
 from gz.msgs10.clock_pb2 import Clock
+from gz.msgs10.image_pb2 import Image
 from gz.msgs10.laserscan_pb2 import LaserScan
 from gz.msgs10.odometry_pb2 import Odometry
 from gz.msgs10.pose_v_pb2 import Pose_V
@@ -28,7 +31,7 @@ def _yaw_pitch_roll(q):
 
 
 class GzSim:
-    def __init__(self, robots, world="arena"):
+    def __init__(self, robots, world="arena", camera=False):
         self.node, self.world, self.robots = Node(), world, list(robots)
         self._lock = threading.Lock()
         self._clock, self._poses, self._scans, self._odoms = 0.0, {}, {}, {}
@@ -38,6 +41,9 @@ class GzSim:
         for r in self.robots:
             assert self.node.subscribe(LaserScan, f"/{r}/scan", lambda m, r=r: self._on_scan(r, m))
             assert self.node.subscribe(Odometry, f"/{r}/odom", lambda m, r=r: self._on_odom(r, m))
+        self._image = None
+        if camera:
+            assert self.node.subscribe(Image, "/overhead/image", self._on_image)
         self._pubs = {r: self.node.advertise(f"/{r}/cmd_vel", Twist) for r in self.robots}
         self.wait_for(lambda: self._poses and all(r in self._scans for r in self.robots), 30, "sim topics")
 
@@ -59,6 +65,16 @@ class GzSim:
         with self._lock:
             self._scans[r] = list(m.ranges)
             self._scan_stamp[r] = self._clock
+
+    def _on_image(self, m):
+        img = np.frombuffer(m.data, np.uint8).reshape(m.height, m.width, 3).copy()
+        with self._lock:
+            self._image = img
+
+    def image(self):
+        """Latest overhead RGB frame (H, W, 3) or None."""
+        with self._lock:
+            return self._image
 
     def _on_odom(self, r, m):
         with self._lock:

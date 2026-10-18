@@ -4,6 +4,8 @@ import pathlib
 
 import yaml
 
+import tags
+
 CFG = yaml.safe_load((pathlib.Path(__file__).parent.parent / "config" / "robot.yaml").read_text())
 
 COLORS = {  # chassis colours from the spec; wheels and lidar are always black
@@ -20,7 +22,10 @@ def _cyl_inertia(m, r, h):  # about the cylinder axis / transverse
     return 0.5 * m * r * r, m * (3 * r * r + h * h) / 12
 
 
-def robot_sdf(name, color, x, y, yaw):
+TAG_BOARD, TAG_Z = 0.12, 0.195  # tag board sits above the lidar scan plane (0.17 m), so it never blocks the scan
+
+
+def robot_sdf(name, color, x, y, yaw, tag_id=None):
     c = CFG
     ch = c["chassis_z_top"] - c["chassis_z_bottom"]
     chz = c["chassis_z_bottom"] + ch / 2
@@ -61,6 +66,7 @@ def robot_sdf(name, color, x, y, yaw):
       <visual name="lidar_body"><pose>{c['lidar_x']} 0 {lz} 0 0 0</pose>
         <geometry><cylinder><radius>{c['lidar_radius']}</radius><length>{c['lidar_height']}</length></cylinder></geometry>
         <material><ambient>{black}</ambient><diffuse>{black}</diffuse></material></visual>
+      {tags.board_visual('tag', TAG_BOARD, 0, 0, TAG_Z, tag_id) if tag_id is not None else ''}
       <collision name="caster_col"><pose>{c['caster_x']} 0 {wr} 0 0 0</pose>
         <geometry><sphere><radius>{wr}</radius></sphere></geometry>
         <surface><friction><ode><mu>0.0</mu><mu2>0.0</mu2></ode></friction></surface></collision>
