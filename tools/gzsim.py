@@ -35,7 +35,7 @@ class GzSim:
         self.node, self.world, self.robots = Node(), world, list(robots)
         self._lock = threading.Lock()
         self._clock, self._poses, self._scans, self._odoms = 0.0, {}, {}, {}
-        self._scan_stamp = {r: -1.0 for r in self.robots}
+        self._scan_n, self._image_n, self._camera = {r: 0 for r in self.robots}, 0, camera
         assert self.node.subscribe(Clock, "/clock", self._on_clock)
         assert self.node.subscribe(Pose_V, f"/world/{world}/pose/info", self._on_pose)
         for r in self.robots:
@@ -64,12 +64,13 @@ class GzSim:
     def _on_scan(self, r, m):
         with self._lock:
             self._scans[r] = list(m.ranges)
-            self._scan_stamp[r] = self._clock
+            self._scan_n[r] += 1
 
     def _on_image(self, m):
         img = np.frombuffer(m.data, np.uint8).reshape(m.height, m.width, 3).copy()
         with self._lock:
             self._image = img
+            self._image_n += 1
 
     def image(self):
         """Latest overhead RGB frame (H, W, 3) or None."""
@@ -79,7 +80,7 @@ class GzSim:
     def _on_odom(self, r, m):
         with self._lock:
             yaw, _, _ = _yaw_pitch_roll(m.pose.orientation)
-            self._odoms[r] = (m.pose.position.x, m.pose.position.y, yaw)
+            self._odoms[r] = (m.pose.position.x, m.pose.position.y, yaw, m.twist.linear.x, m.twist.angular.z)
 
     # --- control -------------------------------------------------------------------------
     def wait_for(self, cond, timeout, what=""):
@@ -95,13 +96,15 @@ class GzSim:
         with self._lock:
             return self._clock
 
-    def step(self, n=1):
+    def step(self, n=1, sync_sensors=True):
         """Advance exactly n physics steps; return once the clock has caught up.
 
         gz-transport sometimes loses the *reply* to a world-control request even though the request ran, so
         success is judged by the sim clock, never the reply. A request is only re-sent if the clock did not
         move at all (a genuinely lost request), which keeps stepping exact."""
         target = self.sim_time() + n * STEP_DT - 1e-6
+        with self._lock:
+            scans0, img0 = dict(self._scan_n), self._image_n
         for _ in range(40):
             req = WorldControl()
             req.pause = True  # an unset pause flag un-pauses the world, so always send it with the step
@@ -109,10 +112,16 @@ class GzSim:
             self.node.request(f"/world/{self.world}/control", req, WorldControl, Boolean, 200)
             try:
                 self.wait_for(lambda: self._clock >= target, 1.0, "clock")
-                return
+                break
             except TimeoutError:
                 continue  # the clock never moved, so the request itself was lost
-        raise RuntimeError("world control never advanced the clock")
+        else:
+            raise RuntimeError("world control never advanced the clock")
+        if sync_sensors and n >= 20:  # sensors tick at 10 Hz (every 20 steps): wait until this step's readings arrived
+            try:
+                self.wait_for(lambda: all(self._scan_n[r] > scans0[r] for r in self.robots) and (not self._camera or self._image_n > img0), 3.0, "sensor update")
+            except TimeoutError:
+                pass
 
     def set_paused(self, paused):
         req = WorldControl()

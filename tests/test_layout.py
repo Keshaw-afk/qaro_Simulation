@@ -34,4 +34,10 @@ assert not L.validate(lay), "boxed-in start was accepted"
 lay2 = L.generate_layout(8)
 lay2.obstacles.append((lay2.goals[1][0], lay2.goals[1][1], 0.3, 0.3, 0.0))
 assert not L.validate(lay2), "goal inside an obstacle was accepted"
+lay3 = L.generate_layout(9)
+gx, gy = lay3.goals[0]; far = math.hypot(gx, gy)
+lay3.obstacles = [(gx + 0.25 * gx / far, gy + 0.25 * gy / far, 0.3, 0.3, 0.0)]   # tall box just beyond the goal, away from the camera
+assert not L.goal_visible(lay3, lay3.goals[0]), "occluded goal reported visible"
+assert all(L.goal_visible(L.generate_layout(s), g) for s in range(20) for g in L.generate_layout(s).goals)
+print("goal-visibility tests passed")
 print("negative tests passed (boxed-in start and goal-in-obstacle both rejected)")

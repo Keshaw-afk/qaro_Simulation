@@ -23,6 +23,7 @@ OBSTACLE_SIDE = (0.15, 0.60)  # random side lengths, metres
 OBSTACLE_COUNT = (3, 8)
 MIN_START_SEP, MIN_GOAL_SEP, MIN_START_GOAL = 0.5, 0.5, 1.0
 WALL_MARGIN = 0.25            # starts/goals keep this far from the walls
+CAM_Z, OBSTACLE_H, TAG_HALF = 2.5, 0.4, 0.1  # overhead camera height, obstacle height, goal-tag half size (must match gen_world.py)
 
 
 @dataclass
@@ -79,6 +80,21 @@ def validate(layout):
     return len(comps) == 1
 
 
+def goal_visible(lay, g):
+    """True if the overhead camera (above the arena centre) has a clear line of sight to the goal tag at floor level:
+    tall obstacles seen at an angle hide a strip of floor behind them."""
+    for frac in np.linspace(1 - OBSTACLE_H / CAM_Z, 0.999, 25):  # points on the camera-to-goal ray that are below obstacle-top height
+        if any(_box_dist(np.array(frac * g[0]), np.array(frac * g[1]), ob) <= 0.0 for ob in lay.obstacles):
+            return False
+    # tag footprint at floor level must not lie inside an obstacle's shadow either: test the tag's four corner rays
+    for dx, dy in ((TAG_HALF, TAG_HALF), (-TAG_HALF, TAG_HALF), (TAG_HALF, -TAG_HALF), (-TAG_HALF, -TAG_HALF)):
+        for frac in np.linspace(1 - OBSTACLE_H / CAM_Z, 0.999, 20):
+            px, py = frac * (g[0] + dx), frac * (g[1] + dy)
+            if any(_box_dist(np.array(px), np.array(py), ob) <= 0.0 for ob in lay.obstacles):
+                return False
+    return True
+
+
 def _sample_points(rng, layout, n, min_sep, avoid=()):
     w, h = layout.arena
     blocked = blocked_map(layout, ROBOT_RADIUS + CLEARANCE_MARGIN)
@@ -128,7 +144,7 @@ def generate_layout(seed, n_obstacles=None):
             continue
         lay.starts = [(x, y, float(rng.uniform(-math.pi, math.pi))) for x, y in starts]
         lay.goals = goals
-        if validate(lay):
+        if validate(lay) and all(goal_visible(lay, g) for g in goals):
             return lay
     raise RuntimeError(f"could not generate a valid layout for seed {seed}")
 

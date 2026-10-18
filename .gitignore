@@ -7,3 +7,4 @@ worlds/*_rt.sdf
 runs/
 checkpoints/*.zip
 *.log
+rl/pool_*.npz

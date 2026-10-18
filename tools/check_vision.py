@@ -9,7 +9,7 @@ TMP = pathlib.Path(os.environ.get("TMPDIR", "/tmp"))
 NAMES = [f"r{i}" for i in range(1, 5)]
 wrap = lambda a: (a + math.pi) % (2 * math.pi) - math.pi
 pos_err, yaw_err, missed, total = [], [], 0, 0
-for k, seed in enumerate([3, 11, 12]):
+for k, seed in enumerate([0, 3, 11, 12, 20]):
     lay = L.generate_layout(seed)
     (TMP / "cv.sdf").write_text(gen_world.world_sdf(lay))
     p = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(TMP / "cv.sdf")], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
@@ -36,7 +36,7 @@ for k, seed in enumerate([3, 11, 12]):
     finally:
         p.terminate(); subprocess.run(["bash", str(pathlib.Path(__file__).parent / "killsim.sh")], capture_output=True)
 import numpy as np
-print(f"detected {total - missed}/{total} tags (4 robots + 4 goals x 3 layouts)")
+print(f"detected {total - missed}/{total} tags (4 robots + 4 goals x 5 layouts)")
 if pos_err:
     print(f"position error: mean {np.mean(pos_err)*100:.1f} cm, max {np.max(pos_err)*100:.1f} cm")
-    ye = np.array(yaw_err); print(f"yaw error (raw, before offset): mean {np.degrees(np.angle(np.exp(1j*ye).mean())):.1f} deg, spread (std) {np.degrees(ye.std()):.1f} deg")
+    ye = np.array(yaw_err); print(f"yaw error: mean {np.degrees(np.angle(np.exp(1j*ye).mean())):.1f} deg, spread (std) {np.degrees(ye.std()):.1f} deg")
