@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+<world name="arena">
+  <physics name="p" type="dart"><max_step_size>0.005</max_step_size><real_time_factor>0</real_time_factor></physics>
+  <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+  <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+  <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+  <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"><render_engine>ogre2</render_engine></plugin>
+  <light type="directional" name="sun"><cast_shadows>true</cast_shadows><pose>0 0 10 0 0 0</pose>
+    <diffuse>0.9 0.9 0.9 1</diffuse><specular>0.2 0.2 0.2 1</specular><direction>-0.3 0.2 -1</direction></light>
+  <model name="ground"><static>true</static><link name="l">
+    <collision name="c"><geometry><plane><normal>0 0 1</normal><size>4.0 3.0</size></plane></geometry></collision>
+    <visual name="v"><geometry><plane><normal>0 0 1</normal><size>4.0 3.0</size></plane></geometry>
+      <material><ambient>0.13 0.37 0.13 1</ambient><diffuse>0.13 0.37 0.13 1</diffuse></material></visual></link></model>
+  <model name="r1">
+    <pose>-1.0 0.0 0 0 0 0.0</pose>
+    <link name="base_link">
+      <inertial><pose>-0.03 0 0.085 0 0 0</pose><mass>1.129</mass>
+        <inertia><ixx>0.0041373145833333335</ixx><iyy>0.0041373145833333335</iyy><izz>0.0050946125</izz></inertia></inertial>
+      <visual name="chassis"><pose>0 0 0.085 0 0 0</pose>
+        <geometry><cylinder><radius>0.095</radius><length>0.13</length></cylinder></geometry>
+        <material><ambient>0.85 0.05 0.05 1</ambient><diffuse>0.85 0.05 0.05 1</diffuse></material></visual>
+      <collision name="chassis_col"><pose>0 0 0.085 0 0 0</pose>
+        <geometry><cylinder><radius>0.095</radius><length>0.13</length></cylinder></geometry></collision>
+      <visual name="lidar_body"><pose>-0.03275 0 0.17 0 0 0</pose>
+        <geometry><cylinder><radius>0.035</radius><length>0.04</length></cylinder></geometry>
+        <material><ambient>0.02 0.02 0.02 1</ambient><diffuse>0.02 0.02 0.02 1</diffuse></material></visual>
+      <collision name="caster_col"><pose>-0.0767 0 0.0325 0 0 0</pose>
+        <geometry><sphere><radius>0.0325</radius></sphere></geometry>
+        <surface><friction><ode><mu>0.0</mu><mu2>0.0</mu2></ode></friction></surface></collision>
+      <sensor name="lidar" type="gpu_lidar">
+        <pose>-0.03275 0 0.17 0 0 0</pose>
+        <topic>/r1/scan</topic>
+        <update_rate>10</update_rate>
+        <always_on>true</always_on>
+        <lidar>
+          <scan><horizontal><samples>360</samples><resolution>1</resolution>
+            <min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal></scan>
+          <range><min>0.15</min><max>2.0</max><resolution>0.01</resolution></range>
+        </lidar>
+      </sensor>
+    </link>
+    <link name="left_wheel">
+      <pose relative_to="base_link">0 0.0778 0.0325 -1.5707963 0 0</pose>
+      <inertial><mass>0.05</mass><inertia><ixx>1.580729166666667e-05</ixx><iyy>1.580729166666667e-05</iyy><izz>2.6406250000000005e-05</izz></inertia></inertial>
+      <visual name="v"><geometry><cylinder><radius>0.0325</radius><length>0.025</length></cylinder></geometry>
+        <material><ambient>0.02 0.02 0.02 1</ambient><diffuse>0.02 0.02 0.02 1</diffuse></material></visual>
+      <collision name="c"><geometry><cylinder><radius>0.0325</radius><length>0.025</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface></collision>
+    </link>
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>base_link</parent><child>left_wheel</child>
+      <axis><xyz>0 0 1</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+    <link name="right_wheel">
+      <pose relative_to="base_link">0 -0.0778 0.0325 -1.5707963 0 0</pose>
+      <inertial><mass>0.05</mass><inertia><ixx>1.580729166666667e-05</ixx><iyy>1.580729166666667e-05</iyy><izz>2.6406250000000005e-05</izz></inertia></inertial>
+      <visual name="v"><geometry><cylinder><radius>0.0325</radius><length>0.025</length></cylinder></geometry>
+        <material><ambient>0.02 0.02 0.02 1</ambient><diffuse>0.02 0.02 0.02 1</diffuse></material></visual>
+      <collision name="c"><geometry><cylinder><radius>0.0325</radius><length>0.025</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface></collision>
+    </link>
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>base_link</parent><child>right_wheel</child>
+      <axis><xyz>0 0 1</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint><right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.1556</wheel_separation>
+      <wheel_radius>0.0325</wheel_radius>
+      <max_linear_velocity>0.2</max_linear_velocity>
+      <min_linear_velocity>-0.2</min_linear_velocity>
+      <max_angular_velocity>2.5</max_angular_velocity>
+      <min_angular_velocity>-2.5</min_angular_velocity>
+      <topic>/r1/cmd_vel</topic><odom_topic>/r1/odom</odom_topic>
+      <tf_topic>/r1/tf</tf_topic>
+      <frame_id>r1/odom</frame_id><child_frame_id>r1/base_link</child_frame_id>
+      <odom_publisher_frequency>50</odom_publisher_frequency>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/r1/joint_states</topic>
+      <joint_name>left_wheel_joint</joint_name><joint_name>right_wheel_joint</joint_name>
+    </plugin>
+  </model>
+  <model name="obstacle_0"><static>true</static><pose>0.0 0.0 0.2 0 0 0</pose>
+    <link name="l"><visual name="v"><geometry><box><size>0.3 0.3 0.4</size></box></geometry>
+      <material><ambient>1.0 0.41 0.71 1</ambient><diffuse>1.0 0.41 0.71 1</diffuse></material></visual>
+      <collision name="c"><geometry><box><size>0.3 0.3 0.4</size></box></geometry></collision></link></model>
+</world>
+</sdf>

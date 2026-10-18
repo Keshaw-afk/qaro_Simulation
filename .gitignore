@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+# generated worlds (regenerate with tools/gen_world.py); keep milestone worlds explicitly if needed
+worlds/*_rt.sdf
+# training artifacts
+runs/
+checkpoints/*.zip
+*.log

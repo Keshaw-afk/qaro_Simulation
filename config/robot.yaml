@@ -1,0 +1,22 @@
+# TortoiseBot (RigBetel Labs) physical parameters. SOURCED = from rigbetellabs/tortoisebot
+# (wiki + tortoisebotreal.xacro); ESTIMATED = measured from photos in my_gifts/physical_robot_photos.
+wheel_radius: 0.0325        # SOURCED (65 mm diameter wheels)
+wheel_width: 0.025          # SOURCED (25 mm thickness)
+wheel_separation: 0.1556    # SOURCED (xacro: wheel joints at y = +/-0.0778)
+base_mass: 1.129            # SOURCED (xacro base_link)
+wheel_mass: 0.05            # ESTIMATED
+max_linear_speed: 0.20      # DERIVED: 60 RPM BO motor * pi * 0.065 m = 0.204 m/s
+max_angular_speed: 2.5      # DERIVED: 2 * v_max / separation = 2.6 rad/s
+caster_x: -0.0767           # SOURCED (xacro castor_joint)
+chassis_radius: 0.095       # ESTIMATED (plates look ~19-20 cm wide)
+chassis_z_bottom: 0.020     # ESTIMATED
+chassis_z_top: 0.150        # ESTIMATED (3 plates, 45 mm spacers)
+lidar_x: -0.03275           # SOURCED (xacro lidar_joint)
+lidar_z: 0.170              # SOURCED origin 0.167; scan plane taken just above it
+lidar_radius: 0.035         # ESTIMATED (YDLIDAR X2-class head)
+lidar_height: 0.040         # ESTIMATED
+lidar_min_range: 0.15       # spec
+lidar_max_range: 2.0        # spec
+lidar_samples: 360          # 1 deg resolution, downsampled for the policy later
+lidar_rate_hz: 10
+com_x: -0.03               # ESTIMATED: centre of mass between wheel axle (x=0) and rear caster (x=-0.0767); needed for a 1-caster robot not to tip
