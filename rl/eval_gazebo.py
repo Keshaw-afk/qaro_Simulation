@@ -8,6 +8,8 @@ import numpy as np
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / "tools"), str(ROOT / "rl")]
 import deploy as D
+import shield as SH
+from actions import CV, CW
 import gen_world, layout as L, vision
 from gzsim import GzSim
 
@@ -78,7 +80,8 @@ def run_layout(policy, seed, video=None):
                 others_vel = np.array([vel[j] for j in range(4) if j != i])
                 od = sim.odom(n)
                 obs = D.obs_from_sensors(sim.scan(n), (x, y), yaw, goals[i], others, vel[i], others_vel, od[3], od[4], prev[i], i)
-                a = policy(obs)[0]
+                k = SH.apply(np.array([[x, y]]), np.array([yaw]), others[None], others_vel[None], policy.index(obs))[0]  # inter-robot safety layer
+                a = np.array([CV[k] / D.VMAX * 2 - 1, CW[k] / D.WMAX], np.float32)
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))
             sim.step(20)
