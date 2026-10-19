@@ -47,7 +47,7 @@ Environment variables of `eval_gazebo.py`: `SNR_LIVE=1` open the Gazebo GUI and 
 ## Pitfalls (each cost time once)
 - Never run `pkill -f 'gz sim'` inside a command whose text contains `gz sim`: it kills your own shell. Use `tools/killsim.sh`.
 - Run one simulator at a time; stale `gz sim` processes silently corrupt tests. Check with `pgrep -af "[g]z sim"`.
-- The simulator is paused and stepped manually; do not press play in the Gazebo GUI.
+- Headless evaluation: the simulator is paused and stepped manually (`GzSim.step`). Live mode (`SNR_LIVE=1`): `GzSim.play()` un-pauses it, the world file uses real-time factor 1, and `step()` just waits for the sim clock. If the machine is too slow the world simply runs below real time.
 - `runs/gazebo_results.json` is overwritten by every Gazebo evaluation.
 - Wheel link roll must stay -1.5707963 (otherwise the robot drives backwards while odometry says forward); centre of mass x = -0.03 keeps it from tipping.
 - Decoding AprilTags needs the multi-scale search in `vision.py`; a single scale misses some ids.

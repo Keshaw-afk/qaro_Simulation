@@ -12,6 +12,7 @@ What it does
 How it works: it never imports the RL code. Each run is a subprocess of the existing scripts, configured through
 command-line arguments and the environment variables documented in eval_gazebo.py (SNR_LIVE, SNR_FIRST, SNR_SHIELD).
 Gazebo runs need ROS sourced, so they are started through `bash -c "source /opt/ros/jazzy/setup.bash && ..."`.
+With the Gazebo window open the world plays in real time; without it runs are stepped for speed.
 Only one run at a time is allowed (two simulators would share topics and corrupt each other).
 """
 import json

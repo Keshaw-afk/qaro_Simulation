@@ -10,7 +10,7 @@ sys.path[:0] = [str(ROOT / "tools"), str(ROOT / "rl")]
 import deploy as D
 import shield as SH
 from actions import CV, CW
-LIVE = bool(os.environ.get("SNR_LIVE"))              # open the Gazebo GUI and run at about real time
+LIVE = bool(os.environ.get("SNR_LIVE"))              # open the Gazebo GUI; the world plays in real time (not lockstep)
 USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
 import gen_world, layout as L, vision
 from gzsim import GzSim
@@ -32,17 +32,19 @@ def clearance(lay, pos, i):
 def run_layout(policy, seed, video=None):
     lay = L.generate_layout(seed)
     sdf = TMP / f"eval_{seed}.sdf"
-    sdf.write_text(gen_world.world_sdf(lay))
+    sdf.write_text(gen_world.world_sdf(lay, real_time=LIVE))
     proc = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(sdf)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
     gui = None
     try:
         sim = GzSim(NAMES, camera=True)
-        if LIVE:  # watch it: attach the Gazebo GUI to this server (it stays paused between our steps; do not press play)
+        if LIVE:  # watch it: attach the Gazebo GUI to this server (in live mode the world is playing in real time; otherwise it is stepped while paused)
             gui = subprocess.Popen(["gz", "sim", "-g"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
             time.sleep(8)
         sim.step(40)
         sim.wait_for(lambda: sim._image is not None, 30, "camera")
         det = vision.detect(sim.image())
+        if LIVE:
+            sim.play()  # live mode: the simulator really plays (real time, the GUI shows "playing", lidar can be visualised)
         goals = {i: np.array(det["goals"][i]) for i in det["goals"]}
         assert len(goals) == 4, f"only {len(goals)} goal tags seen"
         cam = {i: det["robots"][i] for i in det["robots"]}
@@ -93,8 +95,6 @@ def run_layout(policy, seed, video=None):
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))
             sim.step(20)
-            if LIVE:
-                time.sleep(0.1)  # about real time: 20 physics steps = 0.1 s of simulated time
         for n in NAMES:
             sim.cmd_vel(n, 0, 0)
         if writer is not None:

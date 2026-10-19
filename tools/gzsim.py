@@ -42,6 +42,7 @@ class GzSim:
             assert self.node.subscribe(LaserScan, f"/{r}/scan", lambda m, r=r: self._on_scan(r, m))
             assert self.node.subscribe(Odometry, f"/{r}/odom", lambda m, r=r: self._on_odom(r, m))
         self._image = None
+        self.realtime = False  # True: the world runs by itself (play), and step() just waits for the clock instead of stepping it
         if camera:
             assert self.node.subscribe(Image, "/overhead/image", self._on_image)
         self._pubs = {r: self.node.advertise(f"/{r}/cmd_vel", Twist) for r in self.robots}
@@ -105,7 +106,7 @@ class GzSim:
         target = self.sim_time() + n * STEP_DT - 1e-6
         with self._lock:
             scans0, img0 = dict(self._scan_n), self._image_n
-        for _ in range(40):
+        for _ in range(0 if self.realtime else 40):
             req = WorldControl()
             req.pause = True  # an unset pause flag un-pauses the world, so always send it with the step
             req.multi_step = n
@@ -116,12 +117,19 @@ class GzSim:
             except TimeoutError:
                 continue  # the clock never moved, so the request itself was lost
         else:
-            raise RuntimeError("world control never advanced the clock")
+            if not self.realtime:
+                raise RuntimeError("world control never advanced the clock")
+            self.wait_for(lambda: self._clock >= target, 10.0, "clock (real-time mode)")  # the simulator is playing: just wait
         if sync_sensors and n >= 20:  # sensors tick at 10 Hz (every 20 steps): wait until this step's readings arrived
             try:
                 self.wait_for(lambda: all(self._scan_n[r] > scans0[r] for r in self.robots) and (not self._camera or self._image_n > img0), 3.0, "sensor update")
             except TimeoutError:
                 pass
+
+    def play(self):
+        """Switch to real-time mode: un-pause the world so it runs by itself; step() then only waits for the clock."""
+        self.set_paused(False)
+        self.realtime = True
 
     def set_paused(self, paused):
         req = WorldControl()

@@ -37,7 +37,7 @@ Two environments share the same observation, action table and layout generator:
 - `tools/robot_sdf.py`: robot SDF (coloured chassis, black wheels and lidar, AprilTag board on top, diff-drive plugin, gpu_lidar, odometry). Topics `/rN/cmd_vel`, `/rN/odom`, `/rN/scan`.
 - `tools/gen_world.py`: world SDF: 4 x 3 m arena, 0.4 m grey walls, pink obstacles (height 0.4), goal tag boards (tags 4-7, 0.20 m, on the floor), overhead camera (2.5 m high, 1280x960). Robot tags are ids 0-3 (tag36h11).
 - `tools/layout.py`: random layouts: 3-8 obstacles with sides 0.15-0.60 m. **No-softlock guarantee:** obstacles/walls are inflated by robot radius + margin; all starts and goals must lie in one connected free region. Goals must also be visible to the camera (not hidden behind a tall obstacle).
-- `tools/gzsim.py`: lockstep stepping through gz-transport (`/world/arena/control`, multi_step with pause), sensor access. The simulator stays paused between steps, so never press play in the GUI.
+- `tools/gzsim.py`: lockstep stepping through gz-transport (`/world/arena/control`, multi_step with pause), sensor access. In evaluation runs the simulator stays paused between steps, so never press play there. Live mode (`SNR_LIVE=1`) is different: the world plays in real time (`GzSim.play()`), and the control loop only waits for the simulation clock.
 - `tools/vision.py`: AprilTag detection (OpenCV aruco, multi-scale because some ids are missed at some scales) and pinhole conversion to world coordinates. Accuracy: 40/40 tags found, about 0.3 cm position error.
 - Checks: `tools/check_robot.py`, `check_world.py`, `check_vision.py`, `tests/test_layout.py`, `tests/test_obs_parity.py`.
 
@@ -83,7 +83,7 @@ python3 swarm_gui.py          # or ./run_gui.sh
 Choose a model (every `.npz` in `weights/` and `runs/`, or Browse...), a mode (Gazebo or the fast 2D environment), the first layout and how many,
 and options: open the Gazebo window (live, about real time), safety layer on/off, save videos (Gazebo without the window). Run starts it,
 Stop ends it and the simulator, "Kill stray simulators" cleans up, and the log pane shows the evaluation output with a one-line result summary.
-Gazebo runs take about 1-2 minutes per layout; the 2D mode takes seconds. Only one run at a time. Do not press play in the Gazebo window.
+Gazebo runs take about 1-2 minutes per layout; the 2D mode takes seconds. Only one run at a time. In live mode (window open) the world plays in real time, so the play button shows playing, motion is continuous, and you can use the Gazebo tools such as lidar visualisation. Without the window, runs are stepped while paused for speed.
 
 ### 8.1 Command line
 Use the Ubuntu 24.04 distrobox container. Python env: `.venv` (created with `--system-site-packages`).
@@ -102,7 +102,7 @@ Gazebo evaluation of the final policy on 20 layouts (about 20 min; videos for th
 ```
 python3 rl/eval_gazebo.py weights/final_policy.npz 20 3
 ```
-Watch one layout in the Gazebo GUI (about 1.5 min):
+Watch one layout in the Gazebo GUI, playing in real time (about 1 min):
 ```
 SNR_LIVE=1 SNR_FIRST=13 python3 rl/eval_gazebo.py weights/final_policy.npz 14 0
 ```
