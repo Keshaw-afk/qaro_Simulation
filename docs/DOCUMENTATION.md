@@ -77,14 +77,34 @@ Effect in 2D: robot-robot collisions 18% -> 0%.
 
 ## 8. How to run
 Use the Ubuntu 24.04 distrobox container. Python env: `.venv` (created with `--system-site-packages`).
+**Run these one at a time, not as one pasted block:** they run in order, and the training command takes about 2 hours, so everything after it waits.
+
+Setup, once per terminal (Gazebo scripts need it):
 ```
-source /opt/ros/jazzy/setup.bash                       # needed for Gazebo scripts
-python3 tests/test_layout.py; .venv/bin/python tests/test_obs_parity.py
-.venv/bin/python rl/train.py run11 8e6                 # train (about 2 h); builds rl/pool_*.npz on first run
-python3 rl/eval_gazebo.py weights/final_policy.npz 20 3   # Gazebo eval on 20 layouts, videos for the first 3 (runs/gazebo_seed*.mp4)
-SNR_LIVE=1 SNR_FIRST=13 python3 rl/eval_gazebo.py weights/final_policy.npz 14 0   # watch layout 13 in the Gazebo GUI
-bash tools/killsim.sh                                  # stop stray simulators
+source /opt/ros/jazzy/setup.bash
 ```
+Tests (fast):
+```
+python3 tests/test_layout.py
+.venv/bin/python tests/test_obs_parity.py
+```
+Gazebo evaluation of the final policy on 20 layouts (about 20 min; videos for the first 3 go to `runs/gazebo_seed*.mp4`):
+```
+python3 rl/eval_gazebo.py weights/final_policy.npz 20 3
+```
+Watch one layout in the Gazebo GUI (about 1.5 min):
+```
+SNR_LIVE=1 SNR_FIRST=13 python3 rl/eval_gazebo.py weights/final_policy.npz 14 0
+```
+Stop stray simulators:
+```
+bash tools/killsim.sh
+```
+Optional, retrain from scratch (about 2 h; builds `rl/pool_*.npz` on first run):
+```
+.venv/bin/python rl/train.py run11 8e6
+```
+
 Notes: `SNR_FIRST=k` with `N = k+1` runs only layout k. Run only one simulator at a time (several share topics and corrupt results). `runs/`, `rl/pool_*.npz` are not tracked.
 
 ## 9. Known limitations
