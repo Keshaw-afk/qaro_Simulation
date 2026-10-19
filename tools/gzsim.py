@@ -5,10 +5,21 @@
     sim.scan("r1"), sim.odom("r1"), sim.pose("r1")
 """
 import math
+import os
 import threading
 import time
 
 import numpy as np
+
+# Environment fixes, applied before gz-transport starts (and inherited by every `gz sim` we launch):
+#  * GZ_IP: everything runs on this machine, but gz-transport may advertise on the wrong network interface (a VPN such
+#    as Cloudflare WARP, Docker, ...) and then the simulator and this program never see each other ("timed out waiting
+#    for sim topics"). Pinning it to loopback fixes that; set GZ_IP yourself to override.
+#  * GZ_CONFIG_PATH: sourcing ROS Jazzy replaces it with ROS's vendored folders, which on a plain apt install of Gazebo
+#    Harmonic do not contain the `sim` command (`gz sim` then silently does nothing). Put the system folder first.
+os.environ.setdefault("GZ_IP", "127.0.0.1")
+if os.path.isdir("/usr/share/gz") and "/usr/share/gz" not in os.environ.get("GZ_CONFIG_PATH", "").split(":"):
+    os.environ["GZ_CONFIG_PATH"] = ":".join(p for p in ("/usr/share/gz", os.environ.get("GZ_CONFIG_PATH", "")) if p)
 
 from gz.msgs10.boolean_pb2 import Boolean
 from gz.msgs10.clock_pb2 import Clock

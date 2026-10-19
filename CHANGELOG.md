@@ -3,6 +3,7 @@
 Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`.
 
 ## Unreleased
+- Fix for a clean apt Gazebo + ROS install with a VPN: pin `GZ_IP`, restore `GZ_CONFIG_PATH`, keep the simulator log and show its tail on a startup timeout (found by debugging a friend's laptop over SSH).
 - Big arena profile (`SNR_ARENA=big`, 8 x 6 m); evaluation of the final policy on layouts 1-50 (standard) and 51-100 (big) in `docs/results/`.
 - Isolated Gazebo partitions so several runs coexist; safer desktop app (confirmations, own-run Stop, no kill-all).
 - Live mode plays Gazebo in real time (previously lockstep-paused stepping looked jittery in the GUI).

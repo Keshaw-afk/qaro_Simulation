@@ -47,10 +47,15 @@ def run_layout(policy, seed, video=None):
     lay = L.generate_layout(seed)
     sdf = TMP / f"eval_{seed}.sdf"
     sdf.write_text(gen_world.world_sdf(lay, real_time=LIVE))
-    proc = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(sdf)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    simlog = TMP / f"eval_{seed}.simlog"  # simulator output, kept so a startup failure can be diagnosed
+    proc = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(sdf)], stdout=open(simlog, "w"), stderr=subprocess.STDOUT, start_new_session=True)
     gui = None
     try:
-        sim = GzSim(NAMES, camera=True)
+        try:
+            sim = GzSim(NAMES, camera=True)
+        except TimeoutError as e:
+            tail = simlog.read_text()[-1500:] if simlog.exists() else ""
+            raise RuntimeError(f"{e}. The simulator's output ({simlog}) ends with:\n{tail}\nSee docs/TROUBLESHOOTING.md.") from e
         if LIVE:  # watch it: attach the Gazebo GUI to this server (in live mode the world is playing in real time; otherwise it is stepped while paused)
             gui = subprocess.Popen(["gz", "sim", "-g"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
             time.sleep(8)
