@@ -16,7 +16,8 @@ import gen_world, layout as L, vision
 from gzsim import GzSim
 
 NAMES = [f"r{i}" for i in range(1, 5)]
-R_COL, GOAL_TOL, MAX_STEPS = 0.095 + 0.01, 0.15, 700
+R_COL, GOAL_TOL = 0.095 + 0.01, 0.15
+MAX_STEPS = 1800 if L.BIG else 700  # policy steps of 0.1 s: 180 s in the big arena, 70 s otherwise
 TMP = pathlib.Path(os.environ.get("TMPDIR", "/tmp"))
 
 
@@ -73,7 +74,7 @@ def run_layout(policy, seed, video=None):
             if writer is not None:
                 f = cv2.cvtColor(sim.image(), cv2.COLOR_RGB2BGR)
                 for i in range(4):
-                    px = lambda p: (int(640 + p[0] / (vision.CAM_Z - vision.TAG_Z) * vision.F_PX), int(480 - p[1] / (vision.CAM_Z - vision.TAG_Z) * vision.F_PX))
+                    px = lambda p: (int(gen_world.CAM_W / 2 + p[0] / (vision.CAM_Z - vision.TAG_Z) * vision.F_PX), int(gen_world.CAM_H / 2 - p[1] / (vision.CAM_Z - vision.TAG_Z) * vision.F_PX))
                     cv2.circle(f, px(lay.goals[i]), 22, (255, 255, 255), 2)
                 writer.write(cv2.resize(f, (640, 480)))
             if all(s != "running" for s in status.values()):
@@ -121,6 +122,6 @@ if __name__ == "__main__":
         print(f"seed {k:3d}: {r['status']}  ({r['steps']} policy steps, {time.time() - t0:.0f}s elapsed)", flush=True)
     st = [s for r in results for s in r["status"]]
     tt = [t for r in results for s, t in zip(r["status"], r["time"]) if s == "success"]
-    print(f"GAZEBO RESULT over {n} layouts x 4 robots: success {st.count('success')/len(st):.3f}, collision {st.count('collision')/len(st):.3f}, "
+    print(f"GAZEBO RESULT over {len(results)} layouts x 4 robots: success {st.count('success')/len(st):.3f}, collision {st.count('collision')/len(st):.3f}, "
           f"timeout {st.count('timeout')/len(st):.3f}, mean time-to-goal {np.mean(tt) if tt else float('nan'):.1f}s, all-four-success {np.mean([all(s == 'success' for s in r['status']) for r in results]):.2f}")
     json.dump(results, open(ROOT / "runs" / "gazebo_results.json", "w"))

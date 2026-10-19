@@ -8,22 +8,26 @@ and every goal must lie in one connected free region of that inflated map. So ea
 collision-free path to its goal, and no start/goal sits in a pocket or a gap too narrow to pass.
 """
 import math
+import os
 from dataclasses import dataclass, field
 
 import numpy as np
 import yaml
 from scipy import ndimage
 
-ARENA_W, ARENA_H = 4.0, 3.0
+# SNR_ARENA=big selects the large arena (8 x 6 m, 4x the area, more obstacles, higher camera); default is the 4 x 3 m training arena.
+BIG = os.environ.get("SNR_ARENA") == "big"
+ARENA_W, ARENA_H = (8.0, 6.0) if BIG else (4.0, 3.0)
 ROBOT_RADIUS = 0.13          # chassis radius 0.095 plus the lidar offset, rounded up
 CLEARANCE_MARGIN = 0.05
 GRID_RES = 0.02
 N_ROBOTS = 4
 OBSTACLE_SIDE = (0.15, 0.60)  # random side lengths, metres
-OBSTACLE_COUNT = (3, 8)
-MIN_START_SEP, MIN_GOAL_SEP, MIN_START_GOAL = 0.5, 0.5, 1.0
+OBSTACLE_COUNT = (12, 32) if BIG else (3, 8)  # same obstacle density in both arenas
+MIN_START_SEP, MIN_GOAL_SEP = 0.5, 0.5
+MIN_START_GOAL = 2.0 if BIG else 1.0  # longer trips in the big arena
 WALL_MARGIN = 0.25            # starts/goals keep this far from the walls
-CAM_Z, OBSTACLE_H, TAG_HALF = 2.5, 0.4, 0.1  # overhead camera height, obstacle height, goal-tag half size (must match gen_world.py)
+CAM_Z, OBSTACLE_H, TAG_HALF = (5.0 if BIG else 2.5), 0.4, 0.1  # overhead camera height (higher in the big arena), obstacle height, goal-tag half size
 
 
 @dataclass

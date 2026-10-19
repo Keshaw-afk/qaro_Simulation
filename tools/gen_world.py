@@ -21,7 +21,9 @@ def _static_box(name, x, y, z, sx, sy, sz, yaw, rgba):
 
 
 GOAL_TAG_SIZE, GOAL_TAG_Z = 0.20, 0.002
-CAM_Z, CAM_HFOV, CAM_W, CAM_H = 2.5, 1.45, 1280, 960
+# Camera height comes from layout.py. The big arena doubles the image size so pixels per metre (and tag decoding) stay the same.
+CAM_Z, CAM_HFOV = L.CAM_Z, 1.45
+CAM_W, CAM_H = (2560, 1920) if L.BIG else (1280, 960)
 
 
 def _goal_marker(i, x, y):
