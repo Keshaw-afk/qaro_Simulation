@@ -107,8 +107,10 @@ def run_layout(policy, seed, video=None):
     finally:
         if gui is not None:
             gui.terminate()
-        proc.terminate()
-        subprocess.run(["bash", str(ROOT / "tools" / "killsim.sh")], capture_output=True)
+        try:  # stop only this run's simulator (its own process group), so other simulators, e.g. one being watched live, keep running
+            os.killpg(proc.pid, 9)
+        except ProcessLookupError:
+            pass
 
 
 if __name__ == "__main__":
