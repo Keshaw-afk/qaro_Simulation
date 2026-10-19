@@ -11,6 +11,12 @@ sensors (lidar, odometry, overhead-camera AprilTag poses/goals) go through the s
 
 Go-to-goal baseline (no avoidance): 43% success. Videos: `runs/gazebo_seed*.mp4`; live screenshots: `runs/screenshots/`.
 
+## Quick start
+```
+python3 swarm_gui.py        # desktop app: pick a model, choose layouts, run in Gazebo (live window) or the fast 2D env
+```
+Run it inside the distrobox container. Full docs: `docs/DOCUMENTATION.md` (what and why), `docs/CODE_GUIDE.md` (how the code is organised).
+
 ## How it works
 - `tools/` world/robot SDF generators, layout generator (no-softlock), Gazebo lockstep wrapper (`gzsim.py`), AprilTag vision (`vision.py`).
 - `rl/arena_env.py` fast numpy 2D env mirroring Gazebo; `rl/train.py` PPO (SB3), 45 discrete (speed, turn-rate) actions.

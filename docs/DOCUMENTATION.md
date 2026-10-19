@@ -76,6 +76,16 @@ Effect in 2D: robot-robot collisions 18% -> 0%.
 4. Safety layer on run9 weights: 83% success, 8% collisions. Run10 (discrete + layer + retraining): 91.5% success, 4% collisions. Training curve flattened after about 4M steps.
 
 ## 8. How to run
+### 8.0 Desktop app (easiest)
+```
+python3 swarm_gui.py          # or ./run_gui.sh
+```
+Choose a model (every `.npz` in `weights/` and `runs/`, or Browse...), a mode (Gazebo or the fast 2D environment), the first layout and how many,
+and options: open the Gazebo window (live, about real time), safety layer on/off, save videos (Gazebo without the window). Run starts it,
+Stop ends it and the simulator, "Kill stray simulators" cleans up, and the log pane shows the evaluation output with a one-line result summary.
+Gazebo runs take about 1-2 minutes per layout; the 2D mode takes seconds. Only one run at a time. Do not press play in the Gazebo window.
+
+### 8.1 Command line
 Use the Ubuntu 24.04 distrobox container. Python env: `.venv` (created with `--system-site-packages`).
 **Run these one at a time, not as one pasted block:** they run in order, and the training command takes about 2 hours, so everything after it waits.
 

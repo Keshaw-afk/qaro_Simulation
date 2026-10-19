@@ -10,7 +10,8 @@ sys.path[:0] = [str(ROOT / "tools"), str(ROOT / "rl")]
 import deploy as D
 import shield as SH
 from actions import CV, CW
-LIVE = bool(os.environ.get("SNR_LIVE"))
+LIVE = bool(os.environ.get("SNR_LIVE"))              # open the Gazebo GUI and run at about real time
+USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
 import gen_world, layout as L, vision
 from gzsim import GzSim
 
@@ -85,7 +86,9 @@ def run_layout(policy, seed, video=None):
                 others_vel = np.array([vel[j] for j in range(4) if j != i])
                 od = sim.odom(n)
                 obs = D.obs_from_sensors(sim.scan(n), (x, y), yaw, goals[i], others, vel[i], others_vel, od[3], od[4], prev[i], i)
-                k = SH.apply(np.array([[x, y]]), np.array([yaw]), others[None], others_vel[None], policy.index(obs))[0]  # inter-robot safety layer
+                k = policy.index(obs)[0]
+                if USE_SHIELD:  # inter-robot safety layer (SNR_SHIELD=0 turns it off)
+                    k = SH.apply(np.array([[x, y]]), np.array([yaw]), others[None], others_vel[None], np.array([k]))[0]
                 a = np.array([CV[k] / D.VMAX * 2 - 1, CW[k] / D.WMAX], np.float32)
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))
