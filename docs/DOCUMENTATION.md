@@ -17,7 +17,7 @@ Policy `weights/final_policy.npz` (PPO checkpoint at 7M steps, the best of run10
 
 Gazebo run is closed loop with the real pipeline (camera tags, lidar, odometry); success/collision are scored from simulator ground truth.
 Success = within 0.15 m of the goal; collision = chassis within 1 cm of an obstacle, wall or another robot; timeout = 700 policy steps (70 s).
-Per-layout results are in `runs/gazebo_results.json` (not tracked; regenerate with the command in section 8). Training curve: `docs/run10_eval.csv`.
+Per-layout results are in `docs/gazebo_eval_20_layouts.log`. (`runs/gazebo_results.json` is overwritten by every evaluation run and now holds only a later single-layout rerun.) Training curve: `docs/run10_eval.csv`.
 The 2D and Gazebo numbers agree to within a few points. The Gazebo sample is small (80 robot runs), so the 6.2% collision rate is uncertain by several points.
 Causes of the 5 Gazebo collisions were not analysed; `rl/eval_gazebo.py` can print them (see Known limitations).
 
@@ -89,7 +89,7 @@ Notes: `SNR_FIRST=k` with `N = k+1` runs only layout k. Run only one simulator a
 
 ## 9. Known limitations
 - Gazebo evaluation is 80 robot runs, so rates carry several points of uncertainty.
-- 6.2% of Gazebo runs ended in a collision and the cause was not diagnosed: `rl/eval_gazebo.py` has an uncommitted edit that would print the object hit; it has not been run.
+- 6.2% of Gazebo runs ended in a collision and the cause was not diagnosed: `rl/eval_gazebo.py` has a diagnostic (added after the evaluation) that prints the object hit; it has not been run yet.
 - The safety layer is a hand-written rule, not learned. Without it the policy collides far more.
 - Robot size, chassis height, and lidar head size are estimates from photos, not measurements.
 - Policy inputs rely on the overhead camera for goals and other robots; if a tag is not detected in a frame, deployment would need a fallback (not implemented).
