@@ -18,6 +18,12 @@ Two Python environments exist on purpose:
 - **`.venv` (created with `--system-site-packages`, `pip install -r requirements.txt`)**: training, 2D evaluation, observation-parity test (needs torch, stable-baselines3, gymnasium).
 If `.venv` does not exist, only the second group is unavailable; do not install heavy packages into the system Python.
 
+## Before you run anything
+- **Run commands from the repository root.** Scripts locate files relative to themselves, but the documented commands, `make` and the app assume the root.
+- **Display:** the Gazebo evaluation runs headless (no display needed). Only `swarm_gui.py` and live mode (`SNR_LIVE=1`) need a desktop session.
+- **Verified environment:** Ubuntu 24.04 in a container, ROS 2 Jazzy, gz sim 8.15, Python 3.12, Intel integrated GPU. Anything else is untested; if something differs, say so rather than assuming.
+- **Time budget:** `make test` about 1 min; a Gazebo layout about 1 min (big arena 2-3 min); 2D evaluation of 100 layouts about 1 min; first 2D/training run builds layout pools (several minutes); training about 2 h.
+
 ## Common commands (also available as `make <target>`, see `make help`)
 | Task | Command |
 |---|---|
@@ -29,6 +35,13 @@ If `.venv` does not exist, only the second group is unavailable; do not install 
 | 2D evaluation (seconds) | `.venv/bin/python rl/eval2d.py weights/final_policy.npz 100` |
 | Train | `.venv/bin/python rl/train.py RUN 8e6` (about 2 h on the development machine; writes `runs/RUN/`) |
 Argument conventions: `eval_gazebo.py WEIGHTS N_END [N_VIDEO_END]` runs layouts `SNR_FIRST .. N_END-1`. Full variable list in its docstring.
+
+## What success looks like
+- `make test` ends with `shield tests passed` (and `PARITY OK (observations + action table)` if `.venv` exists).
+- A Gazebo evaluation prints one line per layout, e.g. `seed   4: ['success', 'success', 'success', 'success']  (165 policy steps, 93s elapsed)`
+  (one entry per robot r1-r4: `success`, `collision` or `timeout`), then `GAZEBO RESULT over N layouts x 4 robots: success 0.9..., collision ..., timeout ..., mean time-to-goal ...s, all-four-success ...`.
+  With `weights/final_policy.npz` expect roughly 90% success, about 5% collisions and few timeouts on standard-arena layouts (20 layouts gave 91.2%; individual layouts vary a lot, so judge on 20+).
+- A 2D evaluation prints metric lines and a final `RESULT2D {...}` JSON line.
 
 ## Rules that prevent the known failure modes
 1. **Run one simulator per `GZ_PARTITION`.** Simulators in the same partition share topics and silently corrupt each other's results. Use a different `GZ_PARTITION` for concurrent runs (the app does this automatically). Check with `pgrep -af "[g]z sim"`.

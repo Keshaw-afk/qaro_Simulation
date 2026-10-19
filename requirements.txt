@@ -1,8 +1,9 @@
 # Python packages for TRAINING and the 2D evaluation (install into a venv that can see the system packages, see docs/SETUP.md).
 # Gazebo evaluation and the desktop app need none of these: they use the system python3 with ROS sourced.
-numpy==1.26.4
-gymnasium==1.4.0
-stable-baselines3==2.9.0
-torch==2.14.1        # CPU build is enough: pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Versions used during development: numpy 1.26.4, gymnasium 1.4.0, stable-baselines3 2.9.0, torch 2.14.1 (CPU), scipy 1.11.4.
+numpy>=1.26,<2
+gymnasium>=1.0
+stable-baselines3>=2.3
+torch>=2.2        # CPU build is enough: pip install torch --index-url https://download.pytorch.org/whl/cpu
 scipy
 pyyaml
