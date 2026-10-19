@@ -1,6 +1,17 @@
 """Run a trained policy in Gazebo on the evaluation layouts. Closed loop: camera tags -> poses/goals, lidar, odometry.
-    source /opt/ros/jazzy/setup.bash; python3 rl/eval_gazebo.py WEIGHTS.npz N_LAYOUTS [VIDEO_COUNT]"""
-import json, math, os, pathlib, subprocess, sys, time
+
+    source /opt/ros/jazzy/setup.bash; python3 rl/eval_gazebo.py WEIGHTS.npz N_END [N_VIDEO_END]
+
+Layouts SNR_FIRST .. N_END-1 are run (SNR_FIRST defaults to 0). Videos are saved for layouts below N_VIDEO_END.
+Environment variables:
+  SNR_ARENA=big   large 8 x 6 m arena instead of the 4 x 3 m training arena (read by tools/layout.py)
+  SNR_LIVE=1      open the Gazebo window; the world plays in real time instead of being stepped while paused
+  SNR_SHIELD=0    switch the inter-robot safety layer off
+  SNR_FIRST=k     first layout seed
+  SNR_OUT_DIR     folder for videos and gazebo_results.json (default runs/)
+  GZ_PARTITION    standard Gazebo variable: runs with different values cannot see each other (so several runs can coexist)
+Prints one 'seed k: [...]' line per layout and a final 'GAZEBO RESULT ...' line."""
+import json, math, os, pathlib, signal, subprocess, sys, time
 
 import cv2
 import numpy as np
@@ -11,6 +22,8 @@ import deploy as D
 import shield as SH
 from actions import CV, CW
 LIVE = bool(os.environ.get("SNR_LIVE"))              # open the Gazebo GUI; the world plays in real time (not lockstep)
+OUT_DIR = pathlib.Path(os.environ.get("SNR_OUT_DIR", ROOT / "runs"))  # where videos and gazebo_results.json go (the GUI app uses its own folder)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
 import gen_world, layout as L, vision
 from gzsim import GzSim
@@ -114,11 +127,12 @@ def run_layout(policy, seed, video=None):
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # so "Stop" in the GUI app unwinds through run_layout's finally and stops its own simulator
     policy = D.Policy(sys.argv[1])
     n = int(sys.argv[2]); n_vid = int(sys.argv[3]) if len(sys.argv) > 3 else 0
     results, t0 = [], time.time()
     for k in range(int(os.environ.get("SNR_FIRST", 0)), n):
-        vid = ROOT / "runs" / f"gazebo_seed{k}.mp4" if k < n_vid else None
+        vid = OUT_DIR / f"gazebo_seed{k}.mp4" if k < n_vid else None
         r = run_layout(policy, k, vid)
         results.append(r)
         print(f"seed {k:3d}: {r['status']}  ({r['steps']} policy steps, {time.time() - t0:.0f}s elapsed)", flush=True)
@@ -126,4 +140,4 @@ if __name__ == "__main__":
     tt = [t for r in results for s, t in zip(r["status"], r["time"]) if s == "success"]
     print(f"GAZEBO RESULT over {len(results)} layouts x 4 robots: success {st.count('success')/len(st):.3f}, collision {st.count('collision')/len(st):.3f}, "
           f"timeout {st.count('timeout')/len(st):.3f}, mean time-to-goal {np.mean(tt) if tt else float('nan'):.1f}s, all-four-success {np.mean([all(s == 'success' for s in r['status']) for r in results]):.2f}")
-    json.dump(results, open(ROOT / "runs" / "gazebo_results.json", "w"))
+    json.dump(results, open(OUT_DIR / "gazebo_results.json", "w"))

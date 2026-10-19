@@ -80,12 +80,21 @@ Effect in 2D: robot-robot collisions 18% -> 0%.
 ```
 python3 swarm_gui.py          # or ./run_gui.sh
 ```
-Choose a model (every `.npz` in `weights/` and `runs/`, or Browse...), a mode (Gazebo or the fast 2D environment), the first layout and how many,
-and options: open the Gazebo window (live, about real time), safety layer on/off, save videos (Gazebo without the window). Run starts it,
-Stop ends it and the simulator, "Kill stray simulators" cleans up, and the log pane shows the evaluation output with a one-line result summary.
-Gazebo runs take about 1-2 minutes per layout; the 2D mode takes seconds. Only one run at a time. In live mode (window open) the world plays in real time, so the play button shows playing, motion is continuous, and you can use the Gazebo tools such as lidar visualisation. Without the window, runs are stepped while paused for speed.
+Settings: **Model** (every `.npz` in `weights/` and `runs/`, or Browse...), **Simulator** (Gazebo, or the fast 2D environment), **Arena**
+(Standard 4 x 3 m, or Big 8 x 6 m; the 2D environment only knows the standard arena), **First layout / Number of layouts**,
+and options: open the Gazebo window (plays in real time), safety layer on/off, save a video of each layout. An estimated duration is shown.
+Layouts restart the simulator one after another; that is normal. Results and videos go to `runs/gui/`.
+
+Safeguards against disturbing anything by accident:
+- Each run uses its own Gazebo partition, so it cannot interfere with another evaluation or a simulator started elsewhere.
+- **Stop this run** ends only this app's run (after a confirmation) and removes that run's simulator.
+- There is no "kill everything" button. **Clean up leftovers...** lists only simulators that no running evaluation owns, and asks first.
+- Settings are locked during a run; closing the window during a run asks; starting while another evaluation runs, or with the safety layer off, asks.
+- Standard-arena layouts above 199 were used for training, so the app warns before using them.
+In live mode the world plays in real time, so the play button shows playing, motion is continuous, and the Gazebo tools (e.g. lidar visualisation) work. Without the window, runs are stepped while paused for speed.
 
 ### 8.1 Command line
+Big arena: prefix with `SNR_ARENA=big` (e.g. `SNR_ARENA=big SNR_FIRST=51 python3 rl/eval_gazebo.py weights/final_policy.npz 101 0`). Variables are listed at the top of `rl/eval_gazebo.py`.
 Use the Ubuntu 24.04 distrobox container. Python env: `.venv` (created with `--system-site-packages`).
 **Run these one at a time, not as one pasted block:** they run in order, and the training command takes about 2 hours, so everything after it waits.
 

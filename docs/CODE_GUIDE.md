@@ -6,7 +6,7 @@ check when you change something.
 ## Module map
 | File | Role | Needs |
 |---|---|---|
-| `swarm_gui.py` | Desktop launcher (Tk). Starts the evaluation scripts as subprocesses and shows their output. Contains no RL code. | python3 + tkinter |
+| `swarm_gui.py` | Desktop launcher (Tk). Starts the evaluation scripts as subprocesses and shows their output. Contains no RL code. Isolation/safety logic: own `GZ_PARTITION` per app instance, process lookup through `/proc` (`evaluations()`, `simulators()`), confirmations before any kill. | python3 + tkinter |
 | `rl/actions.py` | The 45-entry action table (speed, turn rate). **Single source of truth**: env, deploy, shield all import it. | numpy |
 | `rl/arena_env.py` | Fast 2D vectorised environment (training). Observation, reward, dynamics, domain randomisation, evaluation bookkeeping (`outcome`, `cause`). | numpy, gymnasium, SB3 |
 | `rl/shield.py` | Safety layer: `apply(pos, yaw, other_pos, other_vel, action_idx) -> action_idx`. Pure numpy, used by the 2D env and by Gazebo evaluation. | numpy |
@@ -32,7 +32,7 @@ check when you change something.
    `Policy.index` (argmax of 45 logits) -> `shield.apply` -> command from `actions` table -> `/rN/cmd_vel`.
 3. Ground-truth poses from the simulator decide success / collision; robots that finish are stopped.
 
-Environment variables of `eval_gazebo.py`: `SNR_LIVE=1` open the Gazebo GUI and run at about real time; `SNR_FIRST=k` start at layout k
+Environment variables of `eval_gazebo.py` (full list in its docstring; also `SNR_ARENA=big`, `SNR_OUT_DIR`, and the standard `GZ_PARTITION` that lets several runs coexist): `SNR_LIVE=1` open the Gazebo GUI and run at about real time; `SNR_FIRST=k` start at layout k
 (layouts k .. N-1 run); `SNR_SHIELD=0` disable the safety layer. Arguments: `WEIGHTS.npz N_END [N_VIDEOS]`.
 
 ## Common changes and what else to touch
