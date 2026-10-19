@@ -10,6 +10,7 @@ sys.path[:0] = [str(ROOT / "tools"), str(ROOT / "rl")]
 import deploy as D
 import shield as SH
 from actions import CV, CW
+LIVE = bool(os.environ.get("SNR_LIVE"))
 import gen_world, layout as L, vision
 from gzsim import GzSim
 
@@ -32,8 +33,12 @@ def run_layout(policy, seed, video=None):
     sdf = TMP / f"eval_{seed}.sdf"
     sdf.write_text(gen_world.world_sdf(lay))
     proc = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(sdf)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    gui = None
     try:
         sim = GzSim(NAMES, camera=True)
+        if LIVE:  # watch it: attach the Gazebo GUI to this server (it stays paused between our steps; do not press play)
+            gui = subprocess.Popen(["gz", "sim", "-g"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+            time.sleep(8)
         sim.step(40)
         sim.wait_for(lambda: sim._image is not None, 30, "camera")
         det = vision.detect(sim.image())
@@ -85,6 +90,8 @@ def run_layout(policy, seed, video=None):
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))
             sim.step(20)
+            if LIVE:
+                time.sleep(0.1)  # about real time: 20 physics steps = 0.1 s of simulated time
         for n in NAMES:
             sim.cmd_vel(n, 0, 0)
         if writer is not None:
@@ -94,6 +101,8 @@ def run_layout(policy, seed, video=None):
                 status[i] = "timeout"
         return {"seed": seed, "status": [status[i] for i in range(4)], "time": [t_done[i] for i in range(4)], "steps": step}
     finally:
+        if gui is not None:
+            gui.terminate()
         proc.terminate()
         subprocess.run(["bash", str(ROOT / "tools" / "killsim.sh")], capture_output=True)
 
@@ -102,7 +111,7 @@ if __name__ == "__main__":
     policy = D.Policy(sys.argv[1])
     n = int(sys.argv[2]); n_vid = int(sys.argv[3]) if len(sys.argv) > 3 else 0
     results, t0 = [], time.time()
-    for k in range(n):
+    for k in range(int(os.environ.get("SNR_FIRST", 0)), n):
         vid = ROOT / "runs" / f"gazebo_seed{k}.mp4" if k < n_vid else None
         r = run_layout(policy, k, vid)
         results.append(r)
