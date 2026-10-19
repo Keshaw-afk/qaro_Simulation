@@ -40,3 +40,8 @@ Start with **`AGENTS.md`** (commands, rules that prevent known failure modes, de
 ## Status and limits
 Finished and evaluated, not tested on other machines or on real robots. The safety layer is a hand-written rule, not learned. Robot dimensions not given
 were estimated from photos. About 6% of Gazebo runs end in a collision whose cause has not been analysed.
+
+## License and credits
+MIT License, Copyright (c) 2026 Keshaw Tiwari: free to use, modify and share, as long as the copyright notice (`LICENSE`) is kept.
+Robot dimensions are based on the public RigBetel Labs TortoiseBot description (`config/robot.yaml` marks each value as sourced, derived or estimated);
+no code from that project is included. Built on Gazebo, ROS 2, OpenCV, Stable-Baselines3 and PyTorch, which keep their own licenses.
