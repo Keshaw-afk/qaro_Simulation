@@ -31,7 +31,7 @@ RAY_IDX = np.array([[10 * j + k for k in BEAM_SUBSET] for j in range(N_POOL)])
 RAY_ANG = (-math.pi + RAY_IDX * _STEP).reshape(-1).astype(np.float32)
 RAYS_PER_GROUP = RAY_IDX.shape[1]
 F32 = np.float32
-from actions import CV, CW, N_ACT, VS, WS  # shared discrete (speed, turn-rate) table
+from actions import CV, CW, N_ACT  # shared discrete (speed, turn-rate) table
 
 
 def obb_dist(px, py, ob):
@@ -214,7 +214,7 @@ class ArenaVecEnv(VecEnv):
             self.actions = new.reshape(W, N_AG)
 
     def step_wait(self):
-        W, idx = self.W, self.actions
+        idx = self.actions
         a = np.stack([CV[idx] / VMAX * 2 - 1, CW[idx] / WMAX], -1)   # normalised (v, w) of the chosen motion, as used in obs/reward
         cmd = np.stack([CV[idx], CW[idx]], -1) * self.speed_scale[..., None]
         applied = np.where(self.delay[..., None], self.cmd_prev, cmd)

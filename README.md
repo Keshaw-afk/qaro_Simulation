@@ -1,31 +1,42 @@
-# swarm_nav_rl: 4 robots, one shared RL policy, Gazebo Harmonic + ROS 2 Jazzy
+# qaro_Simulation: 4 robots, one shared RL policy (Gazebo Harmonic + ROS 2 Jazzy)
 
-Four differential-drive TortoiseBot-style robots drive to per-robot goals in a random-obstacle arena. One shared policy: each robot's
-sensors (lidar, odometry, overhead-camera AprilTag poses/goals) go through the same network to that robot's drive command.
+Four differential-drive TortoiseBot-style robots drive to their own goals in a random-obstacle arena, avoiding obstacles and each other.
+**One shared policy**: each robot's own sensors (lidar, wheel odometry, plus overhead-camera AprilTag positions of goals and the other robots)
+go through the same network, which outputs that robot's drive command. Trained with PPO in a fast 2D twin of the arena, evaluated in Gazebo.
 
-## Result (best policy `runs/final_policy.npz`, PPO 7M steps)
+## Results (policy `weights/final_policy.npz`)
 | Test | Success | Collision | Timeout | Time to goal | All 4 succeed |
 |---|---|---|---|---|---|
-| 2D training env, 100 held-out layouts | 91.5% | 4.0% | 4.5% | 11.3 s | 72% |
-| **Gazebo, 20 held-out layouts x 4 robots, camera-in-the-loop** | **91.2%** | **6.2%** | **2.5%** | **10.6 s** | **65%** |
+| Go-to-goal baseline (no avoidance), 2D, 100 layouts | 43.2% | 56.8% | 0% | 8.5 s | 7% |
+| 2D training environment, 100 held-out layouts | 91.5% | 4.0% | 4.5% | 11.3 s | 72% |
+| **Gazebo, 20 held-out layouts x 4 robots, camera in the loop** | **91.2%** (73/80) | **6.2%** (5/80) | **2.5%** (2/80) | **10.6 s** | **65%** |
 
-Go-to-goal baseline (no avoidance): 43% success. Videos: `runs/gazebo_seed*.mp4`; live screenshots: `runs/screenshots/`.
+More Gazebo runs (standard arena layouts 1-50 and a big 8 x 6 m arena, layouts 51-100) are recorded in `docs/results/`.
+Details, caveats and the history of what was tried: `docs/DOCUMENTATION.md`.
 
-## Quick start
+## Quick start (Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic)
 ```
-python3 swarm_gui.py        # desktop app: pick a model, choose layouts, run in Gazebo (live window) or the fast 2D env
+source /opt/ros/jazzy/setup.bash
+python3 tools/check_env.py                     # verify the machine (see docs/SETUP.md to install what is missing)
+make test                                      # fast tests, no simulator
+python3 swarm_gui.py                           # desktop app: choose model, arena (standard / big), layouts, live window
+make eval-small FIRST=1 N=3                    # or from the command line: Gazebo on layouts 1-3
+make eval-big FIRST=51 N=3                     # the same in the big 8 x 6 m arena
 ```
-Needs ROS 2 Jazzy + Gazebo Harmonic: see `docs/SETUP.md` (setup recipe, `tools/check_env.py` to verify a machine). Full docs: `docs/DOCUMENTATION.md` (what and why), `docs/CODE_GUIDE.md` (how the code is organised).
+Training and the 2D evaluation need a virtualenv (`docs/SETUP.md`, section 4): `make train RUN=run11 STEPS=8e6`, `make eval-2d`.
 
 ## How it works
-- `tools/` world/robot SDF generators, layout generator (no-softlock), Gazebo lockstep wrapper (`gzsim.py`), AprilTag vision (`vision.py`).
-- `rl/arena_env.py` fast numpy 2D env mirroring Gazebo; `rl/train.py` PPO (SB3), 45 discrete (speed, turn-rate) actions.
-- `rl/shield.py` rule-based inter-robot safety layer (predicts 2 s ahead using camera velocities, vetoes robot-robot collision courses).
-  The RL policy still does goal-seeking and obstacle avoidance. It was trained with the layer active and is deployed with it.
-- `rl/deploy.py` numpy inference; `rl/eval_gazebo.py WEIGHTS.npz N [VIDEOS]` closed-loop Gazebo evaluation
-  (`SNR_LIVE=1 SNR_FIRST=k` opens the Gazebo GUI on layout k; do not press play, the sim is stepped in lockstep).
+- `tools/`: world and robot SDF generators, random layouts with a no-softlock guarantee, lockstep Gazebo interface, AprilTag vision.
+- `rl/arena_env.py`: fast numpy 2D environment mirroring Gazebo. `rl/train.py`: PPO (Stable-Baselines3) with 45 discrete (speed, turn-rate) actions.
+- `rl/shield.py`: rule-based inter-robot safety layer. It predicts 2 s ahead from camera-measured velocities and vetoes robot-robot collision courses.
+  The learned policy does goal seeking and obstacle avoidance; it was trained with the layer active and is deployed with it.
+- `rl/deploy.py`: numpy inference and the sensor-to-observation code. `rl/eval_gazebo.py`: closed-loop Gazebo evaluation.
+- `swarm_gui.py`: desktop launcher with safeguards (isolated simulator per run, confirmations, no kill-all).
 
-## Findings
-- Plain PPO plateaued at ~70% success / 25-30% collisions, mostly robot-robot; a DWA expert gets 0% collisions, so the task was fair.
-- DAgger imitation (55%) was not competitive. Discrete actions helped a little (71%); the safety layer + retraining gave 91%.
-- Lidar only sees other robots' small lidar heads, so robot-robot avoidance needs camera positions/velocities.
+## For contributors and AI agents
+Start with **`AGENTS.md`** (commands, rules that prevent known failure modes, definition of done), then `CONTRIBUTING.md`,
+`docs/CODE_GUIDE.md` and `docs/TROUBLESHOOTING.md`. Index of all documents: `docs/README.md`. Changes: `CHANGELOG.md`.
+
+## Status and limits
+Finished and evaluated, not tested on other machines or on real robots. The safety layer is a hand-written rule, not learned. Robot dimensions not given
+were estimated from photos. About 6% of Gazebo runs end in a collision whose cause has not been analysed.

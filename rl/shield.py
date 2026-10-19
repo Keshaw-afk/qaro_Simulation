@@ -6,7 +6,7 @@ motion (closest in speed/turn-rate); if none is safe, take the one with the larg
 The policy (RL) still owns goal-seeking and all obstacle avoidance; this layer only vetoes robot-robot collision courses."""
 import numpy as np
 
-from actions import CV, CW, N_ACT, VMAX, WMAX
+from actions import CV, CW, VMAX, WMAX
 
 R_ROBOT, HORIZON, STEPS, MARGIN = 0.095, 2.0, 10, 0.06
 _T = (np.arange(STEPS) + 1) * HORIZON / STEPS

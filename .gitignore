@@ -8,3 +8,11 @@ runs/
 checkpoints/*.zip
 *.log
 rl/pool_*.npz
+
+# local tooling
+.claude/
+CLAUDE.local.md
+*.mp4
+*.png.tmp
+runs/
+!docs/**/*.log

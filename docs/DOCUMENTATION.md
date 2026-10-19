@@ -140,4 +140,5 @@ config/robot.yaml     robot parameters      tools/    Gazebo world/robot generat
 rl/                   env, training, deploy, expert, DAgger, safety layer, Gazebo evaluator
 tests/                layout and observation-parity tests      weights/  final policy      docs/  this file, training curve
 worlds/               tag images and an early single-robot world
+AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md Makefile requirements.txt   repository-level guides and helpers; swarm_gui.py = desktop app
 ```

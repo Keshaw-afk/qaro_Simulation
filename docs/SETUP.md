@@ -37,5 +37,4 @@ python3 -m venv --system-site-packages .venv
 
 ## Known portability limits
 - `/opt/ros/jazzy/setup.bash` is assumed (the app and docs); other ROS locations need edits to `ROS_SETUP` in `swarm_gui.py`.
-- `tools/screenshot.py` is GNOME/Wayland specific and optional. The app uses `xdg-open` to open the results folder.
 - Other Gazebo/ROS versions (e.g. Gazebo Ionic) use different Python module names (`gz.transport13`, `gz.msgs10`) and would need changes in `tools/gzsim.py`.

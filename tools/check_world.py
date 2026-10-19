@@ -1,5 +1,5 @@
 """Four-robot arena integration test (lockstep). Run from repo root: python3 tools/check_world.py"""
-import math, os, pathlib, subprocess, sys, time
+import math, os, pathlib, subprocess, sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import gen_world, layout as L
 from gzsim import GzSim

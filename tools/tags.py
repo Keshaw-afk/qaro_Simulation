@@ -1,7 +1,6 @@
 """AprilTag (tag36h11) textures with a white quiet zone. ids 0-3: robots, ids 4-7: goal markers."""
 import pathlib
 import cv2
-import numpy as np
 
 TAG_DIR = pathlib.Path(__file__).resolve().parent.parent / "worlds" / "tags"
 DICT = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)

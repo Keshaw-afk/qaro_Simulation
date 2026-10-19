@@ -1,6 +1,5 @@
 """Dynamic-window-style reference controller using the simulator's true state. Diagnostic yardstick (is the env solvable?)
 and potential demonstrator; NOT the deployed policy."""
-import math
 
 import numpy as np
 

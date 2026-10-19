@@ -92,7 +92,6 @@ def run_layout(policy, seed, video=None):
                 writer.write(cv2.resize(f, (640, 480)))
             if all(s != "running" for s in status.values()):
                 break
-            acts = {}
             for i, n in enumerate(NAMES):
                 if status[i] != "running":
                     sim.cmd_vel(n, 0.0, 0.0)

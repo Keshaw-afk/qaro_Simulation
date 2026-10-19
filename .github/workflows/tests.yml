@@ -1,0 +1,11 @@
+# Fast tests only (no Gazebo, no GPU): layout generator and safety layer. Gazebo evaluation cannot run on a plain CI runner.
+name: tests
+on: [push, pull_request]
+jobs:
+  fast-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y python3-numpy python3-scipy python3-yaml
+      - run: python3 tests/test_layout.py
+      - run: python3 tests/test_shield.py

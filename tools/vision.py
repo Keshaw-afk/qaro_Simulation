@@ -5,7 +5,6 @@ known plane (robot top / floor), so a pinhole model with the plane's depth gives
 import math
 
 import cv2
-import numpy as np
 
 import tags
 from gen_world import CAM_H, CAM_HFOV, CAM_W, CAM_Z, GOAL_TAG_Z

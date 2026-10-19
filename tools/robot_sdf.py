@@ -1,5 +1,4 @@
 """SDF for one TortoiseBot-style differential-drive robot. All dimensions come from config/robot.yaml."""
-import math
 import pathlib
 
 import yaml
