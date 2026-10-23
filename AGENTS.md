@@ -32,6 +32,7 @@ If `.venv` does not exist, only the second group is unavailable; do not install 
 | Gazebo evaluation, standard arena, layouts 1-3 | `source /opt/ros/jazzy/setup.bash; SNR_FIRST=1 python3 rl/eval_gazebo.py weights/final_policy.npz 4 0` |
 | Same in the big 8 x 6 m arena | prefix `SNR_ARENA=big` (layout seeds 51-100 were used for the reported big-arena results) |
 | Watch a layout live in the Gazebo window | prefix `SNR_LIVE=1` |
+| Record a demo video from an angled camera | prefix `SNR_DEMO=se` (or `sw`); e.g. layout 45: `SNR_DEMO=se SNR_FIRST=45 ... 46 0`; see `docs/DOCUMENTATION.md` 8.1 |
 | 2D evaluation (seconds) | `.venv/bin/python rl/eval2d.py weights/final_policy.npz 100` |
 | Train | `.venv/bin/python rl/train.py RUN 8e6` (about 2 h on the development machine; writes `runs/RUN/`) |
 Argument conventions: `eval_gazebo.py WEIGHTS N_END [N_VIDEO_END]` runs layouts `SNR_FIRST .. N_END-1`. Full variable list in its docstring.

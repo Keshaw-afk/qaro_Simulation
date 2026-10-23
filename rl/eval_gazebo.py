@@ -7,6 +7,7 @@ Environment variables:
   SNR_ARENA=big   large 8 x 6 m arena instead of the 4 x 3 m training arena (read by tools/layout.py)
   SNR_LIVE=1      open the Gazebo window; the world plays in real time instead of being stepped while paused
   SNR_SHIELD=0    switch the inter-robot safety layer off
+  SNR_DEMO=se|sw  also record demo_seed{k}.avi from an angled camera south-east/south-west of the arena (rl/demo_video.py)
   SNR_FIRST=k     first layout seed
   SNR_OUT_DIR     folder for videos and gazebo_results.json (default runs/)
   GZ_PARTITION    standard Gazebo variable: runs with different values cannot see each other (so several runs can coexist)
@@ -25,6 +26,7 @@ LIVE = bool(os.environ.get("SNR_LIVE"))              # open the Gazebo GUI; the 
 OUT_DIR = pathlib.Path(os.environ.get("SNR_OUT_DIR", ROOT / "runs"))  # where videos and gazebo_results.json go (the GUI app uses its own folder)
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
+DEMO = os.environ.get("SNR_DEMO")  # "se" / "sw": record a demo video from an angled camera (visual-only extras in the world)
 import gen_world, layout as L, vision
 from gzsim import GzSim
 
@@ -46,10 +48,10 @@ def clearance(lay, pos, i):
 def run_layout(policy, seed, video=None):
     lay = L.generate_layout(seed)
     sdf = TMP / f"eval_{seed}.sdf"
-    sdf.write_text(gen_world.world_sdf(lay, real_time=LIVE))
+    sdf.write_text(gen_world.world_sdf(lay, real_time=LIVE, demo_cam=DEMO))
     simlog = TMP / f"eval_{seed}.simlog"  # simulator output, kept so a startup failure can be diagnosed
     proc = subprocess.Popen(["gz", "sim", "-s", "--headless-rendering", str(sdf)], stdout=open(simlog, "w"), stderr=subprocess.STDOUT, start_new_session=True)
-    gui = None
+    gui = rec = None
     try:
         try:
             sim = GzSim(NAMES, camera=True)
@@ -72,6 +74,11 @@ def run_layout(policy, seed, video=None):
         vel = {i: np.zeros(2) for i in range(4)}
         status = {i: "running" for i in range(4)}
         t_done = {i: None for i in range(4)}
+        if DEMO:
+            from demo_video import DemoRecorder
+            rec = DemoRecorder(sim, OUT_DIR / f"demo_seed{seed}.avi", seed, status, t_done)
+            sim.step(20)  # a moment of stillness before the robots start (they are not commanded yet)
+            rec.t_start = sim.sim_time()
         writer = None
         if video:
             writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"mp4v"), 10, (640, 480))
@@ -115,6 +122,12 @@ def run_layout(policy, seed, video=None):
             sim.step(20)
         for n in NAMES:
             sim.cmd_vel(n, 0, 0)
+        if rec is not None:
+            for _ in range(20):  # hold 2 s on the final positions
+                sim.step(20)
+            time.sleep(0.5)  # let the last rendered frames arrive
+            written, rendered = rec.close()
+            print(f"demo video: {OUT_DIR / f'demo_seed{seed}.avi'} ({written} frames at {gen_world.DEMO_FPS} fps, {rendered} rendered)", flush=True)
         if writer is not None:
             writer.release()
         for i in range(4):

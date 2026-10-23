@@ -115,6 +115,12 @@ Watch one layout in the Gazebo GUI, playing in real time (about 1 min):
 ```
 SNR_LIVE=1 SNR_FIRST=13 python3 rl/eval_gazebo.py weights/final_policy.npz 14 0
 ```
+Record a demo video from an angled camera (south-east `se` or south-west `sw` of the arena; about 1 min; writes `runs/demo_seed45.avi`).
+Layout 45 shows every start and goal from both sides. OpenCV here cannot write H.264, so convert with ffmpeg for sharing:
+```
+SNR_DEMO=se SNR_FIRST=45 python3 rl/eval_gazebo.py weights/final_policy.npz 46 0
+ffmpeg -i runs/demo_seed45.avi -c:v libx264 -pix_fmt yuv420p -crf 18 -movflags +faststart runs/demo_seed45.mp4
+```
 Stop stray simulators:
 ```
 bash tools/killsim.sh

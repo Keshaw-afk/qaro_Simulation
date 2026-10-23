@@ -18,7 +18,8 @@ check when you change something.
 | `rl/pool.py` | Pre-generates validated layouts into `rl/pool_{train,eval}.npz` (seeds >= 1000 train, 0-199 eval). Rebuild (delete the files) if layout generation changes. | scipy |
 | `rl/expert.py`, `rl/dagger.py` | DWA expert and DAgger imitation (experiments; not used by the final policy). | .venv |
 | `tools/layout.py` | Random layout generator with the no-softlock guarantee and camera-visibility rule. Shared by Gazebo and the 2D env. | scipy |
-| `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files. | |
+| `rl/demo_video.py` | Records the angled demo camera to a video with a status overlay (`SNR_DEMO`). | ROS sourced |
+| `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files (`world_sdf(..., demo_cam="se")` adds the visual-only demo camera, floor and goal discs). | |
 | `tools/gzsim.py` | Lockstep Gazebo control and sensor reads over gz-transport. | ROS sourced |
 | `tools/vision.py` | AprilTag detection and image -> world coordinates. | OpenCV |
 | `tools/killsim.sh` | Stop all `gz sim` processes safely (see pitfalls). | |
@@ -33,7 +34,7 @@ check when you change something.
 3. Ground-truth poses from the simulator decide success / collision; robots that finish are stopped.
 
 Environment variables of `eval_gazebo.py` (full list in its docstring; also `SNR_ARENA=big`, `SNR_OUT_DIR`, and the standard `GZ_PARTITION` that lets several runs coexist): `SNR_LIVE=1` open the Gazebo GUI and run at about real time; `SNR_FIRST=k` start at layout k
-(layouts k .. N-1 run); `SNR_SHIELD=0` disable the safety layer. Arguments: `WEIGHTS.npz N_END [N_VIDEOS]`.
+(layouts k .. N-1 run); `SNR_SHIELD=0` disable the safety layer; `SNR_DEMO=se|sw` record `demo_seed{k}.avi` from an angled camera. Arguments: `WEIGHTS.npz N_END [N_VIDEOS]`.
 
 ## Common changes and what else to touch
 - **Change the observation** (`arena_env.py` obs builder *and* `deploy.obs_from_sensors` *and* `OBS_DIM`): run `tests/test_obs_parity.py`; old weights become invalid; retrain.

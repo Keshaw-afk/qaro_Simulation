@@ -1,9 +1,10 @@
-"""Generate the arena world SDF from a Layout. Usage: gen_world.py SEED OUT.sdf [--rt]"""
+"""Generate the arena world SDF from a Layout. Usage: gen_world.py SEED OUT.sdf [--rt] [--demo]"""
+import math
 import sys
 
 import layout as L
 import tags
-from robot_sdf import robot_sdf
+from robot_sdf import COLORS, robot_sdf
 
 FOREST_GREEN = "0.13 0.37 0.13 1"
 PINK = "1.0 0.41 0.71 1"
@@ -39,9 +40,40 @@ CAMERA = f"""
         <clip><near>0.1</near><far>10</far></clip></camera></sensor></link></model>"""
 
 
-def world_sdf(lay, real_time=False):
+DEMO_TOPIC, DEMO_FPS, DEMO_W, DEMO_H = "/demo/image", 30, 1280, 720
+
+
+def demo_camera(w, h, side="se"):
+    """Angled 3/4 view for demo videos (not used by the policy): south-east ("se") or south-west ("sw") of the arena, looking at its centre."""
+    s = w / 4.0  # placed for the 4 x 3 m arena, scaled for the big one
+    x, y, z = (2.0 if side == "se" else -2.0) * s, -3.8 * s, 3.6 * s
+    yaw, pitch = math.atan2(0.1 * s - y, -x), math.atan2(z, math.hypot(x, 0.1 * s - y))
+    return f"""
+  <model name="demo_cam"><static>true</static><pose>{x} {y} {z} 0 {pitch} {yaw}</pose>
+    <link name="l"><sensor name="cam" type="camera"><topic>{DEMO_TOPIC}</topic><update_rate>{DEMO_FPS}</update_rate><always_on>true</always_on>
+      <camera><horizontal_fov>1.15</horizontal_fov><image><width>{DEMO_W}</width><height>{DEMO_H}</height><format>R8G8B8</format></image>
+        <clip><near>0.05</near><far>40</far></clip></camera></sensor></link></model>
+  <model name="demo_floor"><static>true</static><pose>0 0 -0.003 0 0 0</pose><link name="l"><visual name="v">
+    <geometry><plane><normal>0 0 1</normal><size>{12 * w} {12 * h}</size></plane></geometry>
+    <material><ambient>0.42 0.42 0.4 1</ambient><diffuse>0.42 0.42 0.4 1</diffuse></material></visual></link></model>"""
+
+
+def _goal_ring(i, x, y):
+    """Disc in the robot's colour under its goal tag (visual only), so a viewer can tell which goal is whose."""
+    c = " ".join(map(str, COLORS[ROBOT_COLORS[i]])) + " 1"
+    return f"""
+  <model name="goal_ring_{i + 1}"><static>true</static><pose>{x} {y} 0.001 0 0 0</pose><link name="l"><visual name="v">
+    <geometry><cylinder><radius>0.17</radius><length>0.001</length></cylinder></geometry>
+    <material><ambient>{c}</ambient><diffuse>{c}</diffuse></material></visual></link></model>"""
+
+
+def world_sdf(lay, real_time=False, demo_cam=None):
+    """demo_cam="se" or "sw" adds, for recording videos, the angled demo camera on that side, a surrounding floor and coloured
+    goal discs (all visual only; the policy never sees them)."""
     w, h = lay.arena
-    body = ""
+    body = demo_camera(w, h, demo_cam) if demo_cam else ""
+    if demo_cam:
+        body += "".join(_goal_ring(i, x, y) for i, (x, y) in enumerate(lay.goals))
     for i, (x, y, yaw) in enumerate(lay.starts):
         body += robot_sdf(f"r{i + 1}", ROBOT_COLORS[i], x, y, yaw, tag_id=i)
     for i, (x, y) in enumerate(lay.goals):
@@ -77,4 +109,4 @@ def world_sdf(lay, real_time=False):
 
 if __name__ == "__main__":
     seed, out = int(sys.argv[1]), sys.argv[2]
-    open(out, "w").write(world_sdf(L.generate_layout(seed), real_time="--rt" in sys.argv))
+    open(out, "w").write(world_sdf(L.generate_layout(seed), real_time="--rt" in sys.argv, demo_cam="se" if "--demo" in sys.argv else None))
