@@ -121,6 +121,7 @@ Layout 45 shows every start and goal from both sides. OpenCV here cannot write H
 SNR_DEMO=se SNR_FIRST=45 python3 rl/eval_gazebo.py weights/final_policy.npz 46 0
 ffmpeg -i runs/demo_seed45.avi -c:v libx264 -pix_fmt yuv420p -crf 18 -movflags +faststart runs/demo_seed45.mp4
 ```
+Add `SNR_LIVE=1` to watch the same layout in the Gazebo window, which then opens on the same angled view (it also records the video).
 Stop stray simulators:
 ```
 bash tools/killsim.sh

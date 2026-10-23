@@ -7,7 +7,8 @@ Environment variables:
   SNR_ARENA=big   large 8 x 6 m arena instead of the 4 x 3 m training arena (read by tools/layout.py)
   SNR_LIVE=1      open the Gazebo window; the world plays in real time instead of being stepped while paused
   SNR_SHIELD=0    switch the inter-robot safety layer off
-  SNR_DEMO=se|sw  also record demo_seed{k}.avi from an angled camera south-east/south-west of the arena (rl/demo_video.py)
+  SNR_DEMO=se|sw  also record demo_seed{k}.avi from an angled camera south-east/south-west of the arena (rl/demo_video.py);
+                  with SNR_LIVE=1 the Gazebo window is also aimed from that viewpoint
   SNR_FIRST=k     first layout seed
   SNR_OUT_DIR     folder for videos and gazebo_results.json (default runs/)
   GZ_PARTITION    standard Gazebo variable: runs with different values cannot see each other (so several runs can coexist)
@@ -45,6 +46,25 @@ def clearance(lay, pos, i):
     return min(gaps)
 
 
+def aim_gui(sim, pose, timeout=20.0):
+    """Move the Gazebo window's camera to pose (x, y, z, pitch, yaw), retrying until the GUI's service is up."""
+    from gz.msgs10.boolean_pb2 import Boolean
+    from gz.msgs10.gui_camera_pb2 import GUICamera
+    x, y, z, pitch, yaw = pose
+    req = GUICamera()
+    req.pose.position.x, req.pose.position.y, req.pose.position.z = x, y, z
+    cp, sp, cy, sy = math.cos(pitch / 2), math.sin(pitch / 2), math.cos(yaw / 2), math.sin(yaw / 2)
+    req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z = cp * cy, -sp * sy, sp * cy, cp * sy
+    t0 = time.time()
+    while time.time() - t0 < timeout:
+        ok, rep = sim.node.request("/gui/move_to/pose", req, GUICamera, Boolean, 1000)
+        if ok and rep.data:
+            return True
+        time.sleep(0.5)
+    print("could not aim the Gazebo window (no /gui/move_to/pose service); the default view is used", flush=True)
+    return False
+
+
 def run_layout(policy, seed, video=None):
     lay = L.generate_layout(seed)
     sdf = TMP / f"eval_{seed}.sdf"
@@ -61,6 +81,8 @@ def run_layout(policy, seed, video=None):
         if LIVE:  # watch it: attach the Gazebo GUI to this server (in live mode the world is playing in real time; otherwise it is stepped while paused)
             gui = subprocess.Popen(["gz", "sim", "-g"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
             time.sleep(8)
+            if DEMO:
+                aim_gui(sim, gen_world.demo_camera_pose(*lay.arena, DEMO))
         sim.step(40)
         sim.wait_for(lambda: sim._image is not None, 30, "camera")
         det = vision.detect(sim.image())

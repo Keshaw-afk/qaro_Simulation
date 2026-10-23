@@ -43,11 +43,16 @@ CAMERA = f"""
 DEMO_TOPIC, DEMO_FPS, DEMO_W, DEMO_H = "/demo/image", 30, 1280, 720
 
 
-def demo_camera(w, h, side="se"):
-    """Angled 3/4 view for demo videos (not used by the policy): south-east ("se") or south-west ("sw") of the arena, looking at its centre."""
+def demo_camera_pose(w, h, side="se"):
+    """(x, y, z, pitch, yaw) of the angled 3/4 demo view: south-east ("se") or south-west ("sw") of the arena, looking at its centre."""
     s = w / 4.0  # placed for the 4 x 3 m arena, scaled for the big one
     x, y, z = (2.0 if side == "se" else -2.0) * s, -3.8 * s, 3.6 * s
-    yaw, pitch = math.atan2(0.1 * s - y, -x), math.atan2(z, math.hypot(x, 0.1 * s - y))
+    return x, y, z, math.atan2(z, math.hypot(x, 0.1 * s - y)), math.atan2(0.1 * s - y, -x)
+
+
+def demo_camera(w, h, side="se"):
+    """Demo camera sensor for videos (not used by the policy) at demo_camera_pose, plus a floor around the arena."""
+    x, y, z, pitch, yaw = demo_camera_pose(w, h, side)
     return f"""
   <model name="demo_cam"><static>true</static><pose>{x} {y} {z} 0 {pitch} {yaw}</pose>
     <link name="l"><sensor name="cam" type="camera"><topic>{DEMO_TOPIC}</topic><update_rate>{DEMO_FPS}</update_rate><always_on>true</always_on>
