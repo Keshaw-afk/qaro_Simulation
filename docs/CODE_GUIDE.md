@@ -19,6 +19,7 @@ check when you change something.
 | `rl/expert.py`, `rl/dagger.py` | DWA expert and DAgger imitation (experiments; not used by the final policy). | .venv |
 | `tools/layout.py` | Random layout generator with the no-softlock guarantee and camera-visibility rule. Shared by Gazebo and the 2D env. | scipy |
 | `rl/demo_video.py` | Records the angled demo camera to a video with a status overlay (`SNR_DEMO`). | ROS sourced |
+| `tools/make_demo.sh`, `tools/demo_layouts.py` | One-command demo (video, optional live view) and the ranked list of layouts that make good demos. | ROS sourced |
 | `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files (`world_sdf(..., demo_cam="se")` adds the visual-only demo camera, floor and goal discs). | |
 | `tools/gzsim.py` | Lockstep Gazebo control and sensor reads over gz-transport. | ROS sourced |
 | `tools/vision.py` | AprilTag detection and image -> world coordinates. | OpenCV |

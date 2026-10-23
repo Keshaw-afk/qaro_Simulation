@@ -179,4 +179,9 @@ if __name__ == "__main__":
     tt = [t for r in results for s, t in zip(r["status"], r["time"]) if s == "success"]
     print(f"GAZEBO RESULT over {len(results)} layouts x 4 robots: success {st.count('success')/len(st):.3f}, collision {st.count('collision')/len(st):.3f}, "
           f"timeout {st.count('timeout')/len(st):.3f}, mean time-to-goal {np.mean(tt) if tt else float('nan'):.1f}s, all-four-success {np.mean([all(s == 'success' for s in r['status']) for r in results]):.2f}")
-    json.dump(results, open(OUT_DIR / "gazebo_results.json", "w"))
+    with open(OUT_DIR / "gazebo_results.json", "w") as f:
+        json.dump(results, f)
+    # Exit without interpreter teardown: gz-transport threads can still deliver a late message (e.g. a camera frame) into a
+    # Python callback while the interpreter shuts down, which segfaults after all work is done (seen once in live demo mode).
+    sys.stdout.flush()
+    os._exit(0)

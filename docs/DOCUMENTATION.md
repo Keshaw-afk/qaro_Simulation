@@ -115,6 +115,7 @@ Watch one layout in the Gazebo GUI, playing in real time (about 1 min):
 ```
 SNR_LIVE=1 SNR_FIRST=13 python3 rl/eval_gazebo.py weights/final_policy.npz 14 0
 ```
+One command does all of the following for a layout (pick one with `python3 tools/demo_layouts.py`): `bash tools/make_demo.sh 45 se live` (video to `runs/demo/`, then the live window).
 Record a demo video from an angled camera (south-east `se` or south-west `sw` of the arena; about 1 min; writes `runs/demo_seed45.avi`).
 Layout 45 shows every start and goal from both sides. OpenCV here cannot write H.264, so convert with ffmpeg for sharing:
 ```
