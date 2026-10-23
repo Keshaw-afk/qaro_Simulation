@@ -4,7 +4,7 @@ Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-p
 
 ## Unreleased
 - `eval_gazebo.py` exits without interpreter teardown after writing results: a late gz-transport message during shutdown segfaulted it once (live demo, layout 8), after all work was done.
-- `tools/make_demo.sh SEED [se|sw] [live]` (record + convert + optional live run, re-runs itself in the distrobox from the host) and `tools/demo_layouts.py` (ranks layouts for demos by camera visibility). Live mode with `SNR_DEMO` opens the Gazebo window on the demo view.
+- `tools/make_demo.sh SEED [se|sw] [live]` (record + convert + optional live run, re-runs itself in the distrobox from the host) and `tools/demo_layouts.py` (ranks layouts for demos by camera visibility; `--hard` by obstacles in the robots' straight paths and path crossings). Live mode with `SNR_DEMO` opens the Gazebo window on the demo view.
 - Demo videos from an angled 3/4 camera (`SNR_DEMO=se|sw`, `rl/demo_video.py`): real-time video by simulation timestamps, status overlay, coloured goal discs; all visual only, normal evaluation worlds are unchanged. Layout 45 is a good demo (8 obstacles, every start and goal visible, all four succeed).
 - Fix for a clean apt Gazebo + ROS install with a VPN: pin `GZ_IP`, restore `GZ_CONFIG_PATH`, keep the simulator log and show its tail on a startup timeout (found by debugging a friend's laptop over SSH).
 - Big arena profile (`SNR_ARENA=big`, 8 x 6 m); evaluation of the final policy on layouts 1-50 (standard) and 51-100 (big) in `docs/results/`.

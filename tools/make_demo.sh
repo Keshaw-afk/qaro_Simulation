@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Demo of one layout from the angled camera: records runs/demo/demo_seed{SEED}.mp4 (exact, stepped), then with "live"
 # plays the same layout in real time in the Gazebo window, opened on the same view. Pick layouts with tools/demo_layouts.py.
-#   bash tools/make_demo.sh SEED [se|sw] [live]
+#   bash tools/make_demo.sh SEED [se|sw] [live|live-only]      (live-only: skip recording, just play it in the window)
 # On a distrobox host without ROS it re-runs itself inside the container (SNR_CONTAINER, default "ubuntu").
 set -euo pipefail
 cd "$(dirname "$0")/.."
-SEED=${1:?usage: make_demo.sh SEED [se|sw] [live]}; SIDE=${2:-se}; LIVE=${3:-}
+SEED=${1:?usage: make_demo.sh SEED [se|sw] [live|live-only]}; SIDE=${2:-se}; LIVE=${3:-}
 if [ ! -f /opt/ros/jazzy/setup.bash ]; then
     exec distrobox enter "${SNR_CONTAINER:-ubuntu}" -- bash -c "cd '$PWD' && bash tools/make_demo.sh $SEED $SIDE $LIVE"
 fi
@@ -21,11 +21,13 @@ to_mp4() {  # DIR: demo_seed$SEED.avi -> H.264 .mp4 (plays everywhere); keeps th
     fi
 }
 
-mkdir -p runs/demo
-SNR_DEMO=$SIDE SNR_FIRST=$SEED SNR_OUT_DIR=runs/demo python3 rl/eval_gazebo.py weights/final_policy.npz $((SEED + 1)) 0
-to_mp4 runs/demo
+if [ "$LIVE" != live-only ]; then
+    mkdir -p runs/demo
+    SNR_DEMO=$SIDE SNR_FIRST=$SEED SNR_OUT_DIR=runs/demo python3 rl/eval_gazebo.py weights/final_policy.npz $((SEED + 1)) 0
+    to_mp4 runs/demo
+fi
 
-if [ "$LIVE" = live ]; then  # real time, so the run can differ slightly from the recorded one; its own video goes to runs/demo/live/
+if [ "$LIVE" = live ] || [ "$LIVE" = live-only ]; then  # real time, so the run can differ slightly from the recorded one; its own video goes to runs/demo/live/
     mkdir -p runs/demo/live
     SNR_LIVE=1 SNR_DEMO=$SIDE SNR_FIRST=$SEED SNR_OUT_DIR=runs/demo/live python3 rl/eval_gazebo.py weights/final_policy.npz $((SEED + 1)) 0
     to_mp4 runs/demo/live
