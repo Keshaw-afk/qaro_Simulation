@@ -1,8 +1,12 @@
 # Changelog
 
-Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`.
+Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`, `v1.0-navigation-demo`.
 
 ## Unreleased
+
+## v1.0-navigation-demo: Robots Navigation and Collision Avoidance Demonstration
+First complete version: four robots reach their goals in Gazebo with the PPO policy and safety layer (standard arena, layouts 1-50: 89.8% success, 6.1% collision, 4.1% timeout; see `docs/results/SUMMARY.md`).
+- Instructor demo kit (`instructor_artifacts/`): demo scripts, checked layouts, ROS/Gazebo info, training curve.
 - Run log (`SNR_LOG=1`, `rl/run_log.py`): once per simulated second prints each robot's ground-truth position, heading, speed, distance to goal and collision signals (smallest clearance, near misses, safety-layer interventions); every step goes to `log_seed{k}.csv`. Read-only, the policy path is unchanged.
 - `eval_gazebo.py` exits without interpreter teardown after writing results: a late gz-transport message during shutdown segfaulted it once (live demo, layout 8), after all work was done.
 - `tools/make_demo.sh SEED [se|sw] [live]` (record + convert + optional live run, re-runs itself in the distrobox from the host) and `tools/demo_layouts.py` (ranks layouts for demos by camera visibility; `--hard` by obstacles in the robots' straight paths and path crossings). Live mode with `SNR_DEMO` opens the Gazebo window on the demo view.
