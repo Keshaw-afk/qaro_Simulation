@@ -1,0 +1,12 @@
+SIMULATION COMMUNICATION GRAPH (static info, no live values)
+generated 2026-10-28 16:33 IST from layout 29, world 'arena'
+software: ROS 2 jazzy, Gazebo Sim 8.15.0, Python 3.12.3
+
+HOW THE PROJECT COMMUNICATES
+  The policy talks to Gazebo directly over gz-transport (Gazebo's own publish/subscribe middleware, Python bindings
+  in tools/gzsim.py), not through ROS 2 topics. No ros_gz bridge is started, so the ROS 2 graph (last section) only
+  holds ROS's defaults. Per robot rN (N = 1..4): lidar + odometry in, drive command out; one overhead camera shared.
+  Control loop: every 0.1 s of sim time (20 physics steps of 5 ms) read sensors -> policy -> safety layer -> cmd_vel.
+
+GAZEBO TOPICS (43)
+  topic                            message type             use in this project

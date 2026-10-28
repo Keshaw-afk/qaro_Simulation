@@ -1,0 +1,28 @@
+LAYOUTS FOR THE INSTRUCTOR DEMO
+Policy weights/final_policy.npz, standard 4 x 3 m arena, 4 robots. Checked in Gazebo on 2026-10-28.
+
+READY (all four robots reached their goals)
+  layout  what is hard about it                               result
+  29      wall of boxes across the middle, 5 path crossings   4/4, 238-249 policy steps (about 24-25 s), 2 live runs
+  80      two robots cross the whole arena                    4/4, 252 policy steps (about 25 s), live run
+  153     7 obstacles, 4 path crossings                       4/4, 202 policy steps (about 20 s), headless test
+  133     one robot has 4 boxes in its way                    4/4, 175-176 policy steps (about 18 s), 2 headless tests
+  62      4 path crossings, longest run                       4/4, 277 policy steps (about 28 s), headless test
+
+SPARE
+  19      6 obstacles, 4 path crossings                       4/4, 195 policy steps (about 20 s); not in the script's list,
+                                                              but instructor_demo 19 still plays it
+
+DO NOT USE (failed when tested alone)
+  71      robot 3 timed out
+  66      robot 2 timed out (twice)
+  187     two robots timed out, two collided
+
+NOTE
+  Live runs play in real time and can differ from a test run; a hard layout can occasionally fail live even after
+  succeeding in a test. A policy step is 0.1 s of simulated time.
+
+HOW TO RUN (from the repository root)
+  instructor_artifacts/instructor_demo 29                 play layout 29 live in the Gazebo window
+  instructor_artifacts/instructor_demo_advanced log 29    same, plus per-second positions and collision signals
+  instructor_artifacts/instructor_demo                    list the ready layouts

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Instructor demo with extras: the same live Gazebo run as instructor_demo, plus diagnostics in the terminal.
+#   runs/instructor_demo_advanced log X    play layout X live and print, once per simulated second, each robot's position,
+#                                          heading, speed, distance to goal and its collision signals (smallest clearance,
+#                                          near misses, safety-layer interventions); every 0.1 s step is also saved to
+#                                          runs/demo/live/log_seedX.csv
+#   runs/instructor_demo_advanced          usage and the recommended layouts
+set -euo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+
+usage() {
+    echo "usage: instructor_demo_advanced log LAYOUT"
+    "$HERE/instructor_demo" | tail -n +2
+}
+[ $# -eq 2 ] || { usage; exit 0; }
+case "$1" in
+    log) export SNR_LOG=1 ;;
+    *) echo "unknown mode '$1'"; usage; exit 1 ;;
+esac
+exec "$HERE/instructor_demo" "$2"

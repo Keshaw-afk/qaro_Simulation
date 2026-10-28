@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# Static info dump of the simulation's communication graph: every channel (topic) with its message type and what this
+# project uses it for, services, models, sensors with their rates, and the ROS 2 graph. No live values are read.
+#   instructor_artifacts/ros_info_dump [LAYOUT]     (default layout 29) -> prints the report and saves it next to this script
+# It starts its own paused, headless simulator on its own GZ_PARTITION, so it cannot disturb a demo or evaluation that is
+# running, and it stops only that simulator. Read-only: no project file is changed. About 2 minutes (one query per topic).
+set -euo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+ROOT="$(cd "$HERE/.." && pwd)"
+LAYOUT=${1:-29}
+[[ "$LAYOUT" =~ ^[0-9]+$ ]] || { echo "usage: ros_info_dump [LAYOUT]"; exit 1; }
+if [ ! -f /opt/ros/jazzy/setup.bash ]; then  # on the Fedora host: run inside the container
+    exec distrobox enter "${SNR_CONTAINER:-ubuntu}" -- bash "$HERE/ros_info_dump" "$LAYOUT"
+fi
+set +u; source /opt/ros/jazzy/setup.bash; set -u
+export GZ_IP=127.0.0.1 GZ_PARTITION="ros_info_dump_$$"  # same loopback pin as tools/gzsim.py; own partition
+[ -d /usr/share/gz ] && export GZ_CONFIG_PATH="/usr/share/gz:${GZ_CONFIG_PATH:-}"
+OUT="$HERE/ros_info.txt"
+TMPD="$(mktemp -d)"
+SIM=
+cleanup() { [ -n "$SIM" ] && kill -9 -- "-$SIM" 2>/dev/null; rm -rf "$TMPD"; }
+trap cleanup EXIT
+
+echo "starting a paused headless simulator for layout $LAYOUT (partition $GZ_PARTITION) ..." >&2
+python3 -c "import sys; sys.path.insert(0, '$ROOT/tools'); import gen_world, layout as L; open('$TMPD/world.sdf', 'w').write(gen_world.world_sdf(L.generate_layout($LAYOUT)))"
+setsid gz sim -s --headless-rendering "$TMPD/world.sdf" > "$TMPD/sim.log" 2>&1 &
+SIM=$!
+for _ in $(seq 40); do gz topic -l 2>/dev/null | grep -q '^/r4/scan$' && break; sleep 1; done
+gz topic -l 2>/dev/null | grep -q '^/r4/scan$' || { echo "simulator did not come up; its log:" >&2; tail -20 "$TMPD/sim.log" >&2; exit 1; }
+
+role() {  # what this project does with a topic or service (from tools/gzsim.py, rl/eval_gazebo.py, rl/demo_video.py)
+    case "$1" in
+        /r?/cmd_vel)                 echo "WRITTEN by the policy: drive command (linear m/s, angular rad/s)" ;;
+        /r?/scan)                    echo "READ: 360-beam lidar -> policy observation" ;;
+        /r?/odom)                    echo "READ: wheel odometry (speed, turn rate) -> policy observation" ;;
+        /overhead/image)             echo "READ: overhead camera -> AprilTags -> robot poses, goals, velocities" ;;
+        /world/arena/pose/info)      echo "READ: ground-truth poses (scoring only: success / collision)" ;;
+        /clock)                      echo "READ: simulation time (lockstep stepping)" ;;
+        /world/arena/control)        echo "CALLED: pause / play / step the world" ;;
+        /demo/*)                     echo "READ: demo video camera (only with SNR_DEMO)" ;;
+        /gui/move_to/pose)           echo "CALLED: aim the Gazebo window (live demo only)" ;;
+        *)                           echo "-" ;;
+    esac
+}
+msgtype() { gz topic -i -t "$1" 2>/dev/null | grep -o 'gz\.msgs\.[A-Za-z_]*' | head -1 || true; }
+
+{
+echo "SIMULATION COMMUNICATION GRAPH (static info, no live values)"
+echo "generated $(date '+%Y-%m-%d %H:%M %Z') from layout $LAYOUT, world 'arena'"
+echo "software: ROS 2 ${ROS_DISTRO:-?}, $(gz sim --versions 2>/dev/null | head -1 | sed 's/^/Gazebo Sim /'), $(python3 --version)"
+echo
+echo "HOW THE PROJECT COMMUNICATES"
+echo "  The policy talks to Gazebo directly over gz-transport (Gazebo's own publish/subscribe middleware, Python bindings"
+echo "  in tools/gzsim.py), not through ROS 2 topics. No ros_gz bridge is started, so the ROS 2 graph (last section) only"
+echo "  holds ROS's defaults. Per robot rN (N = 1..4): lidar + odometry in, drive command out; one overhead camera shared."
+echo "  Control loop: every 0.1 s of sim time (20 physics steps of 5 ms) read sensors -> policy -> safety layer -> cmd_vel."
+echo
+echo "GAZEBO TOPICS ($(gz topic -l | wc -l))"
+printf '  %-32s %-24s %s\n' "topic" "message type" "use in this project"
+gz topic -l | sort | while read -r t; do printf '  %-32s %-24s %s\n' "$t" "$(msgtype "$t")" "$(role "$t")"; done
+echo
+echo "GAZEBO SERVICES ($(gz service -l | wc -l))"
+gz service -l | sort | while read -r s; do r=$(role "$s"); printf '  %-44s %s\n' "$s" "$([ "$r" = - ] || echo "$r")"; done
+echo
+echo "SENSORS AND PLUGINS (from the world file)"
+python3 - "$TMPD/world.sdf" <<'PY'
+import sys, xml.etree.ElementTree as ET
+root = ET.parse(sys.argv[1]).getroot()
+for m in root.iter("model"):
+    for s in m.iter("sensor"):
+        g = lambda tag: (s.findtext(tag) or "-").strip()
+        extra = ""
+        if s.get("type") in ("gpu_lidar", "lidar"):
+            extra = f"{g('lidar/scan/horizontal/samples')} beams, range {g('lidar/range/min')}-{g('lidar/range/max')} m"
+        elif s.get("type") == "camera":
+            extra = f"{g('camera/image/width')}x{g('camera/image/height')}"
+        print(f"  {m.get('name'):12s} sensor {s.get('name'):6s} {s.get('type'):10s} topic {g('topic'):18s} {g('update_rate'):>4s} Hz  {extra}")
+    for p in m.findall("plugin"):
+        name = p.get("name", "").split("::")[-1]
+        topics = ", ".join(f"{c.tag}={c.text.strip()}" for c in p if c.tag.endswith("topic") and c.text)
+        print(f"  {m.get('name'):12s} plugin {name:28s} {topics}")
+w = root.find("world")
+ph = w.find("physics")
+rtf = ph.findtext("real_time_factor")
+print(f"  physics: step {ph.findtext('max_step_size')} s, real-time factor {rtf}" + (" (0 = no speed limit: evaluation pauses the world and steps it)" if rtf == "0" else "")
+      + "; live mode (SNR_LIVE=1) uses factor 1 and plays in real time")
+PY
+echo
+echo "MODELS"
+gz model --list 2>/dev/null | sed -n '/Available models/,$p' | sed 's/^/  /'
+echo
+echo "ROBOT r1 STRUCTURE (r2-r4 identical; pose is the start pose of this layout)"
+gz model -m r1 2>/dev/null | grep -v -e 'Requesting state' -e '^\s*$' | sed 's/^/  /'
+echo
+echo "ROS 2 GRAPH (ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0})"
+echo "  nodes:";    ros2 node list --no-daemon 2>/dev/null | sed 's/^/    /' || true
+echo "  topics:";   ros2 topic list -t --no-daemon 2>/dev/null | sed 's/^/    /' || true
+echo "  services:"; ros2 service list -t --no-daemon 2>/dev/null | sed 's/^/    /' || true
+echo "  (expected: only /parameter_events and /rosout unless something else is running; the simulation itself is on gz-transport)"
+} | tee "$OUT"
+echo "saved: $OUT" >&2

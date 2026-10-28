@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Instructor demo: play one layout live in the Gazebo window (angled camera, real time, 4 robots, shared policy).
+#   runs/instructor_demo X      play layout X (any seed works; the recommended ones are listed below)
+#   runs/instructor_demo        list the recommended layouts
+# Works from the Fedora host or inside the ubuntu distrobox (tools/make_demo.sh handles the switch). About 1 minute per run.
+set -euo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+
+# Hard layouts where all four robots reached their goals in Gazebo: layout, description
+LAYOUTS=(
+    "29  wall of boxes across the middle, 5 path crossings"
+    "80  two robots cross the whole arena, 4 path crossings"
+    "153 7 obstacles, 4 path crossings"
+    "133 6 obstacles, one robot has 4 boxes in its way"
+    "62  5 obstacles, 4 path crossings, longest run (about 28 s)"
+)
+
+if [ $# -eq 0 ]; then
+    echo "usage: instructor_demo LAYOUT"
+    echo "recommended layouts:"
+    printf '  %s\n' "${LAYOUTS[@]}"
+    exit 0
+fi
+X=$1
+[[ "$X" =~ ^[0-9]+$ ]] || { echo "layout must be a number, e.g. instructor_demo ${LAYOUTS[0]%% *}"; exit 1; }
+printf '%s\n' "${LAYOUTS[@]}" | grep -q "^$X " || echo "note: layout $X is not in the recommended list; playing it anyway"
+echo "playing layout $X live in the Gazebo window ..."
+# own partition: another simulator (e.g. a headless run on snr_demo) would otherwise pause/step this one
+export GZ_PARTITION="instructor_demo_$$"
+exec bash "$HERE/../tools/make_demo.sh" "$X" se live-only
