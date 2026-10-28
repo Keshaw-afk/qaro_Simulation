@@ -9,6 +9,8 @@ Environment variables:
   SNR_SHIELD=0    switch the inter-robot safety layer off
   SNR_DEMO=se|sw  also record demo_seed{k}.avi from an angled camera south-east/south-west of the arena (rl/demo_video.py);
                   with SNR_LIVE=1 the Gazebo window is also aimed from that viewpoint
+  SNR_LOG=1       print robot positions and collision signals once per simulated second and save every step to
+                  log_seed{k}.csv (rl/run_log.py); read-only, the policy is not affected
   SNR_FIRST=k     first layout seed
   SNR_OUT_DIR     folder for videos and gazebo_results.json (default runs/)
   GZ_PARTITION    standard Gazebo variable: runs with different values cannot see each other (so several runs can coexist)
@@ -28,6 +30,7 @@ OUT_DIR = pathlib.Path(os.environ.get("SNR_OUT_DIR", ROOT / "runs"))  # where vi
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
 DEMO = os.environ.get("SNR_DEMO")  # "se" / "sw": record a demo video from an angled camera (visual-only extras in the world)
+LOG = bool(os.environ.get("SNR_LOG"))  # per-second position / collision-signal table + per-step CSV (rl/run_log.py)
 import gen_world, layout as L, vision
 from gzsim import GzSim
 
@@ -104,7 +107,20 @@ def run_layout(policy, seed, video=None):
         writer = None
         if video:
             writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"mp4v"), 10, (640, 480))
+        if LOG:
+            from run_log import RunLog
+            log = RunLog(OUT_DIR / f"log_seed{seed}.csv", seed, lay.goals)
+            gt_prev = [sim.pose(n)[:2] for n in NAMES]
+
+        def log_step(step, vetoed):  # ground truth for the log: pose, speed by differencing, clearance
+            nonlocal gt_prev
+            full = [sim.pose(n)[:3] for n in NAMES]
+            speed = [math.hypot(full[i][0] - gt_prev[i][0], full[i][1] - gt_prev[i][1]) / D.DT for i in range(4)]
+            gt_prev = [p[:2] for p in full]
+            log.step(step, full, speed, [clearance(lay, [p[:2] for p in full], i) for i in range(4)], vetoed, [status[i] for i in range(4)])
+
         for step in range(MAX_STEPS):
+            vetoed = [False] * 4
             d = vision.detect(sim.image())
             cam.update(d["robots"])
             for i in range(4):  # world-frame velocity by differencing consecutive camera frames
@@ -125,6 +141,8 @@ def run_layout(policy, seed, video=None):
                     cv2.circle(f, px(lay.goals[i]), 22, (255, 255, 255), 2)
                 writer.write(cv2.resize(f, (640, 480)))
             if all(s != "running" for s in status.values()):
+                if LOG:
+                    log_step(step, vetoed)
                 break
             for i, n in enumerate(NAMES):
                 if status[i] != "running":
@@ -137,10 +155,14 @@ def run_layout(policy, seed, video=None):
                 obs = D.obs_from_sensors(sim.scan(n), (x, y), yaw, goals[i], others, vel[i], others_vel, od[3], od[4], prev[i], i)
                 k = policy.index(obs)[0]
                 if USE_SHIELD:  # inter-robot safety layer (SNR_SHIELD=0 turns it off)
+                    k_policy = k
                     k = SH.apply(np.array([[x, y]]), np.array([yaw]), others[None], others_vel[None], np.array([k]))[0]
+                    vetoed[i] = k != k_policy
                 a = np.array([CV[k] / D.VMAX * 2 - 1, CW[k] / D.WMAX], np.float32)
                 prev[i] = a.astype(np.float32)
                 sim.cmd_vel(n, *D.action_to_cmd(a))
+            if LOG:
+                log_step(step, vetoed)
             sim.step(20)
         for n in NAMES:
             sim.cmd_vel(n, 0, 0)
@@ -152,6 +174,8 @@ def run_layout(policy, seed, video=None):
             print(f"demo video: {OUT_DIR / f'demo_seed{seed}.avi'} ({written} frames at {gen_world.DEMO_FPS} fps, {rendered} rendered)", flush=True)
         if writer is not None:
             writer.release()
+        if LOG:
+            log.close()
         for i in range(4):
             if status[i] == "running":
                 status[i] = "timeout"

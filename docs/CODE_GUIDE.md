@@ -18,6 +18,7 @@ check when you change something.
 | `rl/pool.py` | Pre-generates validated layouts into `rl/pool_{train,eval}.npz` (seeds >= 1000 train, 0-199 eval). Rebuild (delete the files) if layout generation changes. | scipy |
 | `rl/expert.py`, `rl/dagger.py` | DWA expert and DAgger imitation (experiments; not used by the final policy). | .venv |
 | `tools/layout.py` | Random layout generator with the no-softlock guarantee and camera-visibility rule. Shared by Gazebo and the 2D env. | scipy |
+| `rl/run_log.py` | Per-second robot table (position, speed, distance to goal, clearance, near misses, safety-layer interventions) and per-step CSV for `SNR_LOG=1`. Read-only. | |
 | `rl/demo_video.py` | Records the angled demo camera to a video with a status overlay (`SNR_DEMO`). | ROS sourced |
 | `tools/make_demo.sh`, `tools/demo_layouts.py` | One-command demo (video, optional live view) and the ranked list of layouts that make good demos. | ROS sourced |
 | `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files (`world_sdf(..., demo_cam="se")` adds the visual-only demo camera, floor and goal discs). | |
@@ -35,7 +36,7 @@ check when you change something.
 3. Ground-truth poses from the simulator decide success / collision; robots that finish are stopped.
 
 Environment variables of `eval_gazebo.py` (full list in its docstring; also `SNR_ARENA=big`, `SNR_OUT_DIR`, and the standard `GZ_PARTITION` that lets several runs coexist): `SNR_LIVE=1` open the Gazebo GUI and run at about real time; `SNR_FIRST=k` start at layout k
-(layouts k .. N-1 run); `SNR_SHIELD=0` disable the safety layer; `SNR_DEMO=se|sw` record `demo_seed{k}.avi` from an angled camera. Arguments: `WEIGHTS.npz N_END [N_VIDEOS]`.
+(layouts k .. N-1 run); `SNR_SHIELD=0` disable the safety layer; `SNR_DEMO=se|sw` record `demo_seed{k}.avi` from an angled camera; `SNR_LOG=1` print positions and collision signals per second and write `log_seed{k}.csv`. Arguments: `WEIGHTS.npz N_END [N_VIDEOS]`.
 
 ## Common changes and what else to touch
 - **Change the observation** (`arena_env.py` obs builder *and* `deploy.obs_from_sensors` *and* `OBS_DIM`): run `tests/test_obs_parity.py`; old weights become invalid; retrain.
