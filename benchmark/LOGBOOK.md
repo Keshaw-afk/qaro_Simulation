@@ -83,3 +83,7 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   path (needs the simulator state); its batched evaluation is 2-3x slower than PPO's.
 - Gazebo adapter smoke test (PPO, layout 100, loaded machine): 3 success + 1 timeout, 194 s wall; real Gazebo runs are
   scheduled after the CPU-heavy jobs (AGENTS.md: clock stalls under load).
+- ~12:58 Owner reconnected the Colab tab: same runtime (uptime unchanged), the three DQN runs kept going. Google Drive
+  mounted (owner authorised); `MyDrive/qaro_benchmark/` receives checkpoints (.npz), logs, SB3 progress and
+  measurements every 5 min. A crash would lose the replay buffer, so a run could not be resumed exactly, only its best
+  checkpoint so far kept.
