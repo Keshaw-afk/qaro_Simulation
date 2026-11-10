@@ -127,3 +127,11 @@ The owner may close the Claude session; the rest runs without it.
   `tar xzf dqn_final.tar.gz -C ~/robotics/swarm_nav_rl` (it contains `runs/benchmark/dqn/final_s{1,2,3}/` with `DONE` markers, plus `colab_extra/` with the Colab
   measurements and logs, kept apart so nothing local is overwritten). The script picks the weights up within 2 min.
 - Still to do by hand afterwards: `benchmark/RESULTS.md`, docs overview, commit.
+
+## Rule controller tuning (~13:34)
+- 36 sets, validation, 2 processes, 92 min (~5 min per set per process). Best: horizon 1.0, margin 0.02, w_clear 2.0,
+  w_head 0.3 -> **84.0% success / 1.5% collision / 14.5% timeout** (all collisions obstacle, none robot), mean time
+  9.9 s. The top ~6 sets are within 1.7 points of each other. Strongest rival so far on validation (PPO is not
+  measured on these layouts, so no comparison yet).
+- The best sat on the lower edge of 3 parameters: pipeline stopped before the rule test evaluation (none run),
+  grid extended by 14 sets (amendment 3), 7 processes; the pipeline restarts automatically afterwards.
