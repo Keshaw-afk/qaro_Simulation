@@ -113,3 +113,18 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
 - Evaluation is fast (~1-2 min per condition per seed, 3 in parallel).
 - 13:19 Security housekeeping (not benchmark): host shell stopped exporting the GitHub token (distrobox put it on a
   world-readable `podman exec` command line). No effect on any experiment.
+
+## Unattended pipeline and how to resume (~13:30)
+The owner may close the Claude session; the rest runs without it.
+- **Laptop:** `benchmark/run_remaining.sh` (started detached with `setsid nohup` inside the distrobox; log
+  `runs/benchmark/logs/run_remaining.log`). Order: wait for rule tuning (re-runs it if its process died) -> 2D test
+  evaluation of `rule` -> 2D evaluation of the exploratory fine tabq -> Gazebo PPO (100-119) -> wait up to 6 h for
+  the DQN weights -> 2D evaluation of each DQN seed, Gazebo of the validation-chosen seed -> Gazebo of the better of
+  rule / tabq_s3 (test success). Every step is skipped if its output exists, so re-running the script is safe.
+- **Colab:** `/content/package_when_done.sh` waits for the 3 DQN runs, then writes `MyDrive/qaro_benchmark/dqn_final.tar.gz`
+  (+ `.sha256`, `DQN_FINISHED.txt`). The Colab tab must stay open until then.
+- **Manual step if nobody fetches it:** download `dqn_final.tar.gz` from Drive, check the sha256, then
+  `tar xzf dqn_final.tar.gz -C ~/robotics/swarm_nav_rl` (it contains `runs/benchmark/dqn/final_s{1,2,3}/` with `DONE`
+  markers; the Colab `measurements.jsonl` and logs are included but extract over the local ones: extract the
+  measurements/logs elsewhere and merge). The script picks the weights up within 2 min.
+- Still to do by hand afterwards: `benchmark/RESULTS.md`, docs overview, commit.
