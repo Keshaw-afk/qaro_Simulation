@@ -135,3 +135,19 @@ The owner may close the Claude session; the rest runs without it.
   measured on these layouts, so no comparison yet).
 - The best sat on the lower edge of 3 parameters: pipeline stopped before the rule test evaluation (none run),
   grid extended by 14 sets (amendment 3), 7 processes; the pipeline restarts automatically afterwards.
+
+## Pipeline bugs, Colab reset, DQN results (~15:05)
+- **My pipeline script had two bugs** (no result affected, ~70 min lost): the Python path was relative and broke
+  inside `cd benchmark`, so the rule and fine-tabq evaluations failed instantly; and `set -u` made ROS's setup.bash
+  abort, so Gazebo never started. The script then waited for DQN. Fixed (absolute path, `set +u` around `source`),
+  checked, relaunched at ~15:00.
+- Rule grid extension finished: best of 50 sets is horizon 0.7, margin 0.02, w_clear 2.0, w_head 0.1:
+  **87.3% / 2.3% / 10.5%** on validation (was 84.0% / 1.5%). Edge again on w_head and horizon, but the budget
+  (50 sets) is spent; stated as a limitation.
+- Exploratory fine tabq at 8M: 53.5% / 25.3% on validation (coarse finals 61-72%). More data did not close the gap.
+- **Colab runtime reset** (uptime 3 min at 15:01 IST); last Drive backup 14:23 IST at 6.14M steps. Bundle rebuilt from
+  Drive, downloaded to ~/Downloads (sha256 4e1ccb25...), installed in `runs/benchmark/dqn/final_s*` with DONE markers
+  saying "partial". Colab measurements in `results/measurements_colab.jsonl` (the final runs never wrote a Meter
+  record; their time/throughput come from `log.csv` / `sb3/progress.csv`: ~955 steps/s per run, 6,300 s to 6M).
+- **DQN validation (best checkpoint):** s1 89.5% / 0.5% (6M), **s2 91.75% / 1.0% (5M, chosen)**, s3 87.0% / 0.0% (6M).
+  DQN was still noisy between checkpoints (s1 dipped to 55% at 3M, s2 to 54.5% at 2M).

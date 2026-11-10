@@ -1,0 +1,9 @@
+{
+ "name": "rule",
+ "spec": "rule",
+ "params": 7,
+ "bytes": 0,
+ "single_us_median": 159.95049761841074,
+ "single_us_p99": 203.23548473243133,
+ "single_us_mean": 162.13236421830706
+}

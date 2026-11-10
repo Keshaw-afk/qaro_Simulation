@@ -79,3 +79,8 @@ outcome arrays and summary in `benchmark/results/*.json` (committed).
    (`rule.PARAM_GRID_EXT`: horizon 0.7, margin 0.01, w_head 0.1, 14 new sets, total 50 = the pre-registered budget).
    The choice remains the best validation score over all 50 sets. The 36-set choice is kept in
    `results/rule_best_params_grid36.json`.
+4. **2026-11-10 ~15:05, DQN budget deviation (not chosen, forced).** The Colab runtime was reset between ~14:23 and
+   ~15:00 IST (cause not diagnosed; the laptop lid was closed and Colab's free tier can end sessions). All three DQN
+   finals stopped at 6.14M of 8M steps; the replay buffers were lost, so exact continuation is impossible. The best
+   validation checkpoints (selected at 1M-step intervals, as planned) are used: DQN is reported at **6M steps**,
+   75% of PPO's budget. This can only disadvantage DQN.

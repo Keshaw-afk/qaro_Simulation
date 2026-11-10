@@ -12,7 +12,7 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 unset GITHUB_PERSONAL_ACCESS_TOKEN
-PY=.venv/bin/python
+PY="$PWD/.venv/bin/python"
 R=benchmark/results
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 
@@ -41,7 +41,7 @@ fi
 gz() {
   [ -f $R/gazebo__$1.json ] && grep -q '"summary"' $R/gazebo__$1.json && { log "gazebo $1 already done"; return; }
   log "gazebo $1 ($2) start"
-  (source /opt/ros/jazzy/setup.bash && GZ_PARTITION=snr_bench_$1 $PY benchmark/eval_gazebo_bench.py "$1" "$2" 100 120 \
+  (set +u; source /opt/ros/jazzy/setup.bash && GZ_PARTITION=snr_bench_$1 $PY benchmark/eval_gazebo_bench.py "$1" "$2" 100 120 \
      > runs/benchmark/logs/gazebo_$1.log 2>&1)
   log "gazebo $1 done: $(tail -1 runs/benchmark/logs/gazebo_$1.log | cut -c1-250)"
 }
