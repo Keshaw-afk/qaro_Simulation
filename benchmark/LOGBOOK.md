@@ -66,7 +66,10 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   Final runs: config a, seeds 1-3, 8M steps each (started ~12:15).
 - **dqn** (Colab T4, 1M steps each, 2 processes in parallel): ~1,650 steps/s per process; GPU only 4-7% busy - the
   bottleneck is Colab's 2 vCPUs (simulator + SB3 replay bookkeeping), not the network. a 63.0% / 4.0% coll / 33.0% timeout;
-  b (lr 3e-4) 26.0% / 0.3% / 73.8%. (c-f pending.) Tuning runs use the code version before the extra logging (logging only).
+  b (lr 3e-4) 26.0% / 0.3% / 73.8%; **c (4 gradient steps) 63.5% / 0.5% / 36.0% (score 0.633, chosen)**;
+  d (exploration 0.5) 62.3% / 3.3%; e (target update 2k) 54.7% / 4.8%; f (ReLU) 54.7% / 6.8%. DQN collides far less
+  than tabq but times out a lot at 1M steps. Tuning runs used the code before the extra logging (logging only).
+  Final runs: config c, seeds 1-3, 8M steps, all three concurrently on Colab (started ~12:50 local; code hashes verified).
 
 ## Baseline evaluation (full metrics, ~12:10-12:45)
 - Test 100-199, shield on / off: PPO 90.2% / 68.0%; PPO final (8M, never selected) 89.5% / 65.0% (dSucc vs PPO
