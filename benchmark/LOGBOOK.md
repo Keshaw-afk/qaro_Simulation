@@ -160,3 +160,10 @@ The owner may close the Claude session; the rest runs without it.
   robots succeed in 56-57% of layouts; mean time to goal 9.6 s. It needs no safety layer: robot-robot avoidance is
   built in (camera slots), whereas PPO and tabq learned to lean on the safety layer.
 - **Exploratory fine tabq, test:** 54.2% / 26.0% with shield, 46.2% / 39.0% without.
+
+## DQN test results, PPO in Gazebo (~15:33)
+- **DQN test 100-199, shield on:** s1 88.0% / 0.5%, **s2 (validation-chosen) 90.0% [86.8-93.0] / 1.5% coll,
+  dSucc vs PPO -0.2 [-4.0, +3.5]**, s3 83.0% / 0.5%; mean of seeds 87.0%. Shield off: 75.8 / 76.0 / 74.8%, all
+  collisions robot-robot (12.5-16.5%); vs PPO without shield +6.8 to +8.0. With 75% of PPO's budget and far less
+  tuning, the chosen DQN seed is statistically level with PPO and collides 3x less (1.5% vs 4.5%); it times out more.
+- PPO Gazebo (layouts 100-119) finished; DQN s2 Gazebo started 15:31.

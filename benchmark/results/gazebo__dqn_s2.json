@@ -1,0 +1,82 @@
+{
+ "name": "dqn_s2",
+ "spec": "npz:runs/benchmark/dqn/final_s2/best.npz",
+ "layouts": [
+  100,
+  119
+ ],
+ "results": [
+  {
+   "seed": 100,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    14.5,
+    13.4,
+    18.2,
+    10.200000000000001
+   ],
+   "steps": 182,
+   "wall_s": 32.4,
+   "attempt": 1
+  },
+  {
+   "seed": 101,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "collision"
+   ],
+   "time": [
+    21.700000000000003,
+    11.8,
+    28.0,
+    10.5
+   ],
+   "steps": 280,
+   "wall_s": 51.4,
+   "attempt": 1
+  },
+  {
+   "seed": 102,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    18.0,
+    9.5,
+    23.0,
+    12.100000000000001
+   ],
+   "steps": 230,
+   "wall_s": 45.9,
+   "attempt": 1
+  },
+  {
+   "seed": 103,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    15.100000000000001,
+    16.7,
+    19.0,
+    8.1
+   ],
+   "steps": 190,
+   "wall_s": 28.3,
+   "attempt": 1
+  }
+ ]
+}
