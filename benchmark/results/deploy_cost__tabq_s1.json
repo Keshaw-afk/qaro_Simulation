@@ -1,0 +1,9 @@
+{
+ "name": "tabq_s1",
+ "spec": "tabq:../runs/benchmark/tabq/final_s1/best.npz",
+ "params": 291600,
+ "bytes": 1166400,
+ "single_us_median": 406.3759988639504,
+ "single_us_p99": 567.8752721723868,
+ "single_us_mean": 417.8744447333309
+}

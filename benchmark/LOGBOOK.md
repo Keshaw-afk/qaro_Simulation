@@ -103,3 +103,13 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   state is seen ~24x less often. Fine variant fails the amendment-1 rule; coarse stays the tabq contender.
 - Exploratory fg seed 1 to 8M started (protocol amendment 2) to see whether more data closes the gap.
 - Coarse finals at 7M: s1 64.8% / 19.8%, s2 63.8% / 22.3%, s3 62.8% / 20.0% (validation): flat at ~60-65%.
+
+## tabq final results (~13:20)
+- Finals (config a, 8M): best validation checkpoints s1 64.8% (7M), s2 64.8% (6M), **s3 71.5% (8M, chosen by validation)**.
+- **Test 100-199, shield on:** s1 64.5%, s2 61.0%, **s3 69.5%** [64.2-74.8] (coll 20.0%, all obstacle/wall; dSucc vs PPO
+  -20.8 [-25.5, -16.0]); mean of seeds 65.0%. Shield off: 53.8 / 51.7 / 52.5%, collisions 32-42% (robot 14-24%).
+  The table's robot avoidance comes almost entirely from the safety layer, like PPO's; obstacle collisions (~19%) are
+  what it cannot learn with 3 coarse lidar regions. Overrides 6-13% (PPO 26%): it is more timid near robots.
+- Evaluation is fast (~1-2 min per condition per seed, 3 in parallel).
+- 13:19 Security housekeeping (not benchmark): host shell stopped exporting the GitHub token (distrobox put it on a
+  world-readable `podman exec` command line). No effect on any experiment.
