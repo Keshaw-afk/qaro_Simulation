@@ -57,3 +57,13 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
 - PPO on clean test 100-199: 90.2% success, 4.5% collision (vs 91.5% on its selection set 0-99): selection optimism ~1.3 points.
 - PPO without the safety layer: 68.0% success, 25.2% robot-robot collisions (test) - the policy depends heavily on it.
 - PPO behaviour (8 test layouts): ~226 steering-direction flips per minute, 96% path efficiency, 0.18 m/s mean speed.
+
+## Tuning results
+- **tabq** (6 configs x 2M steps, seed 0, validation seeds 2900-2999; score = success - 0.5 collision):
+  a 64.5% / 24.8% coll (score 0.521, **chosen**), d 63.0% / 24.0% (0.510), f 55.3% / 29.5%, c 54.0% / 29.5%,
+  b 51.0% / 39.3%, e 32.8% / 52.3%. Visit-count learning rates beat constant ones; gamma 0.95 hurt. 97% of the
+  6,480 states visited by 2M steps. 2,300-2,700 steps/s per process (4-6 processes in parallel), 12-15 min per run.
+  Final runs: config a, seeds 1-3, 8M steps each (started ~12:15).
+- **dqn** (Colab T4, 1M steps each, 2 processes in parallel): ~1,650 steps/s per process; GPU only 4-7% busy - the
+  bottleneck is Colab's 2 vCPUs (simulator + SB3 replay bookkeeping), not the network. a 63.0% / 4.0% coll / 33.0% timeout;
+  b (lr 3e-4) 26.0% / 0.3% / 73.8%. (c-f pending.) Tuning runs use the code version before the extra logging (logging only).
