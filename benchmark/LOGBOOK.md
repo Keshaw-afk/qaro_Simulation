@@ -88,7 +88,7 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   measurements every 5 min. A crash would lose the replay buffer, so a run could not be resumed exactly, only its best
   checkpoint so far kept.
 
-## Plateau handling (~13:10)
+## Plateau handling (~12:45)
 - Coarse tabq plateaued at ~60% validation success / ~27% collisions by 4M steps, 99% of 6,480 states visited; training
   success with eps 0.05 (~62%) agrees with validation, TD error still falling (0.50 -> 0.37): no sign of a bug, the
   representation is the limit. Protocol amendment 1: finer 157,464-state variant (configs fa/fd/fg), decided before any
@@ -97,7 +97,7 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
 - Metric note: `stopped_frac` over all robots is dominated by robots that time out (they sit or spin for up to 900
   steps: PPO 5.5% on 8 layouts without timeouts vs 30.6% over the test set); added `stopped_frac_success`.
 
-## Fine tabq outcome (~13:50)
+## Fine tabq outcome (~13:12)
 - 2M steps, validation: fa 24.0% / 28.5% coll, fd 20.3% / 37.0%, fg 28.3% / 31.3% (coarse a: 64.5% / 24.8%). ~78k of
   157k states visited (50%), still rising; ~1,900 steps/s per process. The finer table learns far more slowly: each
   state is seen ~24x less often. Fine variant fails the amendment-1 rule; coarse stays the tabq contender.

@@ -64,12 +64,12 @@ Code in `benchmark/`; trained rival weights in `runs/benchmark/` (not committed,
 outcome arrays and summary in `benchmark/results/*.json` (committed).
 
 ## Amendments (appended; the text above is unchanged)
-1. **2026-11-10 ~13:15, tabq state representation.** The coarse 6,480-state table plateaued at ~60% validation success
+1. **2026-11-10 ~12:45, tabq state representation.** The coarse 6,480-state table plateaued at ~60% validation success
    with 99% of states visited, i.e. limited by the representation rather than by data or bugs. To avoid a strawman, a
    finer representation (157,464 states, see `tabq.py`) is tuned on validation (configs `fa`, `fd`, `fg`, 2M steps)
    and, if it beats the coarse table on validation, trained for 8M steps x 3 seeds. Both variants are reported on the
    test set. Decided before any tabq test-set evaluation.
-2. **2026-11-10 ~13:50, outcome of amendment 1.** Fine tabq at 2M steps on validation: fa 24.0% success / 28.5% coll,
+2. **2026-11-10 ~13:12, outcome of amendment 1.** Fine tabq at 2M steps on validation: fa 24.0% success / 28.5% coll,
    fd 20.3% / 37.0%, fg 28.3% / 31.3%, all far below coarse config a (64.5% / 24.8%). By the amendment-1 rule the fine
    variant is **not** a contender; the coarse table is the tabq result. Because the fine table had visited only ~50% of
    its states and was still improving (data-starved, not representation-limited), one **exploratory** run (fg, seed 1,
