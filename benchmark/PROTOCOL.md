@@ -74,3 +74,8 @@ outcome arrays and summary in `benchmark/results/*.json` (committed).
    variant is **not** a contender; the coarse table is the tabq result. Because the fine table had visited only ~50% of
    its states and was still improving (data-starved, not representation-limited), one **exploratory** run (fg, seed 1,
    8M steps) is made and reported separately, labelled exploratory, never chosen over coarse by test results.
+3. **2026-11-10 ~13:38, rule grid extension.** The 36-set grid's best (84.0% / 1.5% validation) lay on the lower edge
+   of horizon, margin and w_head. Before any rule test evaluation, the grid is extended past that edge
+   (`rule.PARAM_GRID_EXT`: horizon 0.7, margin 0.01, w_head 0.1, 14 new sets, total 50 = the pre-registered budget).
+   The choice remains the best validation score over all 50 sets. The 36-set choice is kept in
+   `results/rule_best_params_grid36.json`.

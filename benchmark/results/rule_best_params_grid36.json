@@ -1,0 +1,41 @@
+{
+ "params": {
+  "horizon": 1.0,
+  "margin": 0.02,
+  "w_clear": 2.0,
+  "w_head": 0.3,
+  "w_prog": 2.0,
+  "w_speed": 0.2,
+  "steps": 8
+ },
+ "validation": {
+  "success": 0.84,
+  "collision": 0.015,
+  "timeout": 0.145,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.91904761904762
+ },
+ "grid": {
+  "horizon": [
+   1.0,
+   1.5,
+   2.0
+  ],
+  "margin": [
+   0.02,
+   0.05
+  ],
+  "w_clear": [
+   0.5,
+   1.0,
+   2.0
+  ],
+  "w_head": [
+   0.3,
+   1.0
+  ]
+ },
+ "n_sets": 36
+}

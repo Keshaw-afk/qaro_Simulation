@@ -83,6 +83,31 @@ def tune(procs=4):
     print("BEST", json.dumps({**DEFAULT, **best[0]}), best[1])
 
 
+# Extension (PROTOCOL amendment 3): the 36-set grid's best sat on its lower edge for horizon, margin and w_head, so the
+# grid is extended past that edge, within the pre-registered budget of 50 sets (36 + 14), still on validation only.
+PARAM_GRID_EXT = dict(horizon=[0.7, 1.0], margin=[0.01, 0.02], w_clear=[0.5, 2.0], w_head=[0.1, 0.3])
+
+
+def tune_ext(procs=6):
+    from meter import Meter
+    prev = json.loads((C.RUNS / "rule_tuning.json").read_text())
+    done = [{k: r["params"][k] for k in PARAM_GRID} for r in prev]
+    grid = [g for g in (dict(zip(PARAM_GRID_EXT, v)) for v in itertools.product(*PARAM_GRID_EXT.values())) if g not in done]
+    assert len(done) + len(grid) <= 50, "tuning budget (PROTOCOL.md) exceeded"
+    with Meter("rule_tune_ext", kind="tune", method="rule", n_sets=len(grid)) as m:
+        with Pool(procs) as pool:
+            new = pool.map(_val, grid)
+        res = [(r["params"], {k: v for k, v in r.items() if k != "params"}) for r in prev] + new
+        best = max(res, key=lambda x: C.score(x[1]))
+        m.add(best=best[0])
+    for p_, s in sorted(res, key=lambda x: -C.score(x[1]))[:10]:
+        print(json.dumps(p_), f"val success {s['success']:.3f} collision {s['collision']:.3f} timeout {s['timeout']:.3f}", flush=True)
+    (C.RUNS / "rule_tuning.json").write_text(json.dumps([{"params": a, **b} for a, b in res], indent=1))
+    C.save("rule_best_params", {"params": {**DEFAULT, **best[0]}, "validation": best[1], "grid": PARAM_GRID,
+                                "grid_ext": PARAM_GRID_EXT, "n_sets": len(res)})
+    print("BEST", json.dumps({**DEFAULT, **best[0]}), best[1])
+
+
 def best_ctrl():
     return make(json.loads((C.OUT / "rule_best_params.json").read_text())["params"])
 
@@ -90,3 +115,5 @@ def best_ctrl():
 if __name__ == "__main__":
     if sys.argv[1] == "tune":
         tune(int(sys.argv[2]) if len(sys.argv) > 2 else 4)
+    elif sys.argv[1] == "tune_ext":
+        tune_ext(int(sys.argv[2]) if len(sys.argv) > 2 else 6)
