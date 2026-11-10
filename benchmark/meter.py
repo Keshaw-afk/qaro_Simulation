@@ -12,7 +12,11 @@ What is recorded (null when not available on the machine):
 - GPU energy (NVIDIA NVML total-energy counter, mJ) and mean/max GPU power and utilisation (sampled every second).
 - Throughput (env_steps / wall_s when the job reports env_steps), mean CPU clock (MHz), max CPU temperature, and the power
   source (AC / battery) sampled every second: throttling or battery mode changes timings.
-- Host description (CPU model, cores, GPU, Python/torch/numpy versions, git commit)."""
+- Host description (CPU model, cores, GPU, Python/torch/numpy versions, git commit).
+- cpu_energy_est_J: ESTIMATE used when RAPL is not readable (the owner chose not to open it, 2026-11-10):
+  our CPU seconds x (CPU TDP / hardware threads). i5-12450H: 45 W / 12 threads = 3.75 W per busy thread; unknown CPUs
+  (e.g. Colab's Xeon VM) 3.5 W. It ignores idle/uncore power and frequency changes, so it is a rough marginal-energy
+  estimate (likely within a factor of ~2), not a measurement; the assumption is stored with every record."""
 import json
 import os
 import pathlib
@@ -176,6 +180,9 @@ class Meter:
         ac = [c[2] for c in self.gpu.cpu if c[2] is not None]
         rec.update(cpu_mhz_mean=round(sum(mhz) / len(mhz)) if mhz else None, cpu_temp_max_c=max(tmp) if tmp else None,
                    on_ac_all_time=all(ac) if ac else _on_ac())
+        model = host_info().get("cpu_model", "")
+        w_thread, basis = (45.0 / 12, "i5-12450H TDP 45 W / 12 threads") if "i5-12450H" in model else (3.5, "generic 3.5 W per busy thread")
+        rec.update(cpu_energy_est_J=round((cpu_u + cpu_s) * w_thread, 1), cpu_energy_est_basis=basis)
         rec.update(self.extra)
         if self.extra.get("env_steps"):
             rec["env_steps_per_s"] = round(self.extra["env_steps"] / max(wall, 1e-9), 1)
