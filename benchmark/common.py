@@ -125,7 +125,8 @@ def behaviour(raw):
     out = {"path_efficiency": float((sg[ok] / np.maximum(path[ok], 1e-9)).mean()) if ok.any() else float("nan"),
            "path_m_success": float(path[ok].mean()) if ok.any() else float("nan"),
            "mean_speed_mps": float(path.sum() / (steps * E.DT)),
-           "stopped_frac": float(np.sum(raw["stopped_steps"]) / steps),
+           "stopped_frac": float(np.sum(raw["stopped_steps"]) / steps),          # all robots: dominated by robots that time out
+           "stopped_frac_success": float(np.asarray(raw["stopped_steps"])[ok].sum() / max(alive[ok].sum(), 1)),
            "turn_flips_per_min": float(np.sum(raw["turn_flips"]) / (steps * E.DT / 60)),
            "min_gap_obstacle_m_median": float(np.median(raw["min_gap_obstacle_m"])),
            "min_gap_robot_m_median": float(np.median(raw["min_gap_robot_m"])),

@@ -7,7 +7,12 @@ front-left (30..90) and front-right (-90..-30), 3 levels each (<0.35, <0.8, >=0.
 (none / ahead / left / right / behind) x own speed (2: below / above half of max). Actions: the same 45 commands.
 Learning: one shared table for all 256 robots of 64 training worlds (seeds 1000-2899), env reward unchanged, safety layer
 on (part of the environment, as for PPO). Duplicate (state, action) updates within one step are averaged.
-Every 1M steps: protocol evaluation on validation layouts (seeds 2900-2999); the best (success - 0.5 collision) is kept."""
+Every 1M steps: protocol evaluation on validation layouts (seeds 2900-2999); the best (success - 0.5 collision) is kept.
+
+Representation variant "fine" (protocol amendment 2026-11-10, after the coarse table plateaued at ~60% on validation and
+before any test-set evaluation of tabq): 157,464 states = goal bearing 12 bins x distance 3 x five lidar regions
+(front -20..20, front-left 20..60, front-right -60..-20, left 60..110, right -110..-60 deg; 3 levels each) x nearest
+robot within 1 m (none, or ahead/left/right/behind x closing/not) x own speed 2. Configs prefixed "f" use it."""
 import json
 import math
 import sys
@@ -53,13 +58,49 @@ def discretize(obs):
     return ((((b * 3 + db) * 27 + lid) * 5 + rb) * 2 + vb).astype(np.int64)
 
 
+F5 = [np.arange(16, 20), np.arange(20, 24), np.arange(12, 16), np.arange(24, 29), np.arange(7, 12)]  # F, FL, FR, L, R sectors
+N_FINE = 12 * 3 * 243 * 9 * 2
+
+
+def discretize_fine(obs):
+    o = np.asarray(obs)
+    bear = np.arctan2(o[:, 38], o[:, 37])
+    b = ((bear + math.pi) / (2 * math.pi) * 12).astype(int) % 12
+    d = o[:, 36] * 4.0
+    db = np.where(d < 0.4, 0, np.where(d < 1.2, 1, 2))
+    lid = np.zeros(len(o), np.int64)
+    for sec in F5:
+        lid = lid * 3 + _lvl(o[:, sec].min(1))
+    rel = o[:, 41:53].reshape(-1, 3, 4)
+    rp, rv = rel[..., :2] * 3.0, rel[..., 2:] * 0.4
+    dist = np.hypot(rp[..., 0], rp[..., 1])
+    k = dist.argmin(1)
+    i = np.arange(len(o))
+    near, nv = rp[i, k], rv[i, k]
+    ang = np.degrees(np.arctan2(near[:, 1], near[:, 0]))
+    dirb = np.where(np.abs(ang) <= 45, 0, np.where((ang > 45) & (ang <= 135), 1, np.where((ang < -45) & (ang >= -135), 2, 3)))
+    closing = ((near * nv).sum(1) < 0).astype(int)
+    rb = np.where(dist.min(1) >= 1.0, 0, 1 + dirb * 2 + closing)
+    vb = (o[:, 39] > 0.5).astype(int)
+    return ((((b * 3 + db) * 243 + lid) * 9 + rb) * 2 + vb).astype(np.int64)
+
+
+REPRS = {"coarse": (discretize, N_STATE), "fine": (discretize_fine, N_FINE)}
+CONFIGS.update({"fa": dict(CONFIGS["a"], repr="fine"), "fd": dict(CONFIGS["d"], repr="fine"),
+                "fg": dict(alpha="visit", alpha_min=0.05, gamma=0.99, eps_frac=0.5, repr="fine")})
+
+
 def ctrl_from(path):
-    Q = np.load(path)["Q"]
-    return lambda obs, env: Q[discretize(obs)].argmax(1)
+    d = np.load(path)
+    disc = REPRS[str(d["repr"]) if "repr" in d.files else "coarse"][0]
+    Q = d["Q"]
+    return lambda obs, env: Q[disc(obs)].argmax(1)
 
 
 def train(cfg_name, seed, steps, name):
     cfg = CONFIGS[cfg_name]
+    rname = cfg.get("repr", "coarse")
+    discretize, N_STATE = REPRS[rname]
     out = C.RUNS / "tabq" / name
     out.mkdir(parents=True, exist_ok=True)
     tp = C.train_pool()
@@ -79,7 +120,7 @@ def train(cfg_name, seed, steps, name):
     cv = dict(n=0, s=0, c=0, tr=0, ret=0.0, td=0.0, tdn=0)
     log = open(out / "log.csv", "w")
     log.write("steps,wall_s,eps,val_success,val_collision,val_timeout,val_score,visited_states,train_episodes,train_success_rate,train_collision_rate\n")
-    with Meter(f"tabq_train_{name}", kind="train", method="tabq", config=cfg_name, seed=seed) as m:
+    with Meter(f"tabq_train_{name}", kind="train", method="tabq", config=cfg_name, seed=seed, repr=rname) as m:
         while t < steps:
             eps = max(0.05, 1.0 - t / (cfg["eps_frac"] * steps) * 0.95)
             greedy = Q[s].argmax(1)
@@ -103,12 +144,12 @@ def train(cfg_name, seed, steps, name):
             td = target - Q[s, a]
             cv["td"] += float(np.abs(td).sum()); cv["tdn"] += N
             flat = s * E.N_ACT + a
-            sums = np.bincount(flat, weights=td, minlength=Q.size)
-            cnt = np.bincount(flat, minlength=Q.size)
-            hit = np.nonzero(cnt)[0]
-            n_visit.ravel()[hit] += cnt[hit]
+            hit, inv = np.unique(flat, return_inverse=True)          # distinct (state, action) pairs updated this step
+            sums = np.bincount(inv, weights=td)                         # duplicates within the step are averaged
+            cnt = np.bincount(inv)
+            n_visit.ravel()[hit] += cnt
             alpha = np.full(len(hit), cfg["alpha_min"]) if cfg["alpha"] == "const" else np.maximum(cfg["alpha_min"], 1.0 / n_visit.ravel()[hit] ** 0.6)
-            Q.ravel()[hit] += (alpha * sums[hit] / cnt[hit]).astype(np.float32)
+            Q.ravel()[hit] += (alpha * sums / cnt).astype(np.float32)
             s = s_next
             t += N
             if t >= next_curve:
@@ -122,7 +163,7 @@ def train(cfg_name, seed, steps, name):
                 cv = dict(n=0, s=0, c=0, tr=0, ret=0.0, td=0.0, tdn=0)
             if t >= next_eval or t >= steps:
                 next_eval += 1_000_000
-                np.savez_compressed(out / "latest.npz", Q=Q, n_visit=n_visit)
+                np.savez_compressed(out / "latest.npz", Q=Q, n_visit=n_visit, repr=rname)
                 raw = C.run_protocol(tp, ctrl_from(out / "latest.npz"), C.VAL_IDX)
                 sm = C.summarize(raw, n_boot=200)
                 visited = int((n_visit.sum(1) > 0).sum())
@@ -133,7 +174,7 @@ def train(cfg_name, seed, steps, name):
                 ep_s = ep_c = ep_n = 0
                 if C.score(sm) > best:
                     best = C.score(sm)
-                    np.savez_compressed(out / "best.npz", Q=Q, n_visit=n_visit)
+                    np.savez_compressed(out / "best.npz", Q=Q, n_visit=n_visit, repr=rname)
                     (out / "best.json").write_text(json.dumps({"steps": t, **{k: sm[k] for k in ("success", "collision", "timeout")}}))
         m.add(env_steps=t, states=N_STATE, visited_states=int((n_visit.sum(1) > 0).sum()), visited_pairs=int((n_visit > 0).sum()),
               table_bytes=int(Q.nbytes), best_val_score=best, config_params=cfg)

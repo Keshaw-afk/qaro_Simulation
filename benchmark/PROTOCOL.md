@@ -62,3 +62,10 @@ PPO is re-run on these same layouts (its old 0-19 result is not reused).
 ## Reproducibility
 Code in `benchmark/`; trained rival weights in `runs/benchmark/` (not committed, AGENTS.md rule 6); raw per-robot
 outcome arrays and summary in `benchmark/results/*.json` (committed).
+
+## Amendments (appended; the text above is unchanged)
+1. **2026-11-10 ~13:15, tabq state representation.** The coarse 6,480-state table plateaued at ~60% validation success
+   with 99% of states visited, i.e. limited by the representation rather than by data or bugs. To avoid a strawman, a
+   finer representation (157,464 states, see `tabq.py`) is tuned on validation (configs `fa`, `fd`, `fg`, 2M steps)
+   and, if it beats the coarse table on validation, trained for 8M steps x 3 seeds. Both variants are reported on the
+   test set. Decided before any tabq test-set evaluation.

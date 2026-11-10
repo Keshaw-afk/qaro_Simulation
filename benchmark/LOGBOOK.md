@@ -87,3 +87,12 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   mounted (owner authorised); `MyDrive/qaro_benchmark/` receives checkpoints (.npz), logs, SB3 progress and
   measurements every 5 min. A crash would lose the replay buffer, so a run could not be resumed exactly, only its best
   checkpoint so far kept.
+
+## Plateau handling (~13:10)
+- Coarse tabq plateaued at ~60% validation success / ~27% collisions by 4M steps, 99% of 6,480 states visited; training
+  success with eps 0.05 (~62%) agrees with validation, TD error still falling (0.50 -> 0.37): no sign of a bug, the
+  representation is the limit. Protocol amendment 1: finer 157,464-state variant (configs fa/fd/fg), decided before any
+  tabq test evaluation. tabq update rewritten with np.unique (sparse; identical math, tested) because the dense
+  bincount over 7M table entries per step would be slow.
+- Metric note: `stopped_frac` over all robots is dominated by robots that time out (they sit or spin for up to 900
+  steps: PPO 5.5% on 8 layouts without timeouts vs 30.6% over the test set); added `stopped_frac_success`.

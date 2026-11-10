@@ -48,6 +48,39 @@ def test_discretize():
     print("discretize ok")
 
 
+def test_discretize_fine():
+    o = blank_obs(2.0, 0.0)
+    s0 = tabq.discretize_fine(o[None])[0]
+    assert 0 <= s0 < tabq.N_FINE
+    vb, rb = s0 % 2, s0 // 2 % 9
+    lid, db, b = s0 // 18 % 243, s0 // 18 // 243 % 3, s0 // 18 // 243 // 3
+    assert (b, db, lid, rb, vb) == (6, 2, 242, 0, 0), (b, db, lid, rb, vb)   # bearing 0 -> bin 6 of 12; all lidar regions free
+    o2 = o.copy(); o2[sector_of(0)] = 0.3 / 2.0                               # front blocked -> first lidar digit 0
+    assert tabq.discretize_fine(o2[None])[0] // 18 % 243 == 0 * 81 + 2 * 27 + 2 * 9 + 2 * 3 + 2
+    o3 = o.copy(); o3[sector_of(-80)] = 0.5 / 2.0                             # right (-110..-60) at 0.5 m -> last digit 1
+    assert tabq.discretize_fine(o3[None])[0] // 18 % 243 == 242 - 1
+    o4 = o.copy(); o4[41:45] = [0.5 / 3, 0.0, -0.2 / 0.4, 0.0]               # robot ahead, closing
+    o5 = o.copy(); o5[41:45] = [0.5 / 3, 0.0, 0.2 / 0.4, 0.0]                # robot ahead, moving away
+    assert tabq.discretize_fine(o4[None])[0] // 2 % 9 == 1 + 0 * 2 + 1
+    assert tabq.discretize_fine(o5[None])[0] // 2 % 9 == 1 + 0 * 2 + 0
+    print("discretize_fine ok")
+
+
+def test_sparse_update():
+    """The unique()-based update equals the original dense bincount update (duplicates averaged)."""
+    rng = np.random.default_rng(1)
+    Q1 = rng.normal(size=(50, E.N_ACT)).astype(np.float32); Q2 = Q1.copy()
+    s, a, td = rng.integers(0, 50, 300), rng.integers(0, E.N_ACT, 300), rng.normal(size=300)
+    flat = s * E.N_ACT + a
+    sums, cnt = np.bincount(flat, weights=td, minlength=Q1.size), np.bincount(flat, minlength=Q1.size)
+    hit = np.nonzero(cnt)[0]
+    Q1.ravel()[hit] += (0.1 * sums[hit] / cnt[hit]).astype(np.float32)
+    h2, inv = np.unique(flat, return_inverse=True)
+    Q2.ravel()[h2] += (0.1 * np.bincount(inv, weights=td) / np.bincount(inv)).astype(np.float32)
+    assert np.array_equal(hit, h2) and np.abs(Q1 - Q2).max() < 1e-6
+    print("sparse update ok")
+
+
 def test_rule():
     ctrl = rule.make()
     fast_straight = int(np.argmin((E.CV - 0.2) ** 2 + E.CW ** 2))
@@ -137,7 +170,7 @@ def test_ppo_regression():
 
 
 if __name__ == "__main__":
-    test_split(); test_stats(); test_discretize(); test_rule(); test_dqn_export(); test_behaviour_metrics()
+    test_split(); test_stats(); test_discretize(); test_discretize_fine(); test_sparse_update(); test_rule(); test_dqn_export(); test_behaviour_metrics()
     if "--slow" in sys.argv:
         test_ppo_regression()
     print("BENCHMARK TESTS PASSED")
