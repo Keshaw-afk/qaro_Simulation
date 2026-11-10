@@ -1,0 +1,9 @@
+{
+ "name": "tabq_fine_explore",
+ "spec": "tabq:../runs/benchmark/tabq/explore_fine_fg_s1/best.npz",
+ "params": 7085880,
+ "bytes": 28343520,
+ "single_us_median": 83.71899821213447,
+ "single_us_p99": 88.99256943550425,
+ "single_us_mean": 83.79686994502615
+}

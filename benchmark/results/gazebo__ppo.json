@@ -1,0 +1,244 @@
+{
+ "name": "ppo",
+ "spec": "npz:weights/final_policy.npz",
+ "layouts": [
+  100,
+  119
+ ],
+ "results": [
+  {
+   "seed": 100,
+   "status": [
+    "success",
+    "success",
+    "timeout",
+    "success"
+   ],
+   "time": [
+    7.4,
+    7.2,
+    null,
+    7.9
+   ],
+   "steps": 699,
+   "wall_s": 96.0,
+   "attempt": 1
+  },
+  {
+   "seed": 101,
+   "status": [
+    "success",
+    "success",
+    "collision",
+    "success"
+   ],
+   "time": [
+    18.6,
+    6.4,
+    8.200000000000001,
+    14.9
+   ],
+   "steps": 186,
+   "wall_s": 28.6,
+   "attempt": 1
+  },
+  {
+   "seed": 102,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    9.5,
+    5.6000000000000005,
+    13.100000000000001,
+    8.9
+   ],
+   "steps": 131,
+   "wall_s": 20.5,
+   "attempt": 1
+  },
+  {
+   "seed": 103,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    13.9,
+    13.8,
+    13.200000000000001,
+    7.7
+   ],
+   "steps": 139,
+   "wall_s": 27.4,
+   "attempt": 1
+  },
+  {
+   "seed": 104,
+   "status": [
+    "success",
+    "collision",
+    "success",
+    "success"
+   ],
+   "time": [
+    8.6,
+    15.700000000000001,
+    17.7,
+    7.800000000000001
+   ],
+   "steps": 177,
+   "wall_s": 33.1,
+   "attempt": 1
+  },
+  {
+   "seed": 105,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    7.0,
+    13.200000000000001,
+    7.7,
+    6.6000000000000005
+   ],
+   "steps": 132,
+   "wall_s": 32.8,
+   "attempt": 1
+  },
+  {
+   "seed": 106,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    8.4,
+    4.800000000000001,
+    11.600000000000001,
+    6.0
+   ],
+   "steps": 116,
+   "wall_s": 31.4,
+   "attempt": 1
+  },
+  {
+   "seed": 107,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    10.5,
+    13.0,
+    6.9,
+    20.900000000000002
+   ],
+   "steps": 209,
+   "wall_s": 57.0,
+   "attempt": 1
+  },
+  {
+   "seed": 108,
+   "status": [
+    "success",
+    "success",
+    "timeout",
+    "collision"
+   ],
+   "time": [
+    6.6000000000000005,
+    6.5,
+    null,
+    17.0
+   ],
+   "steps": 699,
+   "wall_s": 179.6,
+   "attempt": 1
+  },
+  {
+   "seed": 109,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "collision"
+   ],
+   "time": [
+    9.0,
+    7.2,
+    5.7,
+    9.600000000000001
+   ],
+   "steps": 96,
+   "wall_s": 28.1,
+   "attempt": 1
+  },
+  {
+   "seed": 110,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    13.4,
+    12.200000000000001,
+    10.200000000000001,
+    11.4
+   ],
+   "steps": 134,
+   "wall_s": 40.1,
+   "attempt": 1
+  },
+  {
+   "seed": 111,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    11.3,
+    6.5,
+    13.0,
+    11.100000000000001
+   ],
+   "steps": 130,
+   "wall_s": 38.5,
+   "attempt": 1
+  },
+  {
+   "seed": 112,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    8.1,
+    6.9,
+    9.4,
+    9.700000000000001
+   ],
+   "steps": 97,
+   "wall_s": 29.4,
+   "attempt": 1
+  }
+ ]
+}

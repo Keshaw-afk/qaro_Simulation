@@ -151,3 +151,12 @@ The owner may close the Claude session; the rest runs without it.
   record; their time/throughput come from `log.csv` / `sb3/progress.csv`: ~955 steps/s per run, 6,300 s to 6M).
 - **DQN validation (best checkpoint):** s1 89.5% / 0.5% (6M), **s2 91.75% / 1.0% (5M, chosen)**, s3 87.0% / 0.0% (6M).
   DQN was still noisy between checkpoints (s1 dipped to 55% at 3M, s2 to 54.5% at 2M).
+
+## Decision: DQN stays at 6M; test evaluations (~15:20)
+- Owner decided: no 8M rerun; DQN is evaluated as it stands (amendment 4). DQN 2D evaluations started alongside the
+  PPO Gazebo run (load average ~2, so the Gazebo clock is not at risk).
+- **Rule controller, test 100-199:** shield on 84.0% [79.8-88.0] / 2.5% coll / 13.5% timeout, dSucc vs PPO
+  **-6.2 [-10.2, -2.2]**; shield off **84.5% / 0.5% coll**, vs PPO without shield **+16.5 [+9.5, +23.2]**. All four
+  robots succeed in 56-57% of layouts; mean time to goal 9.6 s. It needs no safety layer: robot-robot avoidance is
+  built in (camera slots), whereas PPO and tabq learned to lean on the safety layer.
+- **Exploratory fine tabq, test:** 54.2% / 26.0% with shield, 46.2% / 39.0% without.

@@ -1,0 +1,9 @@
+{
+ "name": "dqn_s1",
+ "spec": "npz:../runs/benchmark/dqn/final_s1/best.npz",
+ "params": 92717,
+ "bytes": 371828,
+ "single_us_median": 90.49749860423617,
+ "single_us_p99": 139.25445979111828,
+ "single_us_mean": 92.49526933432973
+}
