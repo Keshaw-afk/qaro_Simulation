@@ -167,3 +167,14 @@ The owner may close the Claude session; the rest runs without it.
   collisions robot-robot (12.5-16.5%); vs PPO without shield +6.8 to +8.0. With 75% of PPO's budget and far less
   tuning, the chosen DQN seed is statistically level with PPO and collides 3x less (1.5% vs 4.5%); it times out more.
 - PPO Gazebo (layouts 100-119) finished; DQN s2 Gazebo started 15:31.
+
+## Gazebo and write-up (~15:30-17:10)
+- Gazebo 100-119 (80 robots): PPO 73/5/2 (ok/coll/timeout), DQN s2 73/2/5, rule 64/3/13. Rule chosen for Gazebo over
+  tabq s3 by 2D test success (pipeline rule). Pipeline finished 16:31 (ALL DONE).
+- dqn_s3 was evaluated twice (my manual loop and the pipeline overlapped because PPO's Gazebo run finished sooner than
+  estimated); deterministic, identical output.
+- `make_results.py` regenerates every table from raw files -> `results/summary.json`; `RESULTS.md` written; README,
+  CHANGELOG, docs index and DOCUMENTATION section 2 point to it. DQN Colab launch scripts added to the repo.
+- Benchmark tests incl. `--slow` PPO regression pass.
+- Lesson: back up full training state (model + replay buffer) off Colab, not only network weights; a runtime reset
+  made exact continuation impossible.

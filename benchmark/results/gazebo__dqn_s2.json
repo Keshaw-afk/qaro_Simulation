@@ -5,6 +5,17 @@
   100,
   119
  ],
+ "summary": {
+  "success": 0.9125,
+  "collision": 0.025,
+  "timeout": 0.0625,
+  "error": 0.0,
+  "mean_time_s": 15.478082191780823,
+  "all_four": 0.65,
+  "decision_us_median": 83.98699719691649,
+  "decision_us_p99": 232.5180158368312,
+  "decisions": 14983
+ },
  "results": [
   {
    "seed": 100,
@@ -76,6 +87,294 @@
    ],
    "steps": 190,
    "wall_s": 28.3,
+   "attempt": 1
+  },
+  {
+   "seed": 104,
+   "status": [
+    "success",
+    "timeout",
+    "success",
+    "success"
+   ],
+   "time": [
+    21.400000000000002,
+    null,
+    18.8,
+    10.0
+   ],
+   "steps": 699,
+   "wall_s": 124.6,
+   "attempt": 1
+  },
+  {
+   "seed": 105,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    12.700000000000001,
+    21.6,
+    11.200000000000001,
+    12.5
+   ],
+   "steps": 216,
+   "wall_s": 49.4,
+   "attempt": 1
+  },
+  {
+   "seed": 106,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    13.200000000000001,
+    6.4,
+    16.8,
+    7.6000000000000005
+   ],
+   "steps": 168,
+   "wall_s": 43.1,
+   "attempt": 1
+  },
+  {
+   "seed": 107,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "timeout"
+   ],
+   "time": [
+    19.1,
+    15.4,
+    12.3,
+    null
+   ],
+   "steps": 699,
+   "wall_s": 174.8,
+   "attempt": 1
+  },
+  {
+   "seed": 108,
+   "status": [
+    "success",
+    "success",
+    "timeout",
+    "success"
+   ],
+   "time": [
+    11.100000000000001,
+    10.5,
+    null,
+    28.0
+   ],
+   "steps": 699,
+   "wall_s": 178.1,
+   "attempt": 1
+  },
+  {
+   "seed": 109,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "timeout"
+   ],
+   "time": [
+    12.200000000000001,
+    7.6000000000000005,
+    11.0,
+    null
+   ],
+   "steps": 699,
+   "wall_s": 183.2,
+   "attempt": 1
+  },
+  {
+   "seed": 110,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    16.900000000000002,
+    17.400000000000002,
+    14.5,
+    27.3
+   ],
+   "steps": 273,
+   "wall_s": 75.4,
+   "attempt": 1
+  },
+  {
+   "seed": 111,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "timeout"
+   ],
+   "time": [
+    13.100000000000001,
+    12.700000000000001,
+    17.6,
+    null
+   ],
+   "steps": 699,
+   "wall_s": 191.4,
+   "attempt": 1
+  },
+  {
+   "seed": 112,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    8.0,
+    10.100000000000001,
+    20.400000000000002,
+    13.600000000000001
+   ],
+   "steps": 204,
+   "wall_s": 58.8,
+   "attempt": 1
+  },
+  {
+   "seed": 113,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    19.700000000000003,
+    30.3,
+    19.3,
+    10.9
+   ],
+   "steps": 303,
+   "wall_s": 87.1,
+   "attempt": 1
+  },
+  {
+   "seed": 114,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    16.7,
+    14.5,
+    11.8,
+    14.5
+   ],
+   "steps": 167,
+   "wall_s": 50.0,
+   "attempt": 1
+  },
+  {
+   "seed": 115,
+   "status": [
+    "success",
+    "success",
+    "collision",
+    "success"
+   ],
+   "time": [
+    9.5,
+    17.7,
+    7.9,
+    13.9
+   ],
+   "steps": 177,
+   "wall_s": 55.0,
+   "attempt": 1
+  },
+  {
+   "seed": 116,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    13.100000000000001,
+    12.4,
+    17.900000000000002,
+    10.700000000000001
+   ],
+   "steps": 179,
+   "wall_s": 57.0,
+   "attempt": 1
+  },
+  {
+   "seed": 117,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    31.6,
+    12.200000000000001,
+    18.6,
+    20.0
+   ],
+   "steps": 316,
+   "wall_s": 98.9,
+   "attempt": 1
+  },
+  {
+   "seed": 118,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    21.3,
+    19.200000000000003,
+    20.3,
+    12.100000000000001
+   ],
+   "steps": 213,
+   "wall_s": 70.2,
+   "attempt": 1
+  },
+  {
+   "seed": 119,
+   "status": [
+    "success",
+    "success",
+    "success",
+    "success"
+   ],
+   "time": [
+    11.700000000000001,
+    15.700000000000001,
+    6.6000000000000005,
+    17.400000000000002
+   ],
+   "steps": 174,
+   "wall_s": 60.9,
    "attempt": 1
   }
  ]

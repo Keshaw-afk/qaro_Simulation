@@ -14,6 +14,11 @@ go through the same network, which outputs that robot's drive command. Trained w
 More Gazebo runs (standard arena layouts 1-50 and a big 8 x 6 m arena, layouts 51-100) are recorded in `docs/results/`.
 Details, caveats and the history of what was tried: `docs/DOCUMENTATION.md`.
 
+**Benchmark against other methods** (`benchmark/RESULTS.md`, branch `benchmark-policies`): with the safety layer, a DQN
+trained here matches PPO (2D test 90.0% vs 90.2%; Gazebo 73/80 robots each, fewer collisions, slower); a hand-written
+dynamic-window controller on the same inputs reaches 84% in 2D and is far better than PPO without the safety layer
+(84.5% vs 68.0%), but drops to 80% in Gazebo; tabular Q-learning reaches 69.5%.
+
 ## Quick start (Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic)
 ```
 source /opt/ros/jazzy/setup.bash

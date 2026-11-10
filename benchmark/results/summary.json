@@ -1,0 +1,3140 @@
+{
+ "twod": {
+  "ppo|test|1": {
+   "success": 0.9025,
+   "collision": 0.045,
+   "timeout": 0.0525,
+   "coll_obstacle": 0.045,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.71,
+   "time_s": 10.877285318559558,
+   "success_ci": [
+    0.865,
+    0.935
+   ],
+   "collision_ci": [
+    0.025,
+    0.0675
+   ],
+   "timeout_ci": [
+    0.03,
+    0.0775
+   ],
+   "all_four_ci": [
+    0.62,
+    0.8
+   ],
+   "path_efficiency": 0.9666387250246489,
+   "path_m_success": 1.9552770083102493,
+   "mean_speed_mps": 0.12726092168353756,
+   "stopped_frac": 0.30610681939264783,
+   "stopped_frac_success": 0.04426108437110041,
+   "turn_flips_per_min": 217.67781033564196,
+   "min_gap_obstacle_m_median": 0.1664,
+   "min_gap_robot_m_median": 0.1496,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 1.235,
+   "action_entropy_bits": 4.395902035498278,
+   "actions_used": 44,
+   "override_rate": 0.25887386787426747,
+   "decision_us_per_robot": 94.13595619451169,
+   "n_robot_runs": 400
+  },
+  "ppo|test|0": {
+   "success": 0.68,
+   "collision": 0.2925,
+   "timeout": 0.0275,
+   "coll_obstacle": 0.04,
+   "coll_wall": 0.0,
+   "coll_robot": 0.2525,
+   "all_four": 0.39,
+   "time_s": 10.288602941176471,
+   "success_ci": [
+    0.6225,
+    0.7375
+   ],
+   "collision_ci": [
+    0.2375,
+    0.3475
+   ],
+   "timeout_ci": [
+    0.01,
+    0.05
+   ],
+   "all_four_ci": [
+    0.3,
+    0.49
+   ],
+   "path_efficiency": 0.9796607003776806,
+   "path_m_success": 1.857941176470588,
+   "mean_speed_mps": 0.1422027269151772,
+   "stopped_frac": 0.2176288074116156,
+   "stopped_frac_success": 0.044523852063605505,
+   "turn_flips_per_min": 200.2447231569287,
+   "min_gap_obstacle_m_median": 0.1773,
+   "min_gap_robot_m_median": 0.1231,
+   "near_miss_robot_steps_per_robot": 2.0525,
+   "near_miss_obstacle_steps_per_robot": 1.315,
+   "action_entropy_bits": 4.264037943776989,
+   "actions_used": 44,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 93.27104186102386,
+   "n_robot_runs": 400
+  },
+  "ppo|ref0-99|1": {
+   "success": 0.915,
+   "collision": 0.04,
+   "timeout": 0.045,
+   "coll_obstacle": 0.0375,
+   "coll_wall": 0.0025,
+   "coll_robot": 0.0,
+   "all_four": 0.72,
+   "time_s": 11.31584699453552,
+   "success_ci": [
+    0.885,
+    0.9425
+   ],
+   "collision_ci": [
+    0.0225,
+    0.0575
+   ],
+   "timeout_ci": [
+    0.025,
+    0.0675624999999991
+   ],
+   "all_four_ci": [
+    0.63,
+    0.81
+   ],
+   "path_efficiency": 0.973648471798352,
+   "path_m_success": 2.0205464480874316,
+   "mean_speed_mps": 0.13268420263539288,
+   "stopped_frac": 0.27546685768545204,
+   "stopped_frac_success": 0.0525642263859378,
+   "turn_flips_per_min": 218.4044378550367,
+   "min_gap_obstacle_m_median": 0.164,
+   "min_gap_robot_m_median": 0.1907,
+   "near_miss_robot_steps_per_robot": 0.04,
+   "near_miss_obstacle_steps_per_robot": 5.455,
+   "action_entropy_bits": 4.30615275638347,
+   "actions_used": 44,
+   "override_rate": 0.20343500641356677,
+   "decision_us_per_robot": 93.61565000012382,
+   "n_robot_runs": 400
+  },
+  "ppo|ref0-99|0": {
+   "success": 0.715,
+   "collision": 0.255,
+   "timeout": 0.03,
+   "coll_obstacle": 0.0275,
+   "coll_wall": 0.0025,
+   "coll_robot": 0.225,
+   "all_four": 0.38,
+   "time_s": 10.947902097902098,
+   "success_ci": [
+    0.66,
+    0.7675
+   ],
+   "collision_ci": [
+    0.2025,
+    0.31
+   ],
+   "timeout_ci": [
+    0.015,
+    0.0475
+   ],
+   "all_four_ci": [
+    0.29,
+    0.48
+   ],
+   "path_efficiency": 0.9822544812271663,
+   "path_m_success": 1.9364335664335666,
+   "mean_speed_mps": 0.14009483138858814,
+   "stopped_frac": 0.22623200609487149,
+   "stopped_frac_success": 0.06294912331129635,
+   "turn_flips_per_min": 196.2348129435823,
+   "min_gap_obstacle_m_median": 0.18295,
+   "min_gap_robot_m_median": 0.1869,
+   "near_miss_robot_steps_per_robot": 1.405,
+   "near_miss_obstacle_steps_per_robot": 1.355,
+   "action_entropy_bits": 4.27941576012712,
+   "actions_used": 44,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 103.55274521661057,
+   "n_robot_runs": 400
+  },
+  "ppo_final|test|1": {
+   "success": 0.895,
+   "collision": 0.04,
+   "timeout": 0.065,
+   "coll_obstacle": 0.0375,
+   "coll_wall": 0.0025,
+   "coll_robot": 0.0,
+   "all_four": 0.69,
+   "time_s": 10.68854748603352,
+   "success_ci": [
+    0.8575,
+    0.9275624999999991
+   ],
+   "collision_ci": [
+    0.0225,
+    0.06
+   ],
+   "timeout_ci": [
+    0.04,
+    0.0925
+   ],
+   "all_four_ci": [
+    0.6,
+    0.78
+   ],
+   "d_success_vs_ref": -0.0075,
+   "d_success_vs_ref_ci": [
+    -0.03,
+    0.0175
+   ],
+   "d_collision_vs_ref": -0.005,
+   "d_collision_vs_ref_ci": [
+    -0.02,
+    0.0075
+   ],
+   "path_efficiency": 0.9636468767994972,
+   "path_m_success": 1.9468715083798884,
+   "mean_speed_mps": 0.12084987897293108,
+   "stopped_frac": 0.3463272635225996,
+   "stopped_frac_success": 0.04095126094342088,
+   "turn_flips_per_min": 203.73364552516253,
+   "min_gap_obstacle_m_median": 0.17204999999999998,
+   "min_gap_robot_m_median": 0.1403,
+   "near_miss_robot_steps_per_robot": 0.01,
+   "near_miss_obstacle_steps_per_robot": 1.185,
+   "action_entropy_bits": 4.2708830651810405,
+   "actions_used": 45,
+   "override_rate": 0.24531316742868894,
+   "decision_us_per_robot": 125.3888208861301,
+   "n_robot_runs": 400
+  },
+  "ppo_final|test|0": {
+   "success": 0.65,
+   "collision": 0.325,
+   "timeout": 0.025,
+   "coll_obstacle": 0.0325,
+   "coll_wall": 0.0,
+   "coll_robot": 0.2925,
+   "all_four": 0.36,
+   "time_s": 9.985,
+   "success_ci": [
+    0.59,
+    0.71
+   ],
+   "collision_ci": [
+    0.2675,
+    0.3825
+   ],
+   "timeout_ci": [
+    0.0075,
+    0.045
+   ],
+   "all_four_ci": [
+    0.27,
+    0.4502499999999964
+   ],
+   "d_success_vs_ref": -0.03,
+   "d_success_vs_ref_ci": [
+    -0.07,
+    0.0075
+   ],
+   "d_collision_vs_ref": 0.0325,
+   "d_collision_vs_ref_ci": [
+    -0.005,
+    0.0725
+   ],
+   "path_efficiency": 0.9818164327566141,
+   "path_m_success": 1.8382307692307691,
+   "mean_speed_mps": 0.14190465656453932,
+   "stopped_frac": 0.22891273089260036,
+   "stopped_frac_success": 0.039174145834135816,
+   "turn_flips_per_min": 206.51255392102644,
+   "min_gap_obstacle_m_median": 0.1822,
+   "min_gap_robot_m_median": 0.1303,
+   "near_miss_robot_steps_per_robot": 1.945,
+   "near_miss_obstacle_steps_per_robot": 1.395,
+   "action_entropy_bits": 4.246100153996475,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 108.85884568893339,
+   "n_robot_runs": 400
+  },
+  "ppo_final|ref0-99|1": {
+   "success": 0.8975,
+   "collision": 0.0525,
+   "timeout": 0.05,
+   "coll_obstacle": 0.05,
+   "coll_wall": 0.0025,
+   "coll_robot": 0.0,
+   "all_four": 0.66,
+   "time_s": 11.012534818941504,
+   "success_ci": [
+    0.865,
+    0.9275
+   ],
+   "collision_ci": [
+    0.0325,
+    0.075
+   ],
+   "timeout_ci": [
+    0.03,
+    0.0725
+   ],
+   "all_four_ci": [
+    0.57,
+    0.75
+   ],
+   "d_success_vs_ref": -0.0175,
+   "d_success_vs_ref_ci": [
+    -0.0475,
+    0.01
+   ],
+   "d_collision_vs_ref": 0.0125,
+   "d_collision_vs_ref_ci": [
+    -0.005,
+    0.0325
+   ],
+   "path_efficiency": 0.9733956983345755,
+   "path_m_success": 2.0079665738161556,
+   "mean_speed_mps": 0.13055168870769945,
+   "stopped_frac": 0.2978190978091545,
+   "stopped_frac_success": 0.041962817756418365,
+   "turn_flips_per_min": 221.1295614994531,
+   "min_gap_obstacle_m_median": 0.1711,
+   "min_gap_robot_m_median": 0.19605,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 1.3275,
+   "action_entropy_bits": 4.170273228239999,
+   "actions_used": 45,
+   "override_rate": 0.21303569652978024,
+   "decision_us_per_robot": 147.19154622478325,
+   "n_robot_runs": 400
+  },
+  "ppo_final|ref0-99|0": {
+   "success": 0.6925,
+   "collision": 0.285,
+   "timeout": 0.0225,
+   "coll_obstacle": 0.04,
+   "coll_wall": 0.0025,
+   "coll_robot": 0.2425,
+   "all_four": 0.34,
+   "time_s": 10.58519855595668,
+   "success_ci": [
+    0.6375,
+    0.745
+   ],
+   "collision_ci": [
+    0.235,
+    0.335
+   ],
+   "timeout_ci": [
+    0.0075,
+    0.04
+   ],
+   "all_four_ci": [
+    0.25,
+    0.43
+   ],
+   "d_success_vs_ref": -0.0225,
+   "d_success_vs_ref_ci": [
+    -0.0675,
+    0.0225
+   ],
+   "d_collision_vs_ref": 0.03,
+   "d_collision_vs_ref_ci": [
+    -0.01,
+    0.0725
+   ],
+   "path_efficiency": 0.9782068235613838,
+   "path_m_success": 1.930884476534296,
+   "mean_speed_mps": 0.14656486905582358,
+   "stopped_frac": 0.2119658855961406,
+   "stopped_frac_success": 0.04396166570035128,
+   "turn_flips_per_min": 206.05616815988972,
+   "min_gap_obstacle_m_median": 0.1827,
+   "min_gap_robot_m_median": 0.1983,
+   "near_miss_robot_steps_per_robot": 1.5575,
+   "near_miss_obstacle_steps_per_robot": 1.0725,
+   "action_entropy_bits": 4.110911701246699,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 147.15385583065452,
+   "n_robot_runs": 400
+  },
+  "dqn_s1|test|1": {
+   "success": 0.88,
+   "collision": 0.005,
+   "timeout": 0.115,
+   "coll_obstacle": 0.005,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.64,
+   "time_s": 15.43380681818182,
+   "success_ci": [
+    0.845,
+    0.912562499999999
+   ],
+   "collision_ci": [
+    0.0,
+    0.0125
+   ],
+   "timeout_ci": [
+    0.0825,
+    0.15
+   ],
+   "all_four_ci": [
+    0.55,
+    0.73
+   ],
+   "d_success_vs_ref": -0.0225,
+   "d_success_vs_ref_ci": [
+    -0.06,
+    0.015
+   ],
+   "d_collision_vs_ref": -0.04,
+   "d_collision_vs_ref_ci": [
+    -0.0625,
+    -0.02
+   ],
+   "path_efficiency": 0.9656117824350955,
+   "path_m_success": 2.005028409090909,
+   "mean_speed_mps": 0.08530765466037715,
+   "stopped_frac": 0.35113971239053243,
+   "stopped_frac_success": 0.07786183665580651,
+   "turn_flips_per_min": 223.73559089063133,
+   "min_gap_obstacle_m_median": 0.17665,
+   "min_gap_robot_m_median": 0.22365000000000002,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 2.81,
+   "action_entropy_bits": 4.285376642285852,
+   "actions_used": 45,
+   "override_rate": 0.0669457374027678,
+   "decision_us_per_robot": 76.50349433604586,
+   "n_robot_runs": 400
+  },
+  "dqn_s1|test|0": {
+   "success": 0.7575,
+   "collision": 0.125,
+   "timeout": 0.1175,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.125,
+   "all_four": 0.47,
+   "time_s": 14.626072607260728,
+   "success_ci": [
+    0.705,
+    0.8075
+   ],
+   "collision_ci": [
+    0.085,
+    0.1675
+   ],
+   "timeout_ci": [
+    0.08,
+    0.16
+   ],
+   "all_four_ci": [
+    0.37,
+    0.57
+   ],
+   "d_success_vs_ref": 0.0775,
+   "d_success_vs_ref_ci": [
+    0.015,
+    0.1375
+   ],
+   "d_collision_vs_ref": -0.1675,
+   "d_collision_vs_ref_ci": [
+    -0.2225,
+    -0.1125
+   ],
+   "path_efficiency": 0.983336017992586,
+   "path_m_success": 1.9267986798679866,
+   "mean_speed_mps": 0.080949740301097,
+   "stopped_frac": 0.3856611066577355,
+   "stopped_frac_success": 0.06990545388902679,
+   "turn_flips_per_min": 203.94215248114025,
+   "min_gap_obstacle_m_median": 0.1854,
+   "min_gap_robot_m_median": 0.21594999999999998,
+   "near_miss_robot_steps_per_robot": 2.025,
+   "near_miss_obstacle_steps_per_robot": 0.6425,
+   "action_entropy_bits": 4.129175113397591,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 79.35751307836149,
+   "n_robot_runs": 400
+  },
+  "dqn_s1|ref0-99|1": {
+   "success": 0.8625,
+   "collision": 0.0,
+   "timeout": 0.1375,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.6,
+   "time_s": 15.431594202898552,
+   "success_ci": [
+    0.825,
+    0.8975
+   ],
+   "collision_ci": [
+    0.0,
+    0.0
+   ],
+   "timeout_ci": [
+    0.1025,
+    0.175
+   ],
+   "all_four_ci": [
+    0.5,
+    0.7
+   ],
+   "d_success_vs_ref": -0.0525,
+   "d_success_vs_ref_ci": [
+    -0.0875,
+    -0.0175
+   ],
+   "d_collision_vs_ref": -0.04,
+   "d_collision_vs_ref_ci": [
+    -0.0575,
+    -0.0225
+   ],
+   "path_efficiency": 0.9744437427632734,
+   "path_m_success": 2.0341884057971016,
+   "mean_speed_mps": 0.07768374229844557,
+   "stopped_frac": 0.42333485823299816,
+   "stopped_frac_success": 0.0692161761114972,
+   "turn_flips_per_min": 242.34419256562745,
+   "min_gap_obstacle_m_median": 0.17375000000000002,
+   "min_gap_robot_m_median": 0.2703,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 0.705,
+   "action_entropy_bits": 4.313035786621049,
+   "actions_used": 45,
+   "override_rate": 0.07550200021413485,
+   "decision_us_per_robot": 78.43586977786698,
+   "n_robot_runs": 400
+  },
+  "dqn_s1|ref0-99|0": {
+   "success": 0.7825,
+   "collision": 0.115,
+   "timeout": 0.1025,
+   "coll_obstacle": 0.005,
+   "coll_wall": 0.0,
+   "coll_robot": 0.11,
+   "all_four": 0.5,
+   "time_s": 15.55303514376997,
+   "success_ci": [
+    0.7275,
+    0.8325
+   ],
+   "collision_ci": [
+    0.0725,
+    0.16
+   ],
+   "timeout_ci": [
+    0.0725,
+    0.135
+   ],
+   "all_four_ci": [
+    0.4,
+    0.6
+   ],
+   "d_success_vs_ref": 0.0675,
+   "d_success_vs_ref_ci": [
+    0.0025,
+    0.1325
+   ],
+   "d_collision_vs_ref": -0.14,
+   "d_collision_vs_ref_ci": [
+    -0.195,
+    -0.0875
+   ],
+   "path_efficiency": 0.9756924805834941,
+   "path_m_success": 2.0373482428115017,
+   "mean_speed_mps": 0.0839273131633417,
+   "stopped_frac": 0.37939842339366714,
+   "stopped_frac_success": 0.07084899652841971,
+   "turn_flips_per_min": 224.256837098692,
+   "min_gap_obstacle_m_median": 0.17505,
+   "min_gap_robot_m_median": 0.27454999999999996,
+   "near_miss_robot_steps_per_robot": 1.47,
+   "near_miss_obstacle_steps_per_robot": 0.795,
+   "action_entropy_bits": 4.191159546476053,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 74.45820708045277,
+   "n_robot_runs": 400
+  },
+  "dqn_s2|test|1": {
+   "success": 0.9,
+   "collision": 0.015,
+   "timeout": 0.085,
+   "coll_obstacle": 0.015,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.68,
+   "time_s": 16.095277777777778,
+   "success_ci": [
+    0.8675,
+    0.93
+   ],
+   "collision_ci": [
+    0.005,
+    0.0275
+   ],
+   "timeout_ci": [
+    0.0575,
+    0.115
+   ],
+   "all_four_ci": [
+    0.59,
+    0.77
+   ],
+   "d_success_vs_ref": -0.0025,
+   "d_success_vs_ref_ci": [
+    -0.04,
+    0.035
+   ],
+   "d_collision_vs_ref": -0.03,
+   "d_collision_vs_ref_ci": [
+    -0.0525,
+    -0.01
+   ],
+   "path_efficiency": 0.9608302638499405,
+   "path_m_success": 2.011138888888889,
+   "mean_speed_mps": 0.09010282776349614,
+   "stopped_frac": 0.32648937483863,
+   "stopped_frac_success": 0.09547313739364548,
+   "turn_flips_per_min": 249.46060327118016,
+   "min_gap_obstacle_m_median": 0.1702,
+   "min_gap_robot_m_median": 0.19295,
+   "near_miss_robot_steps_per_robot": 0.015,
+   "near_miss_obstacle_steps_per_robot": 1.3025,
+   "action_entropy_bits": 4.81749984075498,
+   "actions_used": 45,
+   "override_rate": 0.07961293654090097,
+   "decision_us_per_robot": 75.86750098010573,
+   "n_robot_runs": 400
+  },
+  "dqn_s2|test|0": {
+   "success": 0.76,
+   "collision": 0.165,
+   "timeout": 0.075,
+   "coll_obstacle": 0.0075,
+   "coll_wall": 0.0,
+   "coll_robot": 0.1575,
+   "all_four": 0.47,
+   "time_s": 15.691447368421052,
+   "success_ci": [
+    0.71,
+    0.81
+   ],
+   "collision_ci": [
+    0.1175,
+    0.2125
+   ],
+   "timeout_ci": [
+    0.05,
+    0.1025
+   ],
+   "all_four_ci": [
+    0.37,
+    0.57
+   ],
+   "d_success_vs_ref": 0.08,
+   "d_success_vs_ref_ci": [
+    0.0175,
+    0.1425
+   ],
+   "d_collision_vs_ref": -0.1275,
+   "d_collision_vs_ref_ci": [
+    -0.185,
+    -0.0675
+   ],
+   "path_efficiency": 0.9694875941286195,
+   "path_m_success": 1.9557072368421047,
+   "mean_speed_mps": 0.09092575733010737,
+   "stopped_frac": 0.31852138233790206,
+   "stopped_frac_success": 0.09244895392226742,
+   "turn_flips_per_min": 251.140516069491,
+   "min_gap_obstacle_m_median": 0.1762,
+   "min_gap_robot_m_median": 0.1981,
+   "near_miss_robot_steps_per_robot": 3.85,
+   "near_miss_obstacle_steps_per_robot": 2.8225,
+   "action_entropy_bits": 4.799064575193116,
+   "actions_used": 44,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 75.27815614125252,
+   "n_robot_runs": 400
+  },
+  "dqn_s2|ref0-99|1": {
+   "success": 0.8675,
+   "collision": 0.01,
+   "timeout": 0.1225,
+   "coll_obstacle": 0.01,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.55,
+   "time_s": 16.14034582132565,
+   "success_ci": [
+    0.835,
+    0.8975
+   ],
+   "collision_ci": [
+    0.0025,
+    0.02
+   ],
+   "timeout_ci": [
+    0.0925,
+    0.155
+   ],
+   "all_four_ci": [
+    0.45,
+    0.64
+   ],
+   "d_success_vs_ref": -0.0475,
+   "d_success_vs_ref_ci": [
+    -0.08,
+    -0.015
+   ],
+   "d_collision_vs_ref": -0.03,
+   "d_collision_vs_ref_ci": [
+    -0.05,
+    -0.0125
+   ],
+   "path_efficiency": 0.9697937576879369,
+   "path_m_success": 2.0629682997118155,
+   "mean_speed_mps": 0.07915380415901534,
+   "stopped_frac": 0.4115539232716264,
+   "stopped_frac_success": 0.07895441641223419,
+   "turn_flips_per_min": 259.9334954588317,
+   "min_gap_obstacle_m_median": 0.16865000000000002,
+   "min_gap_robot_m_median": 0.2853,
+   "near_miss_robot_steps_per_robot": 0.02,
+   "near_miss_obstacle_steps_per_robot": 2.87,
+   "action_entropy_bits": 4.7845058452897415,
+   "actions_used": 45,
+   "override_rate": 0.08834185319370688,
+   "decision_us_per_robot": 77.65979089991662,
+   "n_robot_runs": 400
+  },
+  "dqn_s2|ref0-99|0": {
+   "success": 0.7675,
+   "collision": 0.1425,
+   "timeout": 0.09,
+   "coll_obstacle": 0.015,
+   "coll_wall": 0.0,
+   "coll_robot": 0.1275,
+   "all_four": 0.43,
+   "time_s": 15.872312703583063,
+   "success_ci": [
+    0.7175,
+    0.815
+   ],
+   "collision_ci": [
+    0.1,
+    0.185
+   ],
+   "timeout_ci": [
+    0.065,
+    0.1175
+   ],
+   "all_four_ci": [
+    0.33,
+    0.53
+   ],
+   "d_success_vs_ref": 0.0525,
+   "d_success_vs_ref_ci": [
+    -0.01,
+    0.115
+   ],
+   "d_collision_vs_ref": -0.1125,
+   "d_collision_vs_ref_ci": [
+    -0.1725,
+    -0.055
+   ],
+   "path_efficiency": 0.9758021471619661,
+   "path_m_success": 1.997915309446254,
+   "mean_speed_mps": 0.08489222566532992,
+   "stopped_frac": 0.3693036820998906,
+   "stopped_frac_success": 0.08182153997701527,
+   "turn_flips_per_min": 269.5611556689755,
+   "min_gap_obstacle_m_median": 0.17285,
+   "min_gap_robot_m_median": 0.2778,
+   "near_miss_robot_steps_per_robot": 1.5175,
+   "near_miss_obstacle_steps_per_robot": 1.045,
+   "action_entropy_bits": 4.794457872052024,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 68.70513145262925,
+   "n_robot_runs": 400
+  },
+  "dqn_s3|test|1": {
+   "success": 0.83,
+   "collision": 0.005,
+   "timeout": 0.165,
+   "coll_obstacle": 0.005,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.51,
+   "time_s": 15.359939759036145,
+   "success_ci": [
+    0.7875,
+    0.87
+   ],
+   "collision_ci": [
+    0.0,
+    0.0125
+   ],
+   "timeout_ci": [
+    0.125,
+    0.2075
+   ],
+   "all_four_ci": [
+    0.41,
+    0.61
+   ],
+   "d_success_vs_ref": -0.0725,
+   "d_success_vs_ref_ci": [
+    -0.11,
+    -0.035
+   ],
+   "d_collision_vs_ref": -0.04,
+   "d_collision_vs_ref_ci": [
+    -0.0625,
+    -0.02
+   ],
+   "path_efficiency": 0.9827116627871454,
+   "path_m_success": 1.9241867469879517,
+   "mean_speed_mps": 0.06535692318824848,
+   "stopped_frac": 0.5324450956981077,
+   "stopped_frac_success": 0.13107167369349937,
+   "turn_flips_per_min": 240.07380874850753,
+   "min_gap_obstacle_m_median": 0.16770000000000002,
+   "min_gap_robot_m_median": 0.2191,
+   "near_miss_robot_steps_per_robot": 0.01,
+   "near_miss_obstacle_steps_per_robot": 0.64,
+   "action_entropy_bits": 4.40510568028717,
+   "actions_used": 45,
+   "override_rate": 0.09094033792828973,
+   "decision_us_per_robot": 69.34159127209165,
+   "n_robot_runs": 400
+  },
+  "dqn_s3|test|0": {
+   "success": 0.7475,
+   "collision": 0.125,
+   "timeout": 0.1275,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.125,
+   "all_four": 0.43,
+   "time_s": 15.279264214046822,
+   "success_ci": [
+    0.695,
+    0.8
+   ],
+   "collision_ci": [
+    0.0825,
+    0.1675
+   ],
+   "timeout_ci": [
+    0.09,
+    0.1675
+   ],
+   "all_four_ci": [
+    0.33,
+    0.53
+   ],
+   "d_success_vs_ref": 0.0675,
+   "d_success_vs_ref_ci": [
+    -0.0075,
+    0.1425
+   ],
+   "d_collision_vs_ref": -0.1675,
+   "d_collision_vs_ref_ci": [
+    -0.235,
+    -0.1
+   ],
+   "path_efficiency": 0.985149118101471,
+   "path_m_success": 1.8867892976588627,
+   "mean_speed_mps": 0.06971269780487047,
+   "stopped_frac": 0.49704521697732423,
+   "stopped_frac_success": 0.13286636751669037,
+   "turn_flips_per_min": 207.286049905302,
+   "min_gap_obstacle_m_median": 0.1736,
+   "min_gap_robot_m_median": 0.23405,
+   "near_miss_robot_steps_per_robot": 1.84,
+   "near_miss_obstacle_steps_per_robot": 0.6725,
+   "action_entropy_bits": 4.184173326019188,
+   "actions_used": 44,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 67.68960319970776,
+   "n_robot_runs": 400
+  },
+  "dqn_s3|ref0-99|1": {
+   "success": 0.8325,
+   "collision": 0.0,
+   "timeout": 0.1675,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.51,
+   "time_s": 15.71021021021021,
+   "success_ci": [
+    0.795,
+    0.87
+   ],
+   "collision_ci": [
+    0.0,
+    0.0
+   ],
+   "timeout_ci": [
+    0.13,
+    0.205
+   ],
+   "all_four_ci": [
+    0.41,
+    0.61
+   ],
+   "d_success_vs_ref": -0.0825,
+   "d_success_vs_ref_ci": [
+    -0.12,
+    -0.0425
+   ],
+   "d_collision_vs_ref": -0.04,
+   "d_collision_vs_ref_ci": [
+    -0.0575,
+    -0.0225
+   ],
+   "path_efficiency": 0.9815880726062757,
+   "path_m_success": 1.9920420420420422,
+   "mean_speed_mps": 0.06593615415353195,
+   "stopped_frac": 0.5214847045242641,
+   "stopped_frac_success": 0.10419573736022174,
+   "turn_flips_per_min": 217.76139945833148,
+   "min_gap_obstacle_m_median": 0.17459999999999998,
+   "min_gap_robot_m_median": 0.30395,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 0.5425,
+   "action_entropy_bits": 4.127911365175159,
+   "actions_used": 44,
+   "override_rate": 0.03804999334014119,
+   "decision_us_per_robot": 66.59703262527424,
+   "n_robot_runs": 400
+  },
+  "dqn_s3|ref0-99|0": {
+   "success": 0.78,
+   "collision": 0.06,
+   "timeout": 0.16,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.06,
+   "all_four": 0.43,
+   "time_s": 15.657371794871796,
+   "success_ci": [
+    0.7325,
+    0.825
+   ],
+   "collision_ci": [
+    0.03,
+    0.095
+   ],
+   "timeout_ci": [
+    0.125,
+    0.195
+   ],
+   "all_four_ci": [
+    0.33,
+    0.53
+   ],
+   "d_success_vs_ref": 0.065,
+   "d_success_vs_ref_ci": [
+    0.0,
+    0.13
+   ],
+   "d_collision_vs_ref": -0.195,
+   "d_collision_vs_ref_ci": [
+    -0.25,
+    -0.1425
+   ],
+   "path_efficiency": 0.9823685583222679,
+   "path_m_success": 1.986298076923077,
+   "mean_speed_mps": 0.06622821078857938,
+   "stopped_frac": 0.5203396506398219,
+   "stopped_frac_success": 0.10597531268551309,
+   "turn_flips_per_min": 203.91679108920866,
+   "min_gap_obstacle_m_median": 0.17385,
+   "min_gap_robot_m_median": 0.303,
+   "near_miss_robot_steps_per_robot": 0.8275,
+   "near_miss_obstacle_steps_per_robot": 0.43,
+   "action_entropy_bits": 4.041185269521009,
+   "actions_used": 44,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 66.0544426361917,
+   "n_robot_runs": 400
+  },
+  "rule|test|1": {
+   "success": 0.84,
+   "collision": 0.025,
+   "timeout": 0.135,
+   "coll_obstacle": 0.025,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.56,
+   "time_s": 9.579464285714286,
+   "success_ci": [
+    0.7975,
+    0.88
+   ],
+   "collision_ci": [
+    0.0125,
+    0.04
+   ],
+   "timeout_ci": [
+    0.0975,
+    0.175
+   ],
+   "all_four_ci": [
+    0.46,
+    0.66
+   ],
+   "d_success_vs_ref": -0.0625,
+   "d_success_vs_ref_ci": [
+    -0.1025,
+    -0.0225
+   ],
+   "d_collision_vs_ref": -0.02,
+   "d_collision_vs_ref_ci": [
+    -0.0425,
+    0.0025
+   ],
+   "path_efficiency": 0.9883191001757574,
+   "path_m_success": 1.8727083333333334,
+   "mean_speed_mps": 0.0852020003440395,
+   "stopped_frac": 0.5622465780355344,
+   "stopped_frac_success": 0.009413738465840246,
+   "turn_flips_per_min": 11.957830585112918,
+   "min_gap_obstacle_m_median": 0.11660000000000001,
+   "min_gap_robot_m_median": 0.22685,
+   "near_miss_robot_steps_per_robot": 0.035,
+   "near_miss_obstacle_steps_per_robot": 117.32,
+   "action_entropy_bits": 2.547852145782342,
+   "actions_used": 45,
+   "override_rate": 0.09843216277983928,
+   "decision_us_per_robot": 231.99464870006827,
+   "n_robot_runs": 400
+  },
+  "rule|test|0": {
+   "success": 0.845,
+   "collision": 0.005,
+   "timeout": 0.15,
+   "coll_obstacle": 0.005,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.57,
+   "time_s": 9.618934911242604,
+   "success_ci": [
+    0.8,
+    0.885
+   ],
+   "collision_ci": [
+    0.0,
+    0.0125
+   ],
+   "timeout_ci": [
+    0.1125,
+    0.1925
+   ],
+   "all_four_ci": [
+    0.47,
+    0.67
+   ],
+   "d_success_vs_ref": 0.165,
+   "d_success_vs_ref_ci": [
+    0.095,
+    0.2325
+   ],
+   "d_collision_vs_ref": -0.2875,
+   "d_collision_vs_ref_ci": [
+    -0.3425,
+    -0.2325
+   ],
+   "path_efficiency": 0.9906468939250075,
+   "path_m_success": 1.8797189349112426,
+   "mean_speed_mps": 0.08033930754503725,
+   "stopped_frac": 0.5855996124835652,
+   "stopped_frac_success": 0.008642962598425197,
+   "turn_flips_per_min": 10.026987751712683,
+   "min_gap_obstacle_m_median": 0.11654999999999999,
+   "min_gap_robot_m_median": 0.2265,
+   "near_miss_robot_steps_per_robot": 21.5725,
+   "near_miss_obstacle_steps_per_robot": 130.4025,
+   "action_entropy_bits": 2.2036524132718416,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 232.00995445287035,
+   "n_robot_runs": 400
+  },
+  "rule|ref0-99|1": {
+   "success": 0.8225,
+   "collision": 0.0375,
+   "timeout": 0.14,
+   "coll_obstacle": 0.0375,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.48,
+   "time_s": 9.877507598784195,
+   "success_ci": [
+    0.7825,
+    0.8625
+   ],
+   "collision_ci": [
+    0.02,
+    0.055
+   ],
+   "timeout_ci": [
+    0.1075,
+    0.175
+   ],
+   "all_four_ci": [
+    0.38,
+    0.58
+   ],
+   "d_success_vs_ref": -0.0925,
+   "d_success_vs_ref_ci": [
+    -0.135,
+    -0.05
+   ],
+   "d_collision_vs_ref": -0.0025,
+   "d_collision_vs_ref_ci": [
+    -0.025,
+    0.02
+   ],
+   "path_efficiency": 0.9990081617837933,
+   "path_m_success": 1.9423404255319148,
+   "mean_speed_mps": 0.08446435606919854,
+   "stopped_frac": 0.5669360904499815,
+   "stopped_frac_success": 0.0062775025386958795,
+   "turn_flips_per_min": 10.97434305567163,
+   "min_gap_obstacle_m_median": 0.10165,
+   "min_gap_robot_m_median": 0.20585,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 117.33,
+   "action_entropy_bits": 2.4833641738864545,
+   "actions_used": 45,
+   "override_rate": 0.10940913812247043,
+   "decision_us_per_robot": 239.7985679081709,
+   "n_robot_runs": 400
+  },
+  "rule|ref0-99|0": {
+   "success": 0.8275,
+   "collision": 0.0075,
+   "timeout": 0.165,
+   "coll_obstacle": 0.0075,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.49,
+   "time_s": 9.79546827794562,
+   "success_ci": [
+    0.7875,
+    0.8675
+   ],
+   "collision_ci": [
+    0.0,
+    0.0175
+   ],
+   "timeout_ci": [
+    0.1275,
+    0.2025
+   ],
+   "all_four_ci": [
+    0.39,
+    0.59
+   ],
+   "d_success_vs_ref": 0.1125,
+   "d_success_vs_ref_ci": [
+    0.0525,
+    0.1725
+   ],
+   "d_collision_vs_ref": -0.2475,
+   "d_collision_vs_ref_ci": [
+    -0.3025,
+    -0.195
+   ],
+   "path_efficiency": 1.0009232220732596,
+   "path_m_success": 1.927870090634441,
+   "mean_speed_mps": 0.0765393219381882,
+   "stopped_frac": 0.6074213235453815,
+   "stopped_frac_success": 0.006569410603583876,
+   "turn_flips_per_min": 8.906891384140913,
+   "min_gap_obstacle_m_median": 0.10775,
+   "min_gap_robot_m_median": 0.19995000000000002,
+   "near_miss_robot_steps_per_robot": 29.015,
+   "near_miss_obstacle_steps_per_robot": 136.6825,
+   "action_entropy_bits": 2.088400308833542,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 235.1502940526593,
+   "n_robot_runs": 400
+  },
+  "tabq_s1|test|1": {
+   "success": 0.645,
+   "collision": 0.2025,
+   "timeout": 0.1525,
+   "coll_obstacle": 0.1925,
+   "coll_wall": 0.01,
+   "coll_robot": 0.0,
+   "all_four": 0.22,
+   "time_s": 14.657751937984498,
+   "success_ci": [
+    0.59,
+    0.7
+   ],
+   "collision_ci": [
+    0.1625,
+    0.245
+   ],
+   "timeout_ci": [
+    0.1175,
+    0.19
+   ],
+   "all_four_ci": [
+    0.14,
+    0.3
+   ],
+   "d_success_vs_ref": -0.2575,
+   "d_success_vs_ref_ci": [
+    -0.31,
+    -0.2025
+   ],
+   "d_collision_vs_ref": 0.1575,
+   "d_collision_vs_ref_ci": [
+    0.115,
+    0.2025
+   ],
+   "path_efficiency": 0.8819134540256865,
+   "path_m_success": 2.0691860465116285,
+   "mean_speed_mps": 0.06897440420194417,
+   "stopped_frac": 0.5460175603637504,
+   "stopped_frac_success": 0.11666710738556733,
+   "turn_flips_per_min": 200.2645813734713,
+   "min_gap_obstacle_m_median": 0.1376,
+   "min_gap_robot_m_median": 0.24230000000000002,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 8.7775,
+   "action_entropy_bits": 4.617116342965398,
+   "actions_used": 45,
+   "override_rate": 0.06118689244277203,
+   "decision_us_per_robot": 1.8576133779586395,
+   "n_robot_runs": 400
+  },
+  "tabq_s1|test|0": {
+   "success": 0.5375,
+   "collision": 0.3175,
+   "timeout": 0.145,
+   "coll_obstacle": 0.1625,
+   "coll_wall": 0.015,
+   "coll_robot": 0.14,
+   "all_four": 0.15,
+   "time_s": 13.841860465116278,
+   "success_ci": [
+    0.4775,
+    0.5975
+   ],
+   "collision_ci": [
+    0.2675,
+    0.3675
+   ],
+   "timeout_ci": [
+    0.1075,
+    0.1825
+   ],
+   "all_four_ci": [
+    0.08,
+    0.22
+   ],
+   "d_success_vs_ref": -0.1425,
+   "d_success_vs_ref_ci": [
+    -0.2125,
+    -0.0725
+   ],
+   "d_collision_vs_ref": 0.025,
+   "d_collision_vs_ref_ci": [
+    -0.04,
+    0.0925
+   ],
+   "path_efficiency": 0.8946599805074994,
+   "path_m_success": 1.9572790697674416,
+   "mean_speed_mps": 0.06624246098527214,
+   "stopped_frac": 0.5620106826662764,
+   "stopped_frac_success": 0.11979166666666667,
+   "turn_flips_per_min": 226.14221952774673,
+   "min_gap_obstacle_m_median": 0.1547,
+   "min_gap_robot_m_median": 0.2345,
+   "near_miss_robot_steps_per_robot": 9.4775,
+   "near_miss_obstacle_steps_per_robot": 9.075,
+   "action_entropy_bits": 4.576952323745816,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 2.7865992691456793,
+   "n_robot_runs": 400
+  },
+  "tabq_s1|ref0-99|1": {
+   "success": 0.585,
+   "collision": 0.245,
+   "timeout": 0.17,
+   "coll_obstacle": 0.2225,
+   "coll_wall": 0.0225,
+   "coll_robot": 0.0,
+   "all_four": 0.15,
+   "time_s": 14.725641025641025,
+   "success_ci": [
+    0.53,
+    0.64
+   ],
+   "collision_ci": [
+    0.205,
+    0.285
+   ],
+   "timeout_ci": [
+    0.135,
+    0.2075
+   ],
+   "all_four_ci": [
+    0.08,
+    0.22
+   ],
+   "d_success_vs_ref": -0.33,
+   "d_success_vs_ref_ci": [
+    -0.3825,
+    -0.275
+   ],
+   "d_collision_vs_ref": 0.205,
+   "d_collision_vs_ref_ci": [
+    0.1675,
+    0.245
+   ],
+   "path_efficiency": 0.8927316029364565,
+   "path_m_success": 2.080747863247863,
+   "mean_speed_mps": 0.06364998406120498,
+   "stopped_frac": 0.5742337993533403,
+   "stopped_frac_success": 0.11904347321376749,
+   "turn_flips_per_min": 205.6705678764971,
+   "min_gap_obstacle_m_median": 0.14765,
+   "min_gap_robot_m_median": 0.26305,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 9.9275,
+   "action_entropy_bits": 4.609573929195402,
+   "actions_used": 45,
+   "override_rate": 0.08105104968350108,
+   "decision_us_per_robot": 1.9880865502070972,
+   "n_robot_runs": 400
+  },
+  "tabq_s1|ref0-99|0": {
+   "success": 0.4975,
+   "collision": 0.375,
+   "timeout": 0.1275,
+   "coll_obstacle": 0.1975,
+   "coll_wall": 0.025,
+   "coll_robot": 0.1525,
+   "all_four": 0.11,
+   "time_s": 14.433668341708543,
+   "success_ci": [
+    0.44,
+    0.555
+   ],
+   "collision_ci": [
+    0.325,
+    0.4225
+   ],
+   "timeout_ci": [
+    0.095,
+    0.1625
+   ],
+   "all_four_ci": [
+    0.05,
+    0.17
+   ],
+   "d_success_vs_ref": -0.2175,
+   "d_success_vs_ref_ci": [
+    -0.285,
+    -0.1525
+   ],
+   "d_collision_vs_ref": 0.12,
+   "d_collision_vs_ref_ci": [
+    0.0575,
+    0.1825
+   ],
+   "path_efficiency": 0.9031767663362196,
+   "path_m_success": 2.046407035175879,
+   "mean_speed_mps": 0.06833912431787177,
+   "stopped_frac": 0.5456173260572987,
+   "stopped_frac_success": 0.12129652195104969,
+   "turn_flips_per_min": 183.01074351978173,
+   "min_gap_obstacle_m_median": 0.1495,
+   "min_gap_robot_m_median": 0.2647,
+   "near_miss_robot_steps_per_robot": 3.8675,
+   "near_miss_obstacle_steps_per_robot": 7.0975,
+   "action_entropy_bits": 4.44290084778631,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 1.5099792279013653,
+   "n_robot_runs": 400
+  },
+  "tabq_s2|test|1": {
+   "success": 0.61,
+   "collision": 0.275,
+   "timeout": 0.115,
+   "coll_obstacle": 0.2575,
+   "coll_wall": 0.0175,
+   "coll_robot": 0.0,
+   "all_four": 0.17,
+   "time_s": 13.83155737704918,
+   "success_ci": [
+    0.5575,
+    0.66
+   ],
+   "collision_ci": [
+    0.23,
+    0.3225
+   ],
+   "timeout_ci": [
+    0.08743750000000006,
+    0.1475
+   ],
+   "all_four_ci": [
+    0.1,
+    0.25
+   ],
+   "d_success_vs_ref": -0.2925,
+   "d_success_vs_ref_ci": [
+    -0.3425,
+    -0.245
+   ],
+   "d_collision_vs_ref": 0.23,
+   "d_collision_vs_ref_ci": [
+    0.1875,
+    0.275
+   ],
+   "path_efficiency": 0.8906621141008677,
+   "path_m_success": 2.120143442622951,
+   "mean_speed_mps": 0.08071517695099818,
+   "stopped_frac": 0.48839609800362976,
+   "stopped_frac_success": 0.08829891256037216,
+   "turn_flips_per_min": 229.5122504537205,
+   "min_gap_obstacle_m_median": 0.1251,
+   "min_gap_robot_m_median": 0.29405000000000003,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 13.9875,
+   "action_entropy_bits": 4.742438512728483,
+   "actions_used": 45,
+   "override_rate": 0.0647005444646098,
+   "decision_us_per_robot": 2.038837163915256,
+   "n_robot_runs": 400
+  },
+  "tabq_s2|test|0": {
+   "success": 0.5175,
+   "collision": 0.3825,
+   "timeout": 0.1,
+   "coll_obstacle": 0.1975,
+   "coll_wall": 0.0175,
+   "coll_robot": 0.1675,
+   "all_four": 0.1,
+   "time_s": 12.996618357487925,
+   "success_ci": [
+    0.465,
+    0.57
+   ],
+   "collision_ci": [
+    0.3325,
+    0.4325
+   ],
+   "timeout_ci": [
+    0.075,
+    0.1275
+   ],
+   "all_four_ci": [
+    0.04,
+    0.16
+   ],
+   "d_success_vs_ref": -0.1625,
+   "d_success_vs_ref_ci": [
+    -0.2375,
+    -0.09
+   ],
+   "d_collision_vs_ref": 0.09,
+   "d_collision_vs_ref_ci": [
+    0.0175,
+    0.16006249999999908
+   ],
+   "path_efficiency": 0.9115604037900324,
+   "path_m_success": 1.9981159420289856,
+   "mean_speed_mps": 0.08109252620139158,
+   "stopped_frac": 0.4865151836908048,
+   "stopped_frac_success": 0.09073337545998587,
+   "turn_flips_per_min": 224.1689880454199,
+   "min_gap_obstacle_m_median": 0.14575,
+   "min_gap_robot_m_median": 0.2884,
+   "near_miss_robot_steps_per_robot": 3.4,
+   "near_miss_obstacle_steps_per_robot": 11.94,
+   "action_entropy_bits": 4.685126063125765,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 2.747356089154588,
+   "n_robot_runs": 400
+  },
+  "tabq_s2|ref0-99|1": {
+   "success": 0.6175,
+   "collision": 0.215,
+   "timeout": 0.1675,
+   "coll_obstacle": 0.1925,
+   "coll_wall": 0.0225,
+   "coll_robot": 0.0,
+   "all_four": 0.2,
+   "time_s": 14.316194331983807,
+   "success_ci": [
+    0.565,
+    0.6725
+   ],
+   "collision_ci": [
+    0.175,
+    0.2575
+   ],
+   "timeout_ci": [
+    0.13,
+    0.205
+   ],
+   "all_four_ci": [
+    0.12,
+    0.28
+   ],
+   "d_success_vs_ref": -0.2975,
+   "d_success_vs_ref_ci": [
+    -0.3475,
+    -0.2475
+   ],
+   "d_collision_vs_ref": 0.175,
+   "d_collision_vs_ref_ci": [
+    0.1325,
+    0.2175
+   ],
+   "path_efficiency": 0.8815763009816792,
+   "path_m_success": 2.1563157894736844,
+   "mean_speed_mps": 0.06837073625704278,
+   "stopped_frac": 0.5600635754530227,
+   "stopped_frac_success": 0.0921071236673171,
+   "turn_flips_per_min": 278.5689812699863,
+   "min_gap_obstacle_m_median": 0.1326,
+   "min_gap_robot_m_median": 0.2426,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 16.7175,
+   "action_entropy_bits": 4.936256381170416,
+   "actions_used": 45,
+   "override_rate": 0.12852139485305314,
+   "decision_us_per_robot": 1.6830233135705284,
+   "n_robot_runs": 400
+  },
+  "tabq_s2|ref0-99|0": {
+   "success": 0.525,
+   "collision": 0.36,
+   "timeout": 0.115,
+   "coll_obstacle": 0.17,
+   "coll_wall": 0.015,
+   "coll_robot": 0.175,
+   "all_four": 0.1,
+   "time_s": 13.620476190476191,
+   "success_ci": [
+    0.47,
+    0.5775
+   ],
+   "collision_ci": [
+    0.3075,
+    0.4125
+   ],
+   "timeout_ci": [
+    0.085,
+    0.1475
+   ],
+   "all_four_ci": [
+    0.04,
+    0.16
+   ],
+   "d_success_vs_ref": -0.19,
+   "d_success_vs_ref_ci": [
+    -0.26,
+    -0.1225
+   ],
+   "d_collision_vs_ref": 0.105,
+   "d_collision_vs_ref_ci": [
+    0.0325,
+    0.1775
+   ],
+   "path_efficiency": 0.9104518641939987,
+   "path_m_success": 2.0845000000000002,
+   "mean_speed_mps": 0.07600190952167661,
+   "stopped_frac": 0.515346896437917,
+   "stopped_frac_success": 0.09439569275950076,
+   "turn_flips_per_min": 271.4208255734458,
+   "min_gap_obstacle_m_median": 0.1409,
+   "min_gap_robot_m_median": 0.26975,
+   "near_miss_robot_steps_per_robot": 3.9425,
+   "near_miss_obstacle_steps_per_robot": 19.28,
+   "action_entropy_bits": 4.759089771560449,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 1.918998852448163,
+   "n_robot_runs": 400
+  },
+  "tabq_s3|test|1": {
+   "success": 0.695,
+   "collision": 0.2,
+   "timeout": 0.105,
+   "coll_obstacle": 0.19,
+   "coll_wall": 0.01,
+   "coll_robot": 0.0,
+   "all_four": 0.31,
+   "time_s": 15.9,
+   "success_ci": [
+    0.6425,
+    0.7475
+   ],
+   "collision_ci": [
+    0.1575,
+    0.2425
+   ],
+   "timeout_ci": [
+    0.075,
+    0.1375
+   ],
+   "all_four_ci": [
+    0.22,
+    0.4
+   ],
+   "d_success_vs_ref": -0.2075,
+   "d_success_vs_ref_ci": [
+    -0.255,
+    -0.16
+   ],
+   "d_collision_vs_ref": 0.155,
+   "d_collision_vs_ref_ci": [
+    0.1175,
+    0.1925
+   ],
+   "path_efficiency": 0.8572692964360892,
+   "path_m_success": 2.1894244604316544,
+   "mean_speed_mps": 0.08654090807043054,
+   "stopped_frac": 0.42429361015191525,
+   "stopped_frac_success": 0.12053753223836025,
+   "turn_flips_per_min": 203.84438576422667,
+   "min_gap_obstacle_m_median": 0.13385000000000002,
+   "min_gap_robot_m_median": 0.1959,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 12.505,
+   "action_entropy_bits": 5.048634582856757,
+   "actions_used": 45,
+   "override_rate": 0.12781834315098514,
+   "decision_us_per_robot": 1.5708844585282753,
+   "n_robot_runs": 400
+  },
+  "tabq_s3|test|0": {
+   "success": 0.525,
+   "collision": 0.4175,
+   "timeout": 0.0575,
+   "coll_obstacle": 0.17,
+   "coll_wall": 0.0125,
+   "coll_robot": 0.235,
+   "all_four": 0.17,
+   "time_s": 13.790476190476191,
+   "success_ci": [
+    0.465,
+    0.5825
+   ],
+   "collision_ci": [
+    0.3575,
+    0.48
+   ],
+   "timeout_ci": [
+    0.0375,
+    0.08
+   ],
+   "all_four_ci": [
+    0.1,
+    0.25
+   ],
+   "d_success_vs_ref": -0.155,
+   "d_success_vs_ref_ci": [
+    -0.23,
+    -0.08
+   ],
+   "d_collision_vs_ref": 0.125,
+   "d_collision_vs_ref_ci": [
+    0.0475,
+    0.2
+   ],
+   "path_efficiency": 0.8839833154177839,
+   "path_m_success": 1.984261904761905,
+   "mean_speed_mps": 0.09701468002687287,
+   "stopped_frac": 0.3606683914864421,
+   "stopped_frac_success": 0.11312154696132597,
+   "turn_flips_per_min": 178.63891708000398,
+   "min_gap_obstacle_m_median": 0.1621,
+   "min_gap_robot_m_median": 0.1805,
+   "near_miss_robot_steps_per_robot": 6.27,
+   "near_miss_obstacle_steps_per_robot": 7.835,
+   "action_entropy_bits": 4.864955036511109,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 1.7711392439701334,
+   "n_robot_runs": 400
+  },
+  "tabq_s3|ref0-99|1": {
+   "success": 0.6775,
+   "collision": 0.23,
+   "timeout": 0.0925,
+   "coll_obstacle": 0.2125,
+   "coll_wall": 0.0175,
+   "coll_robot": 0.0,
+   "all_four": 0.22,
+   "time_s": 16.478966789667897,
+   "success_ci": [
+    0.63,
+    0.725
+   ],
+   "collision_ci": [
+    0.1925,
+    0.265
+   ],
+   "timeout_ci": [
+    0.065,
+    0.125
+   ],
+   "all_four_ci": [
+    0.14,
+    0.31
+   ],
+   "d_success_vs_ref": -0.2375,
+   "d_success_vs_ref_ci": [
+    -0.28,
+    -0.195
+   ],
+   "d_collision_vs_ref": 0.19,
+   "d_collision_vs_ref_ci": [
+    0.1525,
+    0.225
+   ],
+   "path_efficiency": 0.8489941705818822,
+   "path_m_success": 2.3009594095940957,
+   "mean_speed_mps": 0.08911982952578745,
+   "stopped_frac": 0.404605832467982,
+   "stopped_frac_success": 0.11209637690895248,
+   "turn_flips_per_min": 194.72352024922117,
+   "min_gap_obstacle_m_median": 0.13145,
+   "min_gap_robot_m_median": 0.1922,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 11.9925,
+   "action_entropy_bits": 5.0066573329009385,
+   "actions_used": 45,
+   "override_rate": 0.08197040498442368,
+   "decision_us_per_robot": 2.2664336000768044,
+   "n_robot_runs": 400
+  },
+  "tabq_s3|ref0-99|0": {
+   "success": 0.5125,
+   "collision": 0.4425,
+   "timeout": 0.045,
+   "coll_obstacle": 0.17,
+   "coll_wall": 0.015,
+   "coll_robot": 0.2575,
+   "all_four": 0.1,
+   "time_s": 15.322439024390244,
+   "success_ci": [
+    0.4525,
+    0.57
+   ],
+   "collision_ci": [
+    0.3875,
+    0.5
+   ],
+   "timeout_ci": [
+    0.025,
+    0.0675
+   ],
+   "all_four_ci": [
+    0.05,
+    0.16
+   ],
+   "d_success_vs_ref": -0.2025,
+   "d_success_vs_ref_ci": [
+    -0.2725,
+    -0.135
+   ],
+   "d_collision_vs_ref": 0.1875,
+   "d_collision_vs_ref_ci": [
+    0.12,
+    0.2575
+   ],
+   "path_efficiency": 0.8660444807261294,
+   "path_m_success": 2.1940731707317074,
+   "mean_speed_mps": 0.10192126658108686,
+   "stopped_frac": 0.3177863357580944,
+   "stopped_frac_success": 0.10079271592754131,
+   "turn_flips_per_min": 210.25246041934105,
+   "min_gap_obstacle_m_median": 0.15635,
+   "min_gap_robot_m_median": 0.1919,
+   "near_miss_robot_steps_per_robot": 4.005,
+   "near_miss_obstacle_steps_per_robot": 4.325,
+   "action_entropy_bits": 5.092998963352665,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 1.9896450167127318,
+   "n_robot_runs": 400
+  },
+  "tabq_fine_explore|test|1": {
+   "success": 0.5425,
+   "collision": 0.26,
+   "timeout": 0.1975,
+   "coll_obstacle": 0.25,
+   "coll_wall": 0.01,
+   "coll_robot": 0.0,
+   "all_four": 0.18,
+   "time_s": 16.416129032258066,
+   "success_ci": [
+    0.4825,
+    0.6025
+   ],
+   "collision_ci": [
+    0.215,
+    0.305
+   ],
+   "timeout_ci": [
+    0.1575,
+    0.24
+   ],
+   "all_four_ci": [
+    0.11,
+    0.26
+   ],
+   "d_success_vs_ref": -0.36,
+   "d_success_vs_ref_ci": [
+    -0.4175,
+    -0.3025
+   ],
+   "d_collision_vs_ref": 0.215,
+   "d_collision_vs_ref_ci": [
+    0.1725,
+    0.26
+   ],
+   "path_efficiency": 0.8973001921683893,
+   "path_m_success": 2.020184331797235,
+   "mean_speed_mps": 0.05679728409290205,
+   "stopped_frac": 0.5901084859569564,
+   "stopped_frac_success": 0.1547314936978918,
+   "turn_flips_per_min": 221.1159271415328,
+   "min_gap_obstacle_m_median": 0.12924999999999998,
+   "min_gap_robot_m_median": 0.2651,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 17.05,
+   "action_entropy_bits": 4.657565026683431,
+   "actions_used": 45,
+   "override_rate": 0.047119150819699515,
+   "decision_us_per_robot": 0.8902044306725858,
+   "n_robot_runs": 400
+  },
+  "tabq_fine_explore|test|0": {
+   "success": 0.4625,
+   "collision": 0.39,
+   "timeout": 0.1475,
+   "coll_obstacle": 0.2175,
+   "coll_wall": 0.01,
+   "coll_robot": 0.1625,
+   "all_four": 0.07,
+   "time_s": 15.223243243243244,
+   "success_ci": [
+    0.4075,
+    0.5175
+   ],
+   "collision_ci": [
+    0.34,
+    0.4400624999999991
+   ],
+   "timeout_ci": [
+    0.11,
+    0.1875
+   ],
+   "all_four_ci": [
+    0.02,
+    0.12
+   ],
+   "d_success_vs_ref": -0.2175,
+   "d_success_vs_ref_ci": [
+    -0.2925,
+    -0.1449375000000009
+   ],
+   "d_collision_vs_ref": 0.0975,
+   "d_collision_vs_ref_ci": [
+    0.0275,
+    0.1675
+   ],
+   "path_efficiency": 0.9286114915341953,
+   "path_m_success": 1.9413513513513512,
+   "mean_speed_mps": 0.06131115361385143,
+   "stopped_frac": 0.5616066035836521,
+   "stopped_frac_success": 0.1376628910272343,
+   "turn_flips_per_min": 241.99919468492047,
+   "min_gap_obstacle_m_median": 0.1439,
+   "min_gap_robot_m_median": 0.26005,
+   "near_miss_robot_steps_per_robot": 2.3225,
+   "near_miss_obstacle_steps_per_robot": 9.7725,
+   "action_entropy_bits": 4.746587849266588,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 0.948077586346901,
+   "n_robot_runs": 400
+  },
+  "tabq_fine_explore|ref0-99|1": {
+   "success": 0.49,
+   "collision": 0.3225,
+   "timeout": 0.1875,
+   "coll_obstacle": 0.3,
+   "coll_wall": 0.0225,
+   "coll_robot": 0.0,
+   "all_four": 0.1,
+   "time_s": 17.538775510204083,
+   "success_ci": [
+    0.4375,
+    0.5425624999999991
+   ],
+   "collision_ci": [
+    0.275,
+    0.3725
+   ],
+   "timeout_ci": [
+    0.1475,
+    0.2275
+   ],
+   "all_four_ci": [
+    0.05,
+    0.16
+   ],
+   "d_success_vs_ref": -0.425,
+   "d_success_vs_ref_ci": [
+    -0.475,
+    -0.375
+   ],
+   "d_collision_vs_ref": 0.2825,
+   "d_collision_vs_ref_ci": [
+    0.235,
+    0.3325
+   ],
+   "path_efficiency": 0.8997113314933033,
+   "path_m_success": 2.1387500000000004,
+   "mean_speed_mps": 0.0564635996827258,
+   "stopped_frac": 0.5932251612235748,
+   "stopped_frac_success": 0.16395159413544333,
+   "turn_flips_per_min": 222.2867882884436,
+   "min_gap_obstacle_m_median": 0.0955,
+   "min_gap_robot_m_median": 0.31294999999999995,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 7.72,
+   "action_entropy_bits": 4.5854713381029235,
+   "actions_used": 45,
+   "override_rate": 0.055350553505535055,
+   "decision_us_per_robot": 0.7996867027233949,
+   "n_robot_runs": 400
+  },
+  "tabq_fine_explore|ref0-99|0": {
+   "success": 0.405,
+   "collision": 0.4425,
+   "timeout": 0.1525,
+   "coll_obstacle": 0.2775,
+   "coll_wall": 0.0125,
+   "coll_robot": 0.1525,
+   "all_four": 0.08,
+   "time_s": 17.26172839506173,
+   "success_ci": [
+    0.3525,
+    0.46
+   ],
+   "collision_ci": [
+    0.3825,
+    0.5
+   ],
+   "timeout_ci": [
+    0.1175,
+    0.1925
+   ],
+   "all_four_ci": [
+    0.03,
+    0.14
+   ],
+   "d_success_vs_ref": -0.31,
+   "d_success_vs_ref_ci": [
+    -0.3775,
+    -0.2425
+   ],
+   "d_collision_vs_ref": 0.1875,
+   "d_collision_vs_ref_ci": [
+    0.1175,
+    0.2575
+   ],
+   "path_efficiency": 0.9101569083248147,
+   "path_m_success": 2.0941358024691357,
+   "mean_speed_mps": 0.05957997923888986,
+   "stopped_frac": 0.570920735648393,
+   "stopped_frac_success": 0.16903876412530397,
+   "turn_flips_per_min": 217.45695986838237,
+   "min_gap_obstacle_m_median": 0.12040000000000001,
+   "min_gap_robot_m_median": 0.3046,
+   "near_miss_robot_steps_per_robot": 3.7975,
+   "near_miss_obstacle_steps_per_robot": 5.6875,
+   "action_entropy_bits": 4.593402378181046,
+   "actions_used": 45,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 0.8209951085518696,
+   "n_robot_runs": 400
+  },
+  "dwa|test|1": {
+   "success": 0.7975,
+   "collision": 0.0025,
+   "timeout": 0.2,
+   "coll_obstacle": 0.0025,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.47,
+   "time_s": 11.934169278996865,
+   "success_ci": [
+    0.75,
+    0.8425
+   ],
+   "collision_ci": [
+    0.0,
+    0.0075
+   ],
+   "timeout_ci": [
+    0.1575,
+    0.245
+   ],
+   "all_four_ci": [
+    0.37,
+    0.57
+   ],
+   "d_success_vs_ref": -0.105,
+   "d_success_vs_ref_ci": [
+    -0.15,
+    -0.06
+   ],
+   "d_collision_vs_ref": -0.0425,
+   "d_collision_vs_ref_ci": [
+    -0.0625,
+    -0.025
+   ],
+   "path_efficiency": 0.9315553642982204,
+   "path_m_success": 1.994576802507837,
+   "mean_speed_mps": 0.06555230843233528,
+   "stopped_frac": 0.6009003203761015,
+   "stopped_frac_success": 0.0017073811400052535,
+   "turn_flips_per_min": 4.30737954130855,
+   "min_gap_obstacle_m_median": 0.08729999999999999,
+   "min_gap_robot_m_median": 0.1725,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 46.92,
+   "action_entropy_bits": 2.4134419546201564,
+   "actions_used": 41,
+   "override_rate": 0.02353357595999383,
+   "decision_us_per_robot": 580.9328633056186,
+   "n_robot_runs": 400
+  },
+  "dwa|test|0": {
+   "success": 0.795,
+   "collision": 0.0,
+   "timeout": 0.205,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.48,
+   "time_s": 11.922955974842768,
+   "success_ci": [
+    0.745,
+    0.84
+   ],
+   "collision_ci": [
+    0.0,
+    0.0
+   ],
+   "timeout_ci": [
+    0.16,
+    0.255
+   ],
+   "all_four_ci": [
+    0.38,
+    0.58
+   ],
+   "d_success_vs_ref": 0.115,
+   "d_success_vs_ref_ci": [
+    0.0425,
+    0.185
+   ],
+   "d_collision_vs_ref": -0.2925,
+   "d_collision_vs_ref_ci": [
+    -0.3475,
+    -0.2375
+   ],
+   "path_efficiency": 0.9347227388588609,
+   "path_m_success": 1.9947484276729557,
+   "mean_speed_mps": 0.06442375688134987,
+   "stopped_frac": 0.6077071118471109,
+   "stopped_frac_success": 0.0009231174996703152,
+   "turn_flips_per_min": 3.6628921809962853,
+   "min_gap_obstacle_m_median": 0.09129999999999999,
+   "min_gap_robot_m_median": 0.1673,
+   "near_miss_robot_steps_per_robot": 10.1475,
+   "near_miss_obstacle_steps_per_robot": 48.7975,
+   "action_entropy_bits": 2.3483631385679833,
+   "actions_used": 42,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 447.29668225299974,
+   "n_robot_runs": 400
+  },
+  "dwa|ref0-99|1": {
+   "success": 0.795,
+   "collision": 0.0075,
+   "timeout": 0.1975,
+   "coll_obstacle": 0.0075,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.45,
+   "time_s": 11.882075471698114,
+   "success_ci": [
+    0.7525,
+    0.8375
+   ],
+   "collision_ci": [
+    0.0,
+    0.0175
+   ],
+   "timeout_ci": [
+    0.155,
+    0.2425
+   ],
+   "all_four_ci": [
+    0.35,
+    0.55
+   ],
+   "d_success_vs_ref": -0.12,
+   "d_success_vs_ref_ci": [
+    -0.165,
+    -0.0775
+   ],
+   "d_collision_vs_ref": -0.0325,
+   "d_collision_vs_ref_ci": [
+    -0.0525,
+    -0.014937500000000908
+   ],
+   "path_efficiency": 0.9441071966443859,
+   "path_m_success": 1.9837578616352203,
+   "mean_speed_mps": 0.06660769449358792,
+   "stopped_frac": 0.5943020047483294,
+   "stopped_frac_success": 0.0005293105729786953,
+   "turn_flips_per_min": 8.398493001255833,
+   "min_gap_obstacle_m_median": 0.093,
+   "min_gap_robot_m_median": 0.2202,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 42.1125,
+   "action_entropy_bits": 2.455663237724247,
+   "actions_used": 43,
+   "override_rate": 0.018104151579873683,
+   "decision_us_per_robot": 422.6965992499168,
+   "n_robot_runs": 400
+  },
+  "dwa|ref0-99|0": {
+   "success": 0.8,
+   "collision": 0.0,
+   "timeout": 0.2,
+   "coll_obstacle": 0.0,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.46,
+   "time_s": 11.9146875,
+   "success_ci": [
+    0.7575,
+    0.8425
+   ],
+   "collision_ci": [
+    0.0,
+    0.0
+   ],
+   "timeout_ci": [
+    0.1575,
+    0.2425
+   ],
+   "all_four_ci": [
+    0.36,
+    0.56
+   ],
+   "d_success_vs_ref": 0.085,
+   "d_success_vs_ref_ci": [
+    0.0175,
+    0.1525
+   ],
+   "d_collision_vs_ref": -0.255,
+   "d_collision_vs_ref_ci": [
+    -0.31,
+    -0.2025
+   ],
+   "path_efficiency": 0.9447225313301587,
+   "path_m_success": 1.9880156249999998,
+   "mean_speed_mps": 0.06615316861441789,
+   "stopped_frac": 0.5968926784530587,
+   "stopped_frac_success": 0.0003671938521257901,
+   "turn_flips_per_min": 3.1000572066795606,
+   "min_gap_obstacle_m_median": 0.09140000000000001,
+   "min_gap_robot_m_median": 0.2167,
+   "near_miss_robot_steps_per_robot": 1.895,
+   "near_miss_obstacle_steps_per_robot": 42.715,
+   "action_entropy_bits": 2.3806622485273636,
+   "actions_used": 42,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 434.7225220945499,
+   "n_robot_runs": 400
+  },
+  "goto|test|1": {
+   "success": 0.5425,
+   "collision": 0.415,
+   "timeout": 0.0425,
+   "coll_obstacle": 0.415,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.2,
+   "time_s": 8.857142857142858,
+   "success_ci": [
+    0.485,
+    0.6025
+   ],
+   "collision_ci": [
+    0.3575,
+    0.4725
+   ],
+   "timeout_ci": [
+    0.0225,
+    0.065
+   ],
+   "all_four_ci": [
+    0.12,
+    0.28
+   ],
+   "d_success_vs_ref": -0.36,
+   "d_success_vs_ref_ci": [
+    -0.415,
+    -0.305
+   ],
+   "d_collision_vs_ref": 0.37,
+   "d_collision_vs_ref_ci": [
+    0.3175,
+    0.4225
+   ],
+   "path_efficiency": 1.0686812492266984,
+   "path_m_success": 1.626290322580645,
+   "mean_speed_mps": 0.118065719788156,
+   "stopped_frac": 0.3991574386133847,
+   "stopped_frac_success": 0.0686264308012487,
+   "turn_flips_per_min": 13.707270101107365,
+   "min_gap_obstacle_m_median": 0.09645000000000001,
+   "min_gap_robot_m_median": 0.31955,
+   "near_miss_robot_steps_per_robot": 0.0475,
+   "near_miss_obstacle_steps_per_robot": 6.5725,
+   "action_entropy_bits": 1.2410677461064306,
+   "actions_used": 11,
+   "override_rate": 0.4212806933076553,
+   "decision_us_per_robot": 0.26146798086806994,
+   "n_robot_runs": 400
+  },
+  "goto|test|0": {
+   "success": 0.42,
+   "collision": 0.58,
+   "timeout": 0.0,
+   "coll_obstacle": 0.39,
+   "coll_wall": 0.0,
+   "coll_robot": 0.19,
+   "all_four": 0.09,
+   "time_s": 8.125,
+   "success_ci": [
+    0.3675,
+    0.475
+   ],
+   "collision_ci": [
+    0.525,
+    0.6325
+   ],
+   "timeout_ci": [
+    0.0,
+    0.0
+   ],
+   "all_four_ci": [
+    0.04,
+    0.15
+   ],
+   "d_success_vs_ref": -0.26,
+   "d_success_vs_ref_ci": [
+    -0.3225,
+    -0.1975
+   ],
+   "d_collision_vs_ref": 0.2875,
+   "d_collision_vs_ref_ci": [
+    0.225,
+    0.3525
+   ],
+   "path_efficiency": 1.079467988405787,
+   "path_m_success": 1.5054761904761906,
+   "mean_speed_mps": 0.17990707983461918,
+   "stopped_frac": 0.10046460082690423,
+   "stopped_frac_success": 0.07355311355311356,
+   "turn_flips_per_min": 0.0,
+   "min_gap_obstacle_m_median": 0.12945,
+   "min_gap_robot_m_median": 0.3191,
+   "near_miss_robot_steps_per_robot": 0.8475,
+   "near_miss_obstacle_steps_per_robot": 2.1,
+   "action_entropy_bits": 1.2460014812902473,
+   "actions_used": 11,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 0.24646977292827302,
+   "n_robot_runs": 400
+  },
+  "goto|ref0-99|1": {
+   "success": 0.5575,
+   "collision": 0.3975,
+   "timeout": 0.045,
+   "coll_obstacle": 0.3975,
+   "coll_wall": 0.0,
+   "coll_robot": 0.0,
+   "all_four": 0.14,
+   "time_s": 8.782062780269058,
+   "success_ci": [
+    0.5,
+    0.615
+   ],
+   "collision_ci": [
+    0.345,
+    0.45
+   ],
+   "timeout_ci": [
+    0.025,
+    0.0675
+   ],
+   "all_four_ci": [
+    0.08,
+    0.21
+   ],
+   "d_success_vs_ref": -0.3575,
+   "d_success_vs_ref_ci": [
+    -0.41,
+    -0.305
+   ],
+   "d_collision_vs_ref": 0.3575,
+   "d_collision_vs_ref_ci": [
+    0.305,
+    0.41
+   ],
+   "path_efficiency": 1.0677139090412369,
+   "path_m_success": 1.635829596412556,
+   "mean_speed_mps": 0.1181295014828414,
+   "stopped_frac": 0.4020618556701031,
+   "stopped_frac_success": 0.061325571895424834,
+   "turn_flips_per_min": 13.684507837876005,
+   "min_gap_obstacle_m_median": 0.0902,
+   "min_gap_robot_m_median": 0.3046,
+   "near_miss_robot_steps_per_robot": 0.0725,
+   "near_miss_obstacle_steps_per_robot": 4.4325,
+   "action_entropy_bits": 1.1782484974344747,
+   "actions_used": 11,
+   "override_rate": 0.422280280563009,
+   "decision_us_per_robot": 0.24964660570832264,
+   "n_robot_runs": 400
+  },
+  "goto|ref0-99|0": {
+   "success": 0.4325,
+   "collision": 0.5675,
+   "timeout": 0.0,
+   "coll_obstacle": 0.375,
+   "coll_wall": 0.0,
+   "coll_robot": 0.1925,
+   "all_four": 0.07,
+   "time_s": 8.498265895953757,
+   "success_ci": [
+    0.375,
+    0.49
+   ],
+   "collision_ci": [
+    0.51,
+    0.625
+   ],
+   "timeout_ci": [
+    0.0,
+    0.0
+   ],
+   "all_four_ci": [
+    0.03,
+    0.12
+   ],
+   "d_success_vs_ref": -0.2825,
+   "d_success_vs_ref_ci": [
+    -0.345,
+    -0.22
+   ],
+   "d_collision_vs_ref": 0.3125,
+   "d_collision_vs_ref_ci": [
+    0.2475,
+    0.3775
+   ],
+   "path_efficiency": 1.0746956214645444,
+   "path_m_success": 1.5942196531791908,
+   "mean_speed_mps": 0.1818307510877963,
+   "stopped_frac": 0.09084624456101825,
+   "stopped_frac_success": 0.062032376547408515,
+   "turn_flips_per_min": 0.0,
+   "min_gap_obstacle_m_median": 0.109,
+   "min_gap_robot_m_median": 0.29885,
+   "near_miss_robot_steps_per_robot": 0.8725,
+   "near_miss_obstacle_steps_per_robot": 2.1575,
+   "action_entropy_bits": 1.1760816597532584,
+   "actions_used": 11,
+   "override_rate": 0.0,
+   "decision_us_per_robot": 0.25941084767769745,
+   "n_robot_runs": 400
+  }
+ },
+ "behaviour": {
+  "ppo|1": {
+   "path_efficiency": 0.9666387250246489,
+   "path_m_success": 1.9552770083102493,
+   "mean_speed_mps": 0.12726092168353756,
+   "stopped_frac": 0.30610681939264783,
+   "stopped_frac_success": 0.04426108437110041,
+   "turn_flips_per_min": 217.67781033564196,
+   "min_gap_obstacle_m_median": 0.1664,
+   "min_gap_robot_m_median": 0.1496,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 1.235,
+   "action_entropy_bits": 4.395902035498278,
+   "actions_used": 44
+  },
+  "ppo|0": {
+   "path_efficiency": 0.9796607003776806,
+   "path_m_success": 1.857941176470588,
+   "mean_speed_mps": 0.1422027269151772,
+   "stopped_frac": 0.2176288074116156,
+   "stopped_frac_success": 0.044523852063605505,
+   "turn_flips_per_min": 200.2447231569287,
+   "min_gap_obstacle_m_median": 0.1773,
+   "min_gap_robot_m_median": 0.1231,
+   "near_miss_robot_steps_per_robot": 2.0525,
+   "near_miss_obstacle_steps_per_robot": 1.315,
+   "action_entropy_bits": 4.264037943776989,
+   "actions_used": 44
+  },
+  "ppo_final|1": {
+   "path_efficiency": 0.9636468767994972,
+   "path_m_success": 1.9468715083798884,
+   "mean_speed_mps": 0.12084987897293108,
+   "stopped_frac": 0.3463272635225996,
+   "stopped_frac_success": 0.04095126094342088,
+   "turn_flips_per_min": 203.73364552516253,
+   "min_gap_obstacle_m_median": 0.17204999999999998,
+   "min_gap_robot_m_median": 0.1403,
+   "near_miss_robot_steps_per_robot": 0.01,
+   "near_miss_obstacle_steps_per_robot": 1.185,
+   "action_entropy_bits": 4.2708830651810405,
+   "actions_used": 45
+  },
+  "ppo_final|0": {
+   "path_efficiency": 0.9818164327566141,
+   "path_m_success": 1.8382307692307691,
+   "mean_speed_mps": 0.14190465656453932,
+   "stopped_frac": 0.22891273089260036,
+   "stopped_frac_success": 0.039174145834135816,
+   "turn_flips_per_min": 206.51255392102644,
+   "min_gap_obstacle_m_median": 0.1822,
+   "min_gap_robot_m_median": 0.1303,
+   "near_miss_robot_steps_per_robot": 1.945,
+   "near_miss_obstacle_steps_per_robot": 1.395,
+   "action_entropy_bits": 4.246100153996475,
+   "actions_used": 45
+  },
+  "dqn_s1|1": {
+   "path_efficiency": 0.9656117824350955,
+   "path_m_success": 2.005028409090909,
+   "mean_speed_mps": 0.08530765466037715,
+   "stopped_frac": 0.35113971239053243,
+   "stopped_frac_success": 0.07786183665580651,
+   "turn_flips_per_min": 223.73559089063133,
+   "min_gap_obstacle_m_median": 0.17665,
+   "min_gap_robot_m_median": 0.22365000000000002,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 2.81,
+   "action_entropy_bits": 4.285376642285852,
+   "actions_used": 45
+  },
+  "dqn_s1|0": {
+   "path_efficiency": 0.983336017992586,
+   "path_m_success": 1.9267986798679866,
+   "mean_speed_mps": 0.080949740301097,
+   "stopped_frac": 0.3856611066577355,
+   "stopped_frac_success": 0.06990545388902679,
+   "turn_flips_per_min": 203.94215248114025,
+   "min_gap_obstacle_m_median": 0.1854,
+   "min_gap_robot_m_median": 0.21594999999999998,
+   "near_miss_robot_steps_per_robot": 2.025,
+   "near_miss_obstacle_steps_per_robot": 0.6425,
+   "action_entropy_bits": 4.129175113397591,
+   "actions_used": 45
+  },
+  "dqn_s2|1": {
+   "path_efficiency": 0.9608302638499405,
+   "path_m_success": 2.011138888888889,
+   "mean_speed_mps": 0.09010282776349614,
+   "stopped_frac": 0.32648937483863,
+   "stopped_frac_success": 0.09547313739364548,
+   "turn_flips_per_min": 249.46060327118016,
+   "min_gap_obstacle_m_median": 0.1702,
+   "min_gap_robot_m_median": 0.19295,
+   "near_miss_robot_steps_per_robot": 0.015,
+   "near_miss_obstacle_steps_per_robot": 1.3025,
+   "action_entropy_bits": 4.81749984075498,
+   "actions_used": 45
+  },
+  "dqn_s2|0": {
+   "path_efficiency": 0.9694875941286195,
+   "path_m_success": 1.9557072368421047,
+   "mean_speed_mps": 0.09092575733010737,
+   "stopped_frac": 0.31852138233790206,
+   "stopped_frac_success": 0.09244895392226742,
+   "turn_flips_per_min": 251.140516069491,
+   "min_gap_obstacle_m_median": 0.1762,
+   "min_gap_robot_m_median": 0.1981,
+   "near_miss_robot_steps_per_robot": 3.85,
+   "near_miss_obstacle_steps_per_robot": 2.8225,
+   "action_entropy_bits": 4.799064575193116,
+   "actions_used": 44
+  },
+  "dqn_s3|1": {
+   "path_efficiency": 0.9827116627871454,
+   "path_m_success": 1.9241867469879517,
+   "mean_speed_mps": 0.06535692318824848,
+   "stopped_frac": 0.5324450956981077,
+   "stopped_frac_success": 0.13107167369349937,
+   "turn_flips_per_min": 240.07380874850753,
+   "min_gap_obstacle_m_median": 0.16770000000000002,
+   "min_gap_robot_m_median": 0.2191,
+   "near_miss_robot_steps_per_robot": 0.01,
+   "near_miss_obstacle_steps_per_robot": 0.64,
+   "action_entropy_bits": 4.40510568028717,
+   "actions_used": 45
+  },
+  "dqn_s3|0": {
+   "path_efficiency": 0.985149118101471,
+   "path_m_success": 1.8867892976588627,
+   "mean_speed_mps": 0.06971269780487047,
+   "stopped_frac": 0.49704521697732423,
+   "stopped_frac_success": 0.13286636751669037,
+   "turn_flips_per_min": 207.286049905302,
+   "min_gap_obstacle_m_median": 0.1736,
+   "min_gap_robot_m_median": 0.23405,
+   "near_miss_robot_steps_per_robot": 1.84,
+   "near_miss_obstacle_steps_per_robot": 0.6725,
+   "action_entropy_bits": 4.184173326019188,
+   "actions_used": 44
+  },
+  "rule|1": {
+   "path_efficiency": 0.9883191001757574,
+   "path_m_success": 1.8727083333333334,
+   "mean_speed_mps": 0.0852020003440395,
+   "stopped_frac": 0.5622465780355344,
+   "stopped_frac_success": 0.009413738465840246,
+   "turn_flips_per_min": 11.957830585112918,
+   "min_gap_obstacle_m_median": 0.11660000000000001,
+   "min_gap_robot_m_median": 0.22685,
+   "near_miss_robot_steps_per_robot": 0.035,
+   "near_miss_obstacle_steps_per_robot": 117.32,
+   "action_entropy_bits": 2.547852145782342,
+   "actions_used": 45
+  },
+  "rule|0": {
+   "path_efficiency": 0.9906468939250075,
+   "path_m_success": 1.8797189349112426,
+   "mean_speed_mps": 0.08033930754503725,
+   "stopped_frac": 0.5855996124835652,
+   "stopped_frac_success": 0.008642962598425197,
+   "turn_flips_per_min": 10.026987751712683,
+   "min_gap_obstacle_m_median": 0.11654999999999999,
+   "min_gap_robot_m_median": 0.2265,
+   "near_miss_robot_steps_per_robot": 21.5725,
+   "near_miss_obstacle_steps_per_robot": 130.4025,
+   "action_entropy_bits": 2.2036524132718416,
+   "actions_used": 45
+  },
+  "tabq_s1|1": {
+   "path_efficiency": 0.8819134540256865,
+   "path_m_success": 2.0691860465116285,
+   "mean_speed_mps": 0.06897440420194417,
+   "stopped_frac": 0.5460175603637504,
+   "stopped_frac_success": 0.11666710738556733,
+   "turn_flips_per_min": 200.2645813734713,
+   "min_gap_obstacle_m_median": 0.1376,
+   "min_gap_robot_m_median": 0.24230000000000002,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 8.7775,
+   "action_entropy_bits": 4.617116342965398,
+   "actions_used": 45
+  },
+  "tabq_s1|0": {
+   "path_efficiency": 0.8946599805074994,
+   "path_m_success": 1.9572790697674416,
+   "mean_speed_mps": 0.06624246098527214,
+   "stopped_frac": 0.5620106826662764,
+   "stopped_frac_success": 0.11979166666666667,
+   "turn_flips_per_min": 226.14221952774673,
+   "min_gap_obstacle_m_median": 0.1547,
+   "min_gap_robot_m_median": 0.2345,
+   "near_miss_robot_steps_per_robot": 9.4775,
+   "near_miss_obstacle_steps_per_robot": 9.075,
+   "action_entropy_bits": 4.576952323745816,
+   "actions_used": 45
+  },
+  "tabq_s2|1": {
+   "path_efficiency": 0.8906621141008677,
+   "path_m_success": 2.120143442622951,
+   "mean_speed_mps": 0.08071517695099818,
+   "stopped_frac": 0.48839609800362976,
+   "stopped_frac_success": 0.08829891256037216,
+   "turn_flips_per_min": 229.5122504537205,
+   "min_gap_obstacle_m_median": 0.1251,
+   "min_gap_robot_m_median": 0.29405000000000003,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 13.9875,
+   "action_entropy_bits": 4.742438512728483,
+   "actions_used": 45
+  },
+  "tabq_s2|0": {
+   "path_efficiency": 0.9115604037900324,
+   "path_m_success": 1.9981159420289856,
+   "mean_speed_mps": 0.08109252620139158,
+   "stopped_frac": 0.4865151836908048,
+   "stopped_frac_success": 0.09073337545998587,
+   "turn_flips_per_min": 224.1689880454199,
+   "min_gap_obstacle_m_median": 0.14575,
+   "min_gap_robot_m_median": 0.2884,
+   "near_miss_robot_steps_per_robot": 3.4,
+   "near_miss_obstacle_steps_per_robot": 11.94,
+   "action_entropy_bits": 4.685126063125765,
+   "actions_used": 45
+  },
+  "tabq_s3|1": {
+   "path_efficiency": 0.8572692964360892,
+   "path_m_success": 2.1894244604316544,
+   "mean_speed_mps": 0.08654090807043054,
+   "stopped_frac": 0.42429361015191525,
+   "stopped_frac_success": 0.12053753223836025,
+   "turn_flips_per_min": 203.84438576422667,
+   "min_gap_obstacle_m_median": 0.13385000000000002,
+   "min_gap_robot_m_median": 0.1959,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 12.505,
+   "action_entropy_bits": 5.048634582856757,
+   "actions_used": 45
+  },
+  "tabq_s3|0": {
+   "path_efficiency": 0.8839833154177839,
+   "path_m_success": 1.984261904761905,
+   "mean_speed_mps": 0.09701468002687287,
+   "stopped_frac": 0.3606683914864421,
+   "stopped_frac_success": 0.11312154696132597,
+   "turn_flips_per_min": 178.63891708000398,
+   "min_gap_obstacle_m_median": 0.1621,
+   "min_gap_robot_m_median": 0.1805,
+   "near_miss_robot_steps_per_robot": 6.27,
+   "near_miss_obstacle_steps_per_robot": 7.835,
+   "action_entropy_bits": 4.864955036511109,
+   "actions_used": 45
+  },
+  "tabq_fine_explore|1": {
+   "path_efficiency": 0.8973001921683893,
+   "path_m_success": 2.020184331797235,
+   "mean_speed_mps": 0.05679728409290205,
+   "stopped_frac": 0.5901084859569564,
+   "stopped_frac_success": 0.1547314936978918,
+   "turn_flips_per_min": 221.1159271415328,
+   "min_gap_obstacle_m_median": 0.12924999999999998,
+   "min_gap_robot_m_median": 0.2651,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 17.05,
+   "action_entropy_bits": 4.657565026683431,
+   "actions_used": 45
+  },
+  "tabq_fine_explore|0": {
+   "path_efficiency": 0.9286114915341953,
+   "path_m_success": 1.9413513513513512,
+   "mean_speed_mps": 0.06131115361385143,
+   "stopped_frac": 0.5616066035836521,
+   "stopped_frac_success": 0.1376628910272343,
+   "turn_flips_per_min": 241.99919468492047,
+   "min_gap_obstacle_m_median": 0.1439,
+   "min_gap_robot_m_median": 0.26005,
+   "near_miss_robot_steps_per_robot": 2.3225,
+   "near_miss_obstacle_steps_per_robot": 9.7725,
+   "action_entropy_bits": 4.746587849266588,
+   "actions_used": 45
+  },
+  "dwa|1": {
+   "path_efficiency": 0.9315553642982204,
+   "path_m_success": 1.994576802507837,
+   "mean_speed_mps": 0.06555230843233528,
+   "stopped_frac": 0.6009003203761015,
+   "stopped_frac_success": 0.0017073811400052535,
+   "turn_flips_per_min": 4.30737954130855,
+   "min_gap_obstacle_m_median": 0.08729999999999999,
+   "min_gap_robot_m_median": 0.1725,
+   "near_miss_robot_steps_per_robot": 0.0,
+   "near_miss_obstacle_steps_per_robot": 46.92,
+   "action_entropy_bits": 2.4134419546201564,
+   "actions_used": 41
+  },
+  "dwa|0": {
+   "path_efficiency": 0.9347227388588609,
+   "path_m_success": 1.9947484276729557,
+   "mean_speed_mps": 0.06442375688134987,
+   "stopped_frac": 0.6077071118471109,
+   "stopped_frac_success": 0.0009231174996703152,
+   "turn_flips_per_min": 3.6628921809962853,
+   "min_gap_obstacle_m_median": 0.09129999999999999,
+   "min_gap_robot_m_median": 0.1673,
+   "near_miss_robot_steps_per_robot": 10.1475,
+   "near_miss_obstacle_steps_per_robot": 48.7975,
+   "action_entropy_bits": 2.3483631385679833,
+   "actions_used": 42
+  },
+  "goto|1": {
+   "path_efficiency": 1.0686812492266984,
+   "path_m_success": 1.626290322580645,
+   "mean_speed_mps": 0.118065719788156,
+   "stopped_frac": 0.3991574386133847,
+   "stopped_frac_success": 0.0686264308012487,
+   "turn_flips_per_min": 13.707270101107365,
+   "min_gap_obstacle_m_median": 0.09645000000000001,
+   "min_gap_robot_m_median": 0.31955,
+   "near_miss_robot_steps_per_robot": 0.0475,
+   "near_miss_obstacle_steps_per_robot": 6.5725,
+   "action_entropy_bits": 1.2410677461064306,
+   "actions_used": 11
+  },
+  "goto|0": {
+   "path_efficiency": 1.079467988405787,
+   "path_m_success": 1.5054761904761906,
+   "mean_speed_mps": 0.17990707983461918,
+   "stopped_frac": 0.10046460082690423,
+   "stopped_frac_success": 0.07355311355311356,
+   "turn_flips_per_min": 0.0,
+   "min_gap_obstacle_m_median": 0.12945,
+   "min_gap_robot_m_median": 0.3191,
+   "near_miss_robot_steps_per_robot": 0.8475,
+   "near_miss_obstacle_steps_per_robot": 2.1,
+   "action_entropy_bits": 1.2460014812902473,
+   "actions_used": 11
+  }
+ },
+ "deploy": {
+  "ppo": {
+   "name": "ppo",
+   "spec": "npz:weights/final_policy.npz",
+   "params": 92717,
+   "bytes": 371812,
+   "single_us_median": 113.2159995904658,
+   "single_us_p99": 136.2883107503876,
+   "single_us_mean": 113.3123952489481
+  },
+  "ppo_final": {
+   "name": "ppo_final",
+   "spec": "npz:runs/run10/final.npz",
+   "params": 92717,
+   "bytes": 371812,
+   "single_us_median": 142.57300063036382,
+   "single_us_p99": 624.4873273317352,
+   "single_us_mean": 235.03159475551098
+  },
+  "dqn_s1": {
+   "name": "dqn_s1",
+   "spec": "npz:../runs/benchmark/dqn/final_s1/best.npz",
+   "params": 92717,
+   "bytes": 371828,
+   "single_us_median": 90.49749860423617,
+   "single_us_p99": 139.25445979111828,
+   "single_us_mean": 92.49526933432973
+  },
+  "dqn_s2": {
+   "name": "dqn_s2",
+   "spec": "npz:../runs/benchmark/dqn/final_s2/best.npz",
+   "params": 92717,
+   "bytes": 371828,
+   "single_us_median": 82.83599891001359,
+   "single_us_p99": 123.25919844442979,
+   "single_us_mean": 87.04489526663613
+  },
+  "dqn_s3": {
+   "name": "dqn_s3",
+   "spec": "npz:../runs/benchmark/dqn/final_s3/best.npz",
+   "params": 92717,
+   "bytes": 371828,
+   "single_us_median": 75.99150194437243,
+   "single_us_p99": 83.49927702511195,
+   "single_us_mean": 76.7530774043591
+  },
+  "rule": {
+   "name": "rule",
+   "spec": "rule",
+   "params": 7,
+   "bytes": 0,
+   "single_us_median": 159.95049761841074,
+   "single_us_p99": 203.23548473243133,
+   "single_us_mean": 162.13236421830706
+  },
+  "tabq_s1": {
+   "name": "tabq_s1",
+   "spec": "tabq:../runs/benchmark/tabq/final_s1/best.npz",
+   "params": 291600,
+   "bytes": 1166400,
+   "single_us_median": 406.3759988639504,
+   "single_us_p99": 567.8752721723868,
+   "single_us_mean": 417.8744447333309
+  },
+  "tabq_s2": {
+   "name": "tabq_s2",
+   "spec": "tabq:../runs/benchmark/tabq/final_s2/best.npz",
+   "params": 291600,
+   "bytes": 1166400,
+   "single_us_median": 139.33000082033686,
+   "single_us_p99": 171.79235321236774,
+   "single_us_mean": 141.13873794007017
+  },
+  "tabq_s3": {
+   "name": "tabq_s3",
+   "spec": "tabq:../runs/benchmark/tabq/final_s3/best.npz",
+   "params": 291600,
+   "bytes": 1166400,
+   "single_us_median": 144.23549873754382,
+   "single_us_p99": 186.40043344930743,
+   "single_us_mean": 142.5993295292995
+  },
+  "tabq_fine_explore": {
+   "name": "tabq_fine_explore",
+   "spec": "tabq:../runs/benchmark/tabq/explore_fine_fg_s1/best.npz",
+   "params": 7085880,
+   "bytes": 28343520,
+   "single_us_median": 83.71899821213447,
+   "single_us_p99": 88.99256943550425,
+   "single_us_mean": 83.79686994502615
+  },
+  "dwa": {
+   "name": "dwa",
+   "spec": "dwa",
+   "params": 0,
+   "bytes": 0
+  },
+  "goto": {
+   "name": "goto",
+   "spec": "goto",
+   "params": 0,
+   "bytes": 0,
+   "single_us_median": 21.744001060142182,
+   "single_us_p99": 41.86674839729676,
+   "single_us_mean": 23.438823185355623
+  }
+ },
+ "gazebo": {
+  "ppo": {
+   "layouts": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119
+   ],
+   "robots": 80,
+   "success": 0.9125,
+   "success_ci": [
+    0.8496875000000003,
+    0.975
+   ],
+   "collision": 0.0625,
+   "timeout": 0.025,
+   "counts": {
+    "success": 73,
+    "collision": 5,
+    "timeout": 2,
+    "error": 0
+   },
+   "mean_time_s": 10.373972602739725,
+   "all_four": 0.7,
+   "decision_us_median": 98.14499935600907,
+   "decision_us_p99": 341.94655090686894
+  },
+  "dqn_s2": {
+   "layouts": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119
+   ],
+   "robots": 80,
+   "success": 0.9125,
+   "success_ci": [
+    0.8625,
+    0.9625
+   ],
+   "collision": 0.025,
+   "timeout": 0.0625,
+   "counts": {
+    "success": 73,
+    "collision": 2,
+    "timeout": 5,
+    "error": 0
+   },
+   "mean_time_s": 15.478082191780823,
+   "all_four": 0.65,
+   "decision_us_median": 83.98699719691649,
+   "decision_us_p99": 232.5180158368312,
+   "d_success_vs_ppo": 0.0,
+   "d_success_vs_ppo_ci": [
+    -0.05,
+    0.05
+   ]
+  },
+  "rule": {
+   "layouts": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119
+   ],
+   "robots": 80,
+   "success": 0.8,
+   "success_ci": [
+    0.7,
+    0.8875
+   ],
+   "collision": 0.0375,
+   "timeout": 0.1625,
+   "counts": {
+    "success": 64,
+    "collision": 3,
+    "timeout": 13,
+    "error": 0
+   },
+   "mean_time_s": 9.4234375,
+   "all_four": 0.45,
+   "decision_us_median": 1247.191998118069,
+   "decision_us_p99": 4518.4844368486665,
+   "d_success_vs_ppo": -0.1125,
+   "d_success_vs_ppo_ci": [
+    -0.2375,
+    0.0
+   ]
+  }
+ },
+ "compute": {
+  "dqn/train": {
+   "wall_s": 3574.1670000000004,
+   "cpu_s": 3012.013,
+   "cpu_J_est": 11295.048749999998,
+   "gpu_J": 104588.68,
+   "jobs": 6
+  },
+  "dqn_s1/eval": {
+   "wall_s": 276.525,
+   "cpu_s": 275.08,
+   "cpu_J_est": 1031.6,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "dqn_s2/eval": {
+   "wall_s": 262.238,
+   "cpu_s": 261.215,
+   "cpu_J_est": 979.5,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "dqn_s2/gazebo": {
+   "wall_s": 1715.883,
+   "cpu_s": 1946.977,
+   "cpu_J_est": 7301.2,
+   "gpu_J": 0.0,
+   "jobs": 1
+  },
+  "dqn_s3/eval": {
+   "wall_s": 482.427,
+   "cpu_s": 480.69300000000004,
+   "cpu_J_est": 1802.6000000000001,
+   "gpu_J": 0.0,
+   "jobs": 8
+  },
+  "dwa/eval": {
+   "wall_s": 975.7710000000001,
+   "cpu_s": 970.4319999999998,
+   "cpu_J_est": 3639.1,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "goto/eval": {
+   "wall_s": 209.655,
+   "cpu_s": 208.51,
+   "cpu_J_est": 782.0,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "ppo/eval": {
+   "wall_s": 742.767,
+   "cpu_s": 740.193,
+   "cpu_J_est": 2775.8312499999997,
+   "gpu_J": 0.0,
+   "jobs": 8
+  },
+  "ppo/gazebo": {
+   "wall_s": 1074.016,
+   "cpu_s": 1294.671,
+   "cpu_J_est": 4855.0,
+   "gpu_J": 0.0,
+   "jobs": 1
+  },
+  "ppo_final/eval": {
+   "wall_s": 456.903,
+   "cpu_s": 454.06,
+   "cpu_J_est": 1702.6999999999998,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "rule/eval": {
+   "wall_s": 459.392,
+   "cpu_s": 456.252,
+   "cpu_J_est": 1711.0,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "rule/gazebo": {
+   "wall_s": 1874.988,
+   "cpu_s": 2175.3689999999997,
+   "cpu_J_est": 8157.6,
+   "gpu_J": 0.0,
+   "jobs": 1
+  },
+  "rule/tune": {
+   "wall_s": 6275.687,
+   "cpu_s": 15566.354,
+   "cpu_J_est": 58373.9,
+   "gpu_J": 0.0,
+   "jobs": 2
+  },
+  "tabq/train": {
+   "wall_s": 22872.603,
+   "cpu_s": 22729.154,
+   "cpu_J_est": 85234.3,
+   "gpu_J": 0.0,
+   "jobs": 13
+  },
+  "tabq_fine_explore/eval": {
+   "wall_s": 112.126,
+   "cpu_s": 111.64399999999999,
+   "cpu_J_est": 418.6,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "tabq_s1/eval": {
+   "wall_s": 323.28999999999996,
+   "cpu_s": 310.59900000000005,
+   "cpu_J_est": 1164.8000000000002,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "tabq_s2/eval": {
+   "wall_s": 326.547,
+   "cpu_s": 314.40299999999996,
+   "cpu_J_est": 1179.0,
+   "gpu_J": 0.0,
+   "jobs": 4
+  },
+  "tabq_s3/eval": {
+   "wall_s": 304.384,
+   "cpu_s": 292.84299999999996,
+   "cpu_J_est": 1098.1,
+   "gpu_J": 0.0,
+   "jobs": 4
+  }
+ },
+ "dqn_final_cost": {
+  "s1": {
+   "steps_logged": 6000128,
+   "wall_s_logged": 6304.0,
+   "steps_per_s": 955.0
+  },
+  "s2": {
+   "steps_logged": 6000128,
+   "wall_s_logged": 6247.0,
+   "steps_per_s": 960.0
+  },
+  "s3": {
+   "steps_logged": 6000128,
+   "wall_s_logged": 6313.0,
+   "steps_per_s": 962.0
+  }
+ }
+}

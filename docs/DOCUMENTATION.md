@@ -21,6 +21,13 @@ Per-layout results are in `docs/gazebo_eval_20_layouts.log`. (`runs/gazebo_resul
 The 2D and Gazebo numbers agree to within a few points. The Gazebo sample is small (80 robot runs), so the 6.2% collision rate is uncertain by several points.
 Causes of the 5 Gazebo collisions were not analysed; `rl/eval_gazebo.py` can print them (see Known limitations).
 
+**Benchmark (2026-11-10, `benchmark/RESULTS.md`).** The 7M checkpoint was selected on 2D layouts 0-99, so the 91.5% above is
+slightly optimistic: on clean layouts 100-199 it is 90.2% (Gazebo 100-119: 91.2%, 73/80). Without the safety layer it drops to 68.0%
+(25% robot-robot collisions): the policy relies on the layer. Against other methods on the same inputs: a DQN matches it (90.0%; Gazebo
+73/80), a hand-written dynamic-window controller gets 84.0% (84.5% without the safety layer; Gazebo 64/80), tabular Q-learning 69.5%.
+The training pool `rl/pool_train.npz` predates the goal-visibility rule (built with `tools/layout.py` from 06418bd; 385 of 2000 layouts
+differ from today's generator); see `benchmark/LOGBOOK.md`.
+
 ## 3. System overview
 ```
 overhead camera -> AprilTag detection (tools/vision.py) -> robot poses, goal positions, velocities (frame differencing)

@@ -3,6 +3,10 @@
 Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`, `v1.0-navigation-demo`.
 
 ## Unreleased
+- Benchmark (`benchmark/`, branch `benchmark-policies`): PPO vs tabular Q-learning, DQN, a sensor-only rule controller,
+  the privileged DWA planner and go-to-goal, with a pre-registered protocol, held-out test layouts 100-199, bootstrap
+  intervals, safety layer on/off, Gazebo confirmation, full time/energy logging. Results: `benchmark/RESULTS.md`.
+- Finding: `rl/pool_train.npz` predates the goal-visibility rule (6bae2a8); PPO trained on the older layouts (`benchmark/LOGBOOK.md`).
 
 ## v1.0-navigation-demo: Robots Navigation and Collision Avoidance Demonstration
 First complete version: four robots reach their goals in Gazebo with the PPO policy and safety layer (standard arena, layouts 1-50: 89.8% success, 6.1% collision, 4.1% timeout; see `docs/results/SUMMARY.md`).
