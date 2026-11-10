@@ -124,7 +124,6 @@ The owner may close the Claude session; the rest runs without it.
 - **Colab:** `/content/package_when_done.sh` waits for the 3 DQN runs, then writes `MyDrive/qaro_benchmark/dqn_final.tar.gz`
   (+ `.sha256`, `DQN_FINISHED.txt`). The Colab tab must stay open until then.
 - **Manual step if nobody fetches it:** download `dqn_final.tar.gz` from Drive, check the sha256, then
-  `tar xzf dqn_final.tar.gz -C ~/robotics/swarm_nav_rl` (it contains `runs/benchmark/dqn/final_s{1,2,3}/` with `DONE`
-  markers; the Colab `measurements.jsonl` and logs are included but extract over the local ones: extract the
-  measurements/logs elsewhere and merge). The script picks the weights up within 2 min.
+  `tar xzf dqn_final.tar.gz -C ~/robotics/swarm_nav_rl` (it contains `runs/benchmark/dqn/final_s{1,2,3}/` with `DONE` markers, plus `colab_extra/` with the Colab
+  measurements and logs, kept apart so nothing local is overwritten). The script picks the weights up within 2 min.
 - Still to do by hand afterwards: `benchmark/RESULTS.md`, docs overview, commit.

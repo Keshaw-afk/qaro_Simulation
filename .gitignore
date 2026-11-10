@@ -16,3 +16,4 @@ CLAUDE.local.md
 *.png.tmp
 runs/
 !docs/**/*.log
+colab_extra/
