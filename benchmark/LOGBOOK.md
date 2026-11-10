@@ -96,3 +96,10 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
   bincount over 7M table entries per step would be slow.
 - Metric note: `stopped_frac` over all robots is dominated by robots that time out (they sit or spin for up to 900
   steps: PPO 5.5% on 8 layouts without timeouts vs 30.6% over the test set); added `stopped_frac_success`.
+
+## Fine tabq outcome (~13:50)
+- 2M steps, validation: fa 24.0% / 28.5% coll, fd 20.3% / 37.0%, fg 28.3% / 31.3% (coarse a: 64.5% / 24.8%). ~78k of
+  157k states visited (50%), still rising; ~1,900 steps/s per process. The finer table learns far more slowly: each
+  state is seen ~24x less often. Fine variant fails the amendment-1 rule; coarse stays the tabq contender.
+- Exploratory fg seed 1 to 8M started (protocol amendment 2) to see whether more data closes the gap.
+- Coarse finals at 7M: s1 64.8% / 19.8%, s2 63.8% / 22.3%, s3 62.8% / 20.0% (validation): flat at ~60-65%.
