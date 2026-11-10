@@ -1,0 +1,59 @@
+# Benchmark logbook (lab notebook)
+
+Chronological record of what was done, what went wrong, and why decisions were made. Times are local (IST), 2026-11-10.
+Machine-readable measurements of every job: `results/measurements.jsonl`. Protocol: `PROTOCOL.md`. Results: `RESULTS.md`.
+
+## Setup
+- **~10:55** Branch `benchmark-policies` from `main` (eea05de). Hardware branch parked (tag `parked/hardware-experimentation-2026-11-10`).
+- Resources: laptop i5-12450H (8 cores / 12 threads, 15 GB RAM, owner asked to keep >= 3-4 GB free) inside the
+  `ubuntu` distrobox (Python 3.12, numpy 1.26, SB3 2.9.0, torch CPU); Google Colab with a Tesla T4 (2 vCPU, 12.7 GB RAM,
+  Python 3.13, numpy 2.4, torch 2.14 cu130). Plan: CPU-bound work (tabular Q, rule controller, evaluations, Gazebo)
+  locally; DQN training (neural network) on the T4.
+- **11:10** Protocol committed before any result (ea39d35).
+
+## Findings during setup
+- **PPO checkpoint selection leak (known before running):** `rl/train.py` picks `best.npz` by evaluating on evaluation
+  layouts 0-99, so 0-99 are not a clean test for PPO. Test set moved to layouts 100-199.
+- **Harness reproduces PPO exactly** on 0-99: 91.5% success / 4.0% collision / 4.5% timeout (as in docs), locally and on
+  Colab (numpy 2.4); observation-parity test passes on Colab.
+- **Safety layer swaps PPO's action on ~20% of active robot-steps** (0-99), ~26% on 100-199. Higher than expected.
+- **2D env throughput:** ~9,100 robot-steps/s single process (28 ms per 256-robot step) locally.
+- **DQN on laptop CPU:** 321 steps/s (smoke test, while 6 other jobs ran) -> 8M steps would take ~7 h: confirms GPU use.
+
+## Bugs and mistakes (all caught before any reported number)
+1. **tabq terminal-state bug (logic).** After an episode ended, the final (terminal) state was also used as the robot's
+   current state for the next update, although the robot had already been respawned / given a new goal. Affected
+   ~0.6% of updates. First 6-config tuning sweep discarded (`runs/benchmark/discarded/tabq_buggy_terminal_state`),
+   fixed (`s_boot` vs `s_next`), rerun. Found by line-by-line review after the owner asked about logic bugs.
+2. **Meter double-counted guest CPU time** in the machine-wide busy time (/proc/stat). Fixed.
+3. **Operational: `pgrep -f PATTERN | xargs kill` killed my own shell** (exit 144) because the pattern was in the command
+   text, exactly the pitfall in AGENTS.md rule 2. Processes are now killed by PID only (or with a `[b]racket` pattern).
+4. A per-layout hashing job was slow because `np.load(npz)[key][i]` decompresses the whole array on every access; load
+   arrays once.
+
+## Training-pool discovery (affects the original project)
+- Colab rebuilt `rl/pool_train.npz` from the current code and **385 / 2000 training layouts differed** from the local
+  file (evaluation pool identical). Cause: the local pool was built at 23:45 on 2026-10-18 with `tools/layout.py` from
+  commit 06418bd; 15 minutes later commit 6bae2a8 added the goal-visibility rule (goals must be visible to the overhead
+  camera). The pool was never rebuilt. **PPO was trained on layouts from the older generator** (19% of its training
+  layouts would be rejected today). In the 2D env (no camera) this is a minor shift in layout distribution.
+- Decision: every new learner trains on exactly PPO's pool. Colab rebuilds it with the 06418bd generator; array hash
+  verified identical to the local file (d7bbd86c...).
+
+## Energy measurement
+- Intel RAPL counters are root-only on Fedora (since CVE-2020-8694, "PLATYPUS" power side channel). Owner chose not to
+  open them. CPU energy is therefore an **estimate**: CPU seconds x 45 W / 12 threads (i5-12450H), basis stored with
+  each record. GPU energy on Colab is measured (NVML counter).
+
+## Logging (owner: "log and measure everything")
+- Per job: wall/CPU time, estimated CPU energy, GPU energy/power/utilisation/memory, throughput, CPU clock, temperature,
+  power source, min free RAM, load average, command line, versions, git commit.
+- Per evaluation: outcome, collision cause, time, path length and efficiency, speed, time stopped, closest approach to
+  obstacles/robots, near misses, steering flips, safety-layer swaps per robot, proposed/executed action histograms,
+  decision latency (batched and single-robot), model size.
+- Training: validation every 1M steps (`log.csv`), tabq curve every 100k (`train_curve.csv`), DQN SB3 log (`sb3/progress.csv`).
+
+## Early numbers (first, interrupted baseline evaluation; re-run with full metrics)
+- PPO on clean test 100-199: 90.2% success, 4.5% collision (vs 91.5% on its selection set 0-99): selection optimism ~1.3 points.
+- PPO without the safety layer: 68.0% success, 25.2% robot-robot collisions (test) - the policy depends heavily on it.
+- PPO behaviour (8 test layouts): ~226 steering-direction flips per minute, 96% path efficiency, 0.18 m/s mean speed.

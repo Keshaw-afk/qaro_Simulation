@@ -40,35 +40,100 @@ def subset(pool, idx):
     return {k: v[idx] for k, v in pool.items()}
 
 
+def _snap(a):
+    """Controller output -> action indices (same nearest-entry snapping as ArenaVecEnv.step_async)."""
+    a = np.asarray(a)
+    if a.ndim == 2:
+        v, w = (np.clip(a[:, 0], -1, 1) + 1) / 2 * E.VMAX, np.clip(a[:, 1], -1, 1) * E.WMAX
+        a = ((v[:, None] - E.CV[None]) ** 2 / E.VMAX ** 2 + (w[:, None] - E.CW[None]) ** 2 / E.WMAX ** 2).argmin(1)
+    return a.astype(int)
+
+
+def _gaps(env):
+    """Chassis gaps (W, 4): to the nearest obstacle or wall, and to the nearest other robot (same geometry as the env)."""
+    px, py = env.pos[..., 0:1], env.pos[..., 1:2]
+    d_ob = E.obb_dist(px, py, env.obst[:, None, :, :]).min(-1) - E.R_ROBOT
+    d_wall = np.minimum(E.ARENA_W / 2 - np.abs(env.pos[..., 0]), E.ARENA_H / 2 - np.abs(env.pos[..., 1])) - E.R_ROBOT
+    pd = np.hypot(env.pos[:, :, None, 0] - env.pos[:, None, :, 0], env.pos[:, :, None, 1] - env.pos[:, None, :, 1])
+    pd[:, np.arange(E.N_AG), np.arange(E.N_AG)] = np.inf
+    return np.minimum(d_ob, d_wall), pd.min(-1) - 2 * E.R_ROBOT
+
+
 def run_protocol(pool, ctrl, layouts, shield=True, max_steps=900):
-    """Evaluation protocol of rl/evaluate.py on chosen layouts; returns raw per-robot arrays (layouts x 4)."""
+    """Evaluation protocol of rl/evaluate.py on chosen layouts; returns raw per-robot arrays (layouts x 4).
+    Besides the outcome it records behaviour per robot (read-only, the episode is unchanged): path length, straight-line
+    start-goal distance, closest approach to obstacles/walls and to other robots, near-miss steps (gap < 5 cm), steps
+    stopped (commanded speed 0), steering direction flips, safety-layer swaps; and histograms of proposed and executed
+    actions over all active robot-steps, plus decision timing."""
     env = E.ArenaVecEnv(pool, mode="eval", eval_idx=np.asarray(layouts), max_steps=max_steps, seed=0, randomize=False, shield=shield)
     obs = env.reset()
-    prop = over = calls = 0
-    t_ctrl = t_all = 0.0
+    W = env.W
+    shape = (W, E.N_AG)
+    path, stopped, flips, swaps, near_ob, near_rob = (np.zeros(shape) for _ in range(6))
+    min_ob, min_rob = np.full(shape, np.inf), np.full(shape, np.inf)
+    last_w = np.zeros(shape)
+    start_dist = np.hypot(*(env.goal - env.pos).transpose(2, 0, 1)).astype(float)
+    hist_prop, hist_exec = np.zeros(E.N_ACT, np.int64), np.zeros(E.N_ACT, np.int64)
+    calls, t_ctrl = 0, 0.0
     t_start = time.perf_counter()
     for _ in range(max_steps):
         t0 = time.perf_counter()
         a = ctrl(obs, env)
         t_ctrl += time.perf_counter() - t0
         calls += 1
-        active = env.active.reshape(-1).copy()
+        active = env.active.copy()
+        pos0 = env.pos.copy()
         env.step_async(a)
-        if shield:  # proposed vs executed action (env.actions holds the executed one after the safety layer)
-            a2 = np.asarray(a)
-            if a2.ndim == 2:  # same nearest-entry snapping as ArenaVecEnv.step_async
-                v, w = (np.clip(a2[:, 0], -1, 1) + 1) / 2 * E.VMAX, np.clip(a2[:, 1], -1, 1) * E.WMAX
-                a2 = ((v[:, None] - E.CV[None]) ** 2 / E.VMAX ** 2 + (w[:, None] - E.CW[None]) ** 2 / E.WMAX ** 2).argmin(1)
-            over += int((env.actions.reshape(-1) != a2)[active].sum())
-            prop += int(active.sum())
+        prop_idx = _snap(a).reshape(shape)
+        exec_idx = env.actions.reshape(shape)            # after the safety layer
+        hist_prop += np.bincount(prop_idx[active], minlength=E.N_ACT)
+        hist_exec += np.bincount(exec_idx[active], minlength=E.N_ACT)
+        swaps += active & (prop_idx != exec_idx)
+        stopped += active & (E.CV[exec_idx] == 0)
+        w_now = E.CW[exec_idx]
+        flips += active & (w_now * last_w < 0)
+        last_w = np.where(active & (w_now != 0), w_now, last_w)
         obs, _, _, _ = env.step_wait()
+        path += active * np.hypot(*(env.pos - pos0).transpose(2, 0, 1))
+        g_ob, g_rob = _gaps(env)
+        min_ob = np.where(active, np.minimum(min_ob, g_ob), min_ob)
+        min_rob = np.where(active, np.minimum(min_rob, g_rob), min_rob)
+        near_ob += active & (g_ob < 0.05)
+        near_rob += active & (g_rob < 0.05)
         if not env.active.any():
             break
     t_all = time.perf_counter() - t_start
+    steps_alive = np.where(env.finish_t > 0, env.finish_t, env.t)
+    r = lambda x, k=4: np.round(x, k).tolist()
     return {"layouts": [int(x) for x in layouts], "outcome": env.outcome.tolist(), "cause": env.cause.tolist(),
-            "finish_t": env.finish_t.tolist(), "override_rate": over / max(prop, 1), "shield": shield,
+            "finish_t": env.finish_t.tolist(), "steps_alive": steps_alive.tolist(), "shield": shield,
+            "override_rate": float(swaps.sum() / max(hist_prop.sum(), 1)),
+            "path_m": r(path), "start_goal_m": r(start_dist), "min_gap_obstacle_m": r(min_ob), "min_gap_robot_m": r(min_rob),
+            "near_miss_obstacle_steps": near_ob.astype(int).tolist(), "near_miss_robot_steps": near_rob.astype(int).tolist(),
+            "stopped_steps": stopped.astype(int).tolist(), "turn_flips": flips.astype(int).tolist(), "safety_swaps": swaps.astype(int).tolist(),
+            "action_hist_proposed": hist_prop.tolist(), "action_hist_executed": hist_exec.tolist(),
             "decision_calls": calls, "decision_s_total": t_ctrl, "eval_wall_s": t_all,
             "decision_us_per_robot": t_ctrl / max(calls, 1) / env.num_envs * 1e6}  # batched over all robots of all layouts
+
+
+def behaviour(raw):
+    """Behaviour summary from run_protocol's per-robot arrays (successful robots for path/speed, all robots otherwise)."""
+    o = np.asarray(raw["outcome"]); ok = o == 1
+    path, sg, alive = np.asarray(raw["path_m"]), np.asarray(raw["start_goal_m"]), np.asarray(raw["steps_alive"])
+    steps = max(alive.sum(), 1)
+    hp = np.asarray(raw["action_hist_proposed"])
+    out = {"path_efficiency": float((sg[ok] / np.maximum(path[ok], 1e-9)).mean()) if ok.any() else float("nan"),
+           "path_m_success": float(path[ok].mean()) if ok.any() else float("nan"),
+           "mean_speed_mps": float(path.sum() / (steps * E.DT)),
+           "stopped_frac": float(np.sum(raw["stopped_steps"]) / steps),
+           "turn_flips_per_min": float(np.sum(raw["turn_flips"]) / (steps * E.DT / 60)),
+           "min_gap_obstacle_m_median": float(np.median(raw["min_gap_obstacle_m"])),
+           "min_gap_robot_m_median": float(np.median(raw["min_gap_robot_m"])),
+           "near_miss_robot_steps_per_robot": float(np.mean(raw["near_miss_robot_steps"])),
+           "near_miss_obstacle_steps_per_robot": float(np.mean(raw["near_miss_obstacle_steps"])),
+           "action_entropy_bits": float(-(lambda p: (p[p > 0] * np.log2(p[p > 0])).sum())(hp / max(hp.sum(), 1))),
+           "actions_used": int((hp > 0).sum())}
+    return out
 
 
 def rates(outcome, cause, finish_t):
@@ -100,6 +165,8 @@ def summarize(raw, ref=None, n_boot=10000, seed=0):
             bs = d[idx].mean(1)
             out[f"d_{k}_vs_ref"] = float(d.mean())
             out[f"d_{k}_vs_ref_ci"] = [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))]
+    if "path_m" in raw:
+        out.update(behaviour(raw))
     out["override_rate"] = raw.get("override_rate", float("nan"))
     out["decision_us_per_robot"] = raw.get("decision_us_per_robot", float("nan"))
     out["n_robot_runs"] = int(o.size)

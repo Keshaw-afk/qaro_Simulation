@@ -110,6 +110,34 @@ def test_split():
     print("split ok")
 
 
+def test_behaviour_metrics():
+    """Behaviour bookkeeping is read-only and physically sane, on a few test layouts."""
+    ep = C.eval_pool()
+    raw = C.run_protocol(ep, C.npz_ctrl(C.ROOT / "weights/final_policy.npz"), C.TEST[:8])
+    o, path, sg = np.asarray(raw["outcome"]), np.asarray(raw["path_m"]), np.asarray(raw["start_goal_m"])
+    ok = o == 1
+    assert (path[ok] >= sg[ok] - E.GOAL_TOL - 1e-6).all(), "path shorter than the straight line"
+    coll = (o == 2)
+    gaps = np.minimum(np.asarray(raw["min_gap_obstacle_m"]), np.asarray(raw["min_gap_robot_m"]))
+    assert (gaps[coll] < 0).all(), "a collided robot must have a negative closest gap"
+    assert (gaps[ok] >= 0).all(), "a successful robot cannot have touched anything"
+    hp, he = np.asarray(raw["action_hist_proposed"]), np.asarray(raw["action_hist_executed"])
+    assert hp.sum() == he.sum() == np.sum(raw["steps_alive"]), (hp.sum(), np.sum(raw["steps_alive"]))
+    assert abs(raw["override_rate"] - np.sum(raw["safety_swaps"]) / hp.sum()) < 1e-12
+    b = C.behaviour(raw)
+    assert 0 < b["path_efficiency"] <= 1.1 and 0 < b["mean_speed_mps"] <= E.VMAX + 1e-6, b
+    print("behaviour metrics ok", {k: round(v, 3) for k, v in b.items()})
+
+
+def test_ppo_regression():
+    """The harness must reproduce PPO's known protocol result on layouts 0-99 (91.5% / 4.0% / 4.5%)."""
+    s = C.summarize(C.run_protocol(C.eval_pool(), C.npz_ctrl(C.ROOT / "weights/final_policy.npz"), C.PPO_SELECTION), n_boot=100)
+    assert (round(s["success"], 3), round(s["collision"], 3), round(s["timeout"], 3)) == (0.915, 0.04, 0.045), s
+    print("ppo regression ok")
+
+
 if __name__ == "__main__":
-    test_split(); test_stats(); test_discretize(); test_rule(); test_dqn_export()
+    test_split(); test_stats(); test_discretize(); test_rule(); test_dqn_export(); test_behaviour_metrics()
+    if "--slow" in sys.argv:
+        test_ppo_regression()
     print("BENCHMARK TESTS PASSED")

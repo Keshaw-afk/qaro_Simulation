@@ -94,6 +94,16 @@ def _cpu_temp_c():
         return None
 
 
+def _mem_available_mb():
+    try:
+        for l in open("/proc/meminfo"):
+            if l.startswith("MemAvailable:"):
+                return int(l.split()[1]) // 1024
+    except OSError:
+        pass
+    return None
+
+
 def _on_ac():
     for p in pathlib.Path("/sys/class/power_supply").glob("*/online"):
         try:
@@ -107,7 +117,7 @@ class _GpuSampler(threading.Thread):
     def __init__(self, period=1.0):
         super().__init__(daemon=True)
         self.period, self.samples, self.stop_ev, self.h = period, [], threading.Event(), None
-        self.cpu = []  # (MHz, temperature C, on AC)
+        self.cpu = []  # (MHz, temperature C, on AC, MemAvailable MB, 1-min load average)
         try:
             import pynvml
             pynvml.nvmlInit()
@@ -123,11 +133,12 @@ class _GpuSampler(threading.Thread):
 
     def run(self):
         while not self.stop_ev.wait(self.period):
-            self.cpu.append((_cpu_mhz(), _cpu_temp_c(), _on_ac()))
+            self.cpu.append((_cpu_mhz(), _cpu_temp_c(), _on_ac(), _mem_available_mb(), os.getloadavg()[0]))
             if not self.h:
                 continue
             try:
-                self.samples.append((self.nv.nvmlDeviceGetPowerUsage(self.h) / 1000.0, self.nv.nvmlDeviceGetUtilizationRates(self.h).gpu))
+                self.samples.append((self.nv.nvmlDeviceGetPowerUsage(self.h) / 1000.0, self.nv.nvmlDeviceGetUtilizationRates(self.h).gpu,
+                                     self.nv.nvmlDeviceGetMemoryInfo(self.h).used / 2 ** 20))
             except Exception:
                 pass
 
@@ -174,12 +185,17 @@ class Meter:
         if self.gpu.samples:
             p = [s[0] for s in self.gpu.samples]
             u = [s[1] for s in self.gpu.samples]
-            rec.update(gpu_power_mean_W=round(sum(p) / len(p), 1), gpu_power_max_W=round(max(p), 1), gpu_util_mean_pct=round(sum(u) / len(u), 1))
+            rec.update(gpu_power_mean_W=round(sum(p) / len(p), 1), gpu_power_max_W=round(max(p), 1), gpu_util_mean_pct=round(sum(u) / len(u), 1),
+                       gpu_mem_max_mb=round(max(s[2] for s in self.gpu.samples)), gpu_samples=len(p))
         mhz = [c[0] for c in self.gpu.cpu if c[0]]
         tmp = [c[1] for c in self.gpu.cpu if c[1]]
         ac = [c[2] for c in self.gpu.cpu if c[2] is not None]
+        mem = [c[3] for c in self.gpu.cpu if c[3] is not None]
+        load = [c[4] for c in self.gpu.cpu]
         rec.update(cpu_mhz_mean=round(sum(mhz) / len(mhz)) if mhz else None, cpu_temp_max_c=max(tmp) if tmp else None,
-                   on_ac_all_time=all(ac) if ac else _on_ac())
+                   on_ac_all_time=all(ac) if ac else _on_ac(), mem_available_min_mb=min(mem) if mem else _mem_available_mb(),
+                   loadavg_1min_mean=round(sum(load) / len(load), 2) if load else round(os.getloadavg()[0], 2),
+                   end=time.strftime("%Y-%m-%dT%H:%M:%S"), argv=" ".join(__import__("sys").argv), pid=os.getpid())
         model = host_info().get("cpu_model", "")
         w_thread, basis = (45.0 / 12, "i5-12450H TDP 45 W / 12 threads") if "i5-12450H" in model else (3.5, "generic 3.5 W per busy thread")
         rec.update(cpu_energy_est_J=round((cpu_u + cpu_s) * w_thread, 1), cpu_energy_est_basis=basis)

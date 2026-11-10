@@ -101,13 +101,17 @@ def train(cfg_name, seed, steps, name, device="auto"):
     env = VecNormalize(E.ArenaVecEnv(C.subset(tp, C.TRAIN_IDX), n_worlds=64, seed=seed), norm_obs=True, norm_reward=True, gamma=cfg["gamma"], clip_obs=10.0)
     act = torch.nn.Tanh if CFG_ACT == "tanh" else torch.nn.ReLU
     model = DQN("MlpPolicy", env, policy_kwargs=dict(net_arch=[256, 256], activation_fn=act), seed=seed, device=device, verbose=0, **cfg)
-    print(f"[dqn {name}] config {cfg_name} {cfg} act {CFG_ACT} device {model.device}", flush=True)
+    from stable_baselines3.common.logger import configure
+    model.set_logger(configure(str(out / "sb3"), ["csv"]))  # sb3/progress.csv: loss, exploration rate, episode return/length, success rate, fps
+    n_params = sum(p.numel() for p in model.q_net.parameters())
+    print(f"[dqn {name}] config {cfg_name} {cfg} act {CFG_ACT} device {model.device} params {n_params}", flush=True)
     cb = EvalCb(out, tp)
     with Meter(f"dqn_train_{name}", kind="train", method="dqn", config=cfg_name, seed=seed, device=str(model.device)) as m:
-        model.learn(total_timesteps=steps, callback=cb)
+        model.learn(total_timesteps=steps, callback=cb, log_interval=1000)  # log every 1000 finished episodes (~150k steps)
         if cb.last_n < model.num_timesteps:
             cb.evaluate()
-        m.add(env_steps=int(model.num_timesteps), gradient_steps=int(model._n_updates), best_val_score=cb.best)
+        m.add(env_steps=int(model.num_timesteps), gradient_steps=int(model._n_updates), best_val_score=cb.best, q_net_params=n_params,
+              model_bytes_float32=n_params * 4, config_params={**cfg, "act": CFG_ACT}, batch_size=cfg["batch_size"])
     print(f"[dqn {name}] done: {m.record['wall_s']:.0f}s, {m.record.get('env_steps_per_s')} steps/s, gpu {m.record.get('gpu_J')} J, "
           f"cpu package {m.record.get('cpu_package_J')} J", flush=True)
 

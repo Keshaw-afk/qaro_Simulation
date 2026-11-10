@@ -72,6 +72,11 @@ def train(cfg_name, seed, steps, name):
     s = discretize(obs)
     t, next_eval, best, t0 = 0, 1_000_000, -1e9, time.time()
     ep_s = ep_c = ep_n = 0
+    # fine-grained training curve every 100k steps (episodes ended in the interval, all robots)
+    curve = open(out / "train_curve.csv", "w")
+    curve.write("steps,wall_s,steps_per_s,eps,episodes,success,collision,truncated,mean_return,td_abs_mean,q_mean,q_max,visited_states,visited_pairs\n")
+    next_curve, c_t0, c_steps = 100_000, time.time(), 0
+    cv = dict(n=0, s=0, c=0, tr=0, ret=0.0, td=0.0, tdn=0)
     log = open(out / "log.csv", "w")
     log.write("steps,wall_s,eps,val_success,val_collision,val_timeout,val_score,visited_states,train_episodes,train_success_rate,train_collision_rate\n")
     with Meter(f"tabq_train_{name}", kind="train", method="tabq", config=cfg_name, seed=seed) as m:
@@ -91,8 +96,12 @@ def train(cfg_name, seed, steps, name):
                     terminal[i] = info.get("is_success", False) or info.get("collision", False)
                     if "episode" in info and not info.get("TimeLimit.truncated", False):
                         ep_n += 1; ep_s += info.get("is_success", False); ep_c += info.get("collision", False)
+                    if "episode" in info:
+                        cv["n"] += 1; cv["s"] += info.get("is_success", False); cv["c"] += info.get("collision", False)
+                        cv["tr"] += info.get("TimeLimit.truncated", False); cv["ret"] += info["episode"]["r"]
             target = r + cfg["gamma"] * Q[s_boot].max(1) * (~terminal)
             td = target - Q[s, a]
+            cv["td"] += float(np.abs(td).sum()); cv["tdn"] += N
             flat = s * E.N_ACT + a
             sums = np.bincount(flat, weights=td, minlength=Q.size)
             cnt = np.bincount(flat, minlength=Q.size)
@@ -102,6 +111,15 @@ def train(cfg_name, seed, steps, name):
             Q.ravel()[hit] += (alpha * sums[hit] / cnt[hit]).astype(np.float32)
             s = s_next
             t += N
+            if t >= next_curve:
+                next_curve += 100_000
+                n = max(cv["n"], 1)
+                curve.write(f"{t},{time.time() - t0:.1f},{(t - c_steps) / max(time.time() - c_t0, 1e-9):.0f},{eps:.4f},{cv['n']},{cv['s'] / n:.4f},{cv['c'] / n:.4f},"
+                            f"{cv['tr'] / n:.4f},{cv['ret'] / n:.3f},{cv['td'] / max(cv['tdn'], 1):.4f},{float(Q.mean()):.4f},{float(Q.max()):.4f},"
+                            f"{int((n_visit.sum(1) > 0).sum())},{int((n_visit > 0).sum())}\n")
+                curve.flush()
+                c_t0, c_steps = time.time(), t
+                cv = dict(n=0, s=0, c=0, tr=0, ret=0.0, td=0.0, tdn=0)
             if t >= next_eval or t >= steps:
                 next_eval += 1_000_000
                 np.savez_compressed(out / "latest.npz", Q=Q, n_visit=n_visit)
@@ -117,7 +135,8 @@ def train(cfg_name, seed, steps, name):
                     best = C.score(sm)
                     np.savez_compressed(out / "best.npz", Q=Q, n_visit=n_visit)
                     (out / "best.json").write_text(json.dumps({"steps": t, **{k: sm[k] for k in ("success", "collision", "timeout")}}))
-        m.add(env_steps=t, states=N_STATE, visited_states=int((n_visit.sum(1) > 0).sum()), best_val_score=best)
+        m.add(env_steps=t, states=N_STATE, visited_states=int((n_visit.sum(1) > 0).sum()), visited_pairs=int((n_visit > 0).sum()),
+              table_bytes=int(Q.nbytes), best_val_score=best, config_params=cfg)
     print(f"[tabq {name}] done: {m.record['wall_s']:.0f}s, cpu package energy {m.record.get('cpu_package_J')} J", flush=True)
 
 
