@@ -1,0 +1,9 @@
+{
+ "name": "ppo_final",
+ "spec": "npz:runs/run10/final.npz",
+ "params": 92717,
+ "bytes": 371812,
+ "single_us_median": 142.57300063036382,
+ "single_us_p99": 624.4873273317352,
+ "single_us_mean": 235.03159475551098
+}

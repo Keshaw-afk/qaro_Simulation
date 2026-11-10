@@ -67,3 +67,16 @@ Machine-readable measurements of every job: `results/measurements.jsonl`. Protoc
 - **dqn** (Colab T4, 1M steps each, 2 processes in parallel): ~1,650 steps/s per process; GPU only 4-7% busy - the
   bottleneck is Colab's 2 vCPUs (simulator + SB3 replay bookkeeping), not the network. a 63.0% / 4.0% coll / 33.0% timeout;
   b (lr 3e-4) 26.0% / 0.3% / 73.8%. (c-f pending.) Tuning runs use the code version before the extra logging (logging only).
+
+## Baseline evaluation (full metrics, ~12:10-12:45)
+- Test 100-199, shield on / off: PPO 90.2% / 68.0%; PPO final (8M, never selected) 89.5% / 65.0% (dSucc vs PPO
+  -0.8 [-3.0, +1.8]: checkpoint selection did not matter); go-to-goal 54.2% / 42.0%; DWA (privileged) 79.8% / 79.5%.
+- **DWA without the shield beats PPO without the shield by +11.5 points [+4.2, +18.5]** and has 0 collisions; its
+  failures are 20% timeouts. PPO relies on the safety layer for robot-robot avoidance.
+- **Cross-check:** go-to-goal on 0-99 without shield = 43.2% / 56.8% exactly as docs/DOCUMENTATION.md; with shield
+  55.8% vs documented 55.7%. DWA on 0-99 with shield 79.5% vs documented "about 78%": not reconciled; the documented
+  number predates the env robot-clearance bug fix (docs section 7), probable but unverified cause.
+- Deployment cost: one robot's decision PPO 113 us (92,717 params, 372 KB), go-to-goal 22 us; DWA has no single-robot
+  path (needs the simulator state); its batched evaluation is 2-3x slower than PPO's.
+- Gazebo adapter smoke test (PPO, layout 100, loaded machine): 3 success + 1 timeout, 194 s wall; real Gazebo runs are
+  scheduled after the CPU-heavy jobs (AGENTS.md: clock stalls under load).

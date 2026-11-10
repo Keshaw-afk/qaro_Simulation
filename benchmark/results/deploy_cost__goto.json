@@ -1,0 +1,9 @@
+{
+ "name": "goto",
+ "spec": "goto",
+ "params": 0,
+ "bytes": 0,
+ "single_us_median": 21.744001060142182,
+ "single_us_p99": 41.86674839729676,
+ "single_us_mean": 23.438823185355623
+}

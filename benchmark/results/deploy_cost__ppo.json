@@ -1,0 +1,9 @@
+{
+ "name": "ppo",
+ "spec": "npz:weights/final_policy.npz",
+ "params": 92717,
+ "bytes": 371812,
+ "single_us_median": 113.2159995904658,
+ "single_us_p99": 136.2883107503876,
+ "single_us_mean": 113.3123952489481
+}
