@@ -2,7 +2,7 @@
 
 Branch `benchmark-policies`, 2026-11-10. Protocol (written before any result): `PROTOCOL.md`, with 4 amendments.
 Day-by-day record, bugs and decisions: `LOGBOOK.md`. Every number below is regenerated from raw per-robot files by
-`make_results.py` (output `results/summary.json`); raw files are in `results/raw/` and `results/gazebo__*.json`.
+`make_results.py` (output `results/summary.json`); illustrated PDF: `REPORT.pdf`; raw files are in `results/raw/` and `results/gazebo__*.json`.
 
 ## Short answer
 - **With the safety layer (the deployed configuration), PPO is not beaten, but it is matched.** DQN (validation-chosen
@@ -158,5 +158,6 @@ bash benchmark/run_dqn_tuning.sh && bash benchmark/run_dqn_final.sh   # DQN (Col
 cd benchmark && ../.venv/bin/python evaluate_all.py NAME=SPEC ...     # 2D test + reference, shield on/off
 bash benchmark/run_remaining.sh                     # evaluations + Gazebo (needs ROS)
 .venv/bin/python benchmark/make_results.py          # all tables above
+python3 benchmark/make_report.py                    # REPORT.pdf (host Python + Chrome)
 .venv/bin/python benchmark/test_benchmark.py --slow # harness tests (PPO regression 91.5/4.0/4.5)
 ```
