@@ -3,6 +3,7 @@
 Frames are placed by their simulation timestamps, so the video plays in real time even though the evaluation steps the
 world while paused; a frame the renderer skipped is filled by repeating the previous one. Writes MJPG .avi (OpenCV has
 no H.264 encoder here); convert for sharing with  ffmpeg -i demo.avi -c:v libx264 -pix_fmt yuv420p -crf 18 demo.mp4"""
+import os
 import threading
 
 import cv2
@@ -40,12 +41,14 @@ class DemoRecorder:
 
     def _overlay(self, f, t):
         top = f.shape[0] - 186  # bottom-left corner: open floor in the demo view, never the arena
+        clock = 0.0 if self.t_start is None else max(0.0, t - self.t_start)
+        title = f"4 robots, {os.environ.get('SNR_CAPTION') or 'one shared RL policy'}   t = {clock:4.1f} s"
+        width = max(430, 40 + cv2.getTextSize(title, cv2.FONT_HERSHEY_SIMPLEX, 0.62, 1)[0][0])  # box grows with a longer caption
         panel = f.copy()
-        cv2.rectangle(panel, (12, top), (430, top + 174), (25, 25, 25), -1)
+        cv2.rectangle(panel, (12, top), (width, top + 174), (25, 25, 25), -1)
         cv2.addWeighted(panel, 0.6, f, 0.4, 0, f)
         put = lambda s, x, y, c=(255, 255, 255), sc=0.6: cv2.putText(f, s, (x, y), cv2.FONT_HERSHEY_SIMPLEX, sc, c, 1, cv2.LINE_AA)
-        clock = 0.0 if self.t_start is None else max(0.0, t - self.t_start)
-        put(f"4 robots, one shared RL policy   t = {clock:4.1f} s", 26, top + 28, sc=0.62)
+        put(title, 26, top + 28, sc=0.62)
         for i, colour in enumerate(gen_world.ROBOT_COLORS):
             s = self.status[i]
             label = {"running": "driving", "success": f"reached goal in {self.t_done[i] or 0:.1f} s",

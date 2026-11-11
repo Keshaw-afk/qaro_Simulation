@@ -6,6 +6,9 @@ Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-p
 - Benchmark (`benchmark/`, branch `benchmark-policies`): PPO vs tabular Q-learning, DQN, a sensor-only rule controller,
   the privileged DWA planner and go-to-goal, with a pre-registered protocol, held-out test layouts 100-199, bootstrap
   intervals, safety layer on/off, Gazebo confirmation, full time/energy logging. Results: `benchmark/RESULTS.md`.
+- Demos for any benchmark controller: `SNR_SPEC=... SNR_NAME=... bash tools/make_demo.sh SEED se live` (via
+  `benchmark/demo_bench.py`, writes nothing into the benchmark results); `SNR_CAPTION` sets the video overlay title and
+  the overlay box grows to fit it. PPO, DQN seed 2 and the rule controller all 4/4 on test layout 103.
 - Finding: `rl/pool_train.npz` predates the goal-visibility rule (6bae2a8); PPO trained on the older layouts (`benchmark/LOGBOOK.md`).
 
 ## v1.0-navigation-demo: Robots Navigation and Collision Avoidance Demonstration
