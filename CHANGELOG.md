@@ -3,6 +3,10 @@
 Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`, `v1.0-navigation-demo`.
 
 ## Unreleased
+- Portability for other people's machines and agents: `docs/SETUP.md` section 0 (route per OS: Ubuntu, other Linux via
+  distrobox, Windows via WSL2, macOS via a VM; the 2D half needs only Python), `AGENTS.md` "what can I run on this machine";
+  `make_demo.sh` and `make_comparison_videos.sh` fail with a clear message when neither ROS nor distrobox is present.
+- `tools/make_comparison_videos.sh` + `tools/edit_comparison_video.py`: remake the controller comparison videos.
 - Reproducibility: both layout pools and the benchmark's final models + training logs are now tracked (`rl/pool_*.npz`,
   `runs/benchmark/{dqn,tabq}/*/{best.npz,best.json,log.csv}`, `runs/benchmark/rule_tuning.json`); `benchmark/RESULTS.md`
   Reproduce section in three levels; AGENTS.md benchmark section; `make_report.py` also finds Chromium.

@@ -23,6 +23,13 @@ in Gazebo (full pipeline: overhead camera, lidar, safety layer on; stepped simul
 One episode per arena, so this shows behaviour, not a ranking (for that see `benchmark/RESULTS.md`). These arenas are
 deliberately hard and unlike the training layouts.
 
+## Remake them
+```
+bash tools/make_comparison_videos.sh            # from the repository root; about 10 minutes; -> runs/demo/compare/final/
+```
+Needs the Gazebo half of the setup (`docs/SETUP.md` section 0) and ffmpeg. Gazebo runs vary a little between runs, so
+per-robot results can differ from the table above by a robot or two. The `.mp4` files are not in git (`.gitignore`).
+
 ## Editing
 Each arena: a 1 s title card, about 0.5 s of stillness, the run, about 1 s holding the final positions. Stretches where
 nothing moves for more than 1.5 s are shortened to 0.8 s. Runs longer than 20 s play normally for 12 s, then at

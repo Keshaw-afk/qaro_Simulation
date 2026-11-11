@@ -21,6 +21,7 @@ check when you change something.
 | `rl/run_log.py` | Per-second robot table (position, speed, distance to goal, clearance, near misses, safety-layer interventions) and per-step CSV for `SNR_LOG=1`. Read-only. | |
 | `rl/demo_video.py` | Records the angled demo camera to a video with a status overlay (`SNR_DEMO`). | ROS sourced |
 | `tools/designed_layouts.py` | Hand-designed crossing layouts 9001-9005 (`get_layout(seed)` in `layout.py` returns them); checks them and draws their maps. See `DESIGNED_LAYOUTS.md`. | scipy, OpenCV for maps |
+| `tools/make_comparison_videos.sh`, `tools/edit_comparison_video.py` | One edited video per controller (PPO, DQN, rule) on the same arenas: records with `make_demo.sh` in parallel partitions, then joins clips with title cards, shortened idle stretches and labelled fast-forward. | ROS sourced (or distrobox), OpenCV, ffmpeg |
 | `tools/make_demo.sh`, `tools/demo_layouts.py` | One-command demo (video, optional live view) and the ranked list of layouts that make good demos. | ROS sourced |
 | `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files (`world_sdf(..., demo_cam="se")` adds the visual-only demo camera, floor and goal discs). | |
 | `tools/gzsim.py` | Lockstep Gazebo control and sensor reads over gz-transport. | ROS sourced |

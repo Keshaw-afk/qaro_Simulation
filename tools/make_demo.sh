@@ -12,6 +12,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 SEED=${1:?usage: make_demo.sh SEED [se|sw] [live|live-only]}; SIDE=${2:-se}; LIVE=${3:-}
 if [ ! -f /opt/ros/jazzy/setup.bash ]; then
+    if ! command -v distrobox >/dev/null; then
+        echo "error: needs ROS 2 Jazzy + Gazebo Harmonic (/opt/ros/jazzy/setup.bash not found) and no distrobox to switch into." >&2
+        echo "See docs/SETUP.md section 0 (Ubuntu 24.04 native, distrobox, WSL2 or a VM)." >&2
+        exit 1
+    fi
     exec distrobox enter "${SNR_CONTAINER:-ubuntu}" -- bash -c "cd '$PWD' && SNR_SPEC='${SNR_SPEC:-}' SNR_NAME='${SNR_NAME:-}' SNR_CAPTION='${SNR_CAPTION:-}' bash tools/make_demo.sh $SEED $SIDE $LIVE"
 fi
 set +u; source /opt/ros/jazzy/setup.bash; set -u

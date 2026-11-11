@@ -8,8 +8,23 @@ Four differential-drive robots (TortoiseBot-style) drive to per-robot goals in a
 One shared RL policy (PPO, 45 discrete actions) controls all four from each robot's own sensors; a rule-based safety layer (`rl/shield.py`)
 vetoes robot-robot collision courses. State: finished and evaluated (about 91% success in Gazebo, see `docs/DOCUMENTATION.md`).
 
+## First: what can I run on this machine?
+Check, from the repository root:
+```
+test -f /opt/ros/jazzy/setup.bash && echo "ROS Jazzy: yes" || echo "ROS Jazzy: no"
+command -v distrobox >/dev/null && echo "distrobox: yes" || echo "distrobox: no"
+ls .venv/bin/python 2>/dev/null || echo "no .venv yet (docs/SETUP.md section 0)"
+```
+| You have | You can run | You cannot run |
+|---|---|---|
+| Only Python 3.12 + `pip install -r requirements.txt` (any OS) | tests, 2D evaluation, training, the whole benchmark except Gazebo (`benchmark/RESULTS.md` Reproduce levels 1-3 without the Gazebo lines), designed-layout checks | anything Gazebo: `rl/eval_gazebo.py`, `tools/make_demo.sh`, `tools/make_comparison_videos.sh`, the desktop app |
+| Ubuntu 24.04 + ROS 2 Jazzy + Gazebo Harmonic (native, VM, WSL2, or a distrobox the scripts can enter) | everything | live windows need a display (headless Gazebo runs do not) |
+Install routes per operating system (Linux, Windows, macOS): `docs/SETUP.md` section 0. If a command fails because a component is
+missing, say which one and point to that section instead of installing system packages yourself. Commands are written for a POSIX
+shell; on Windows run them inside WSL2 (the 2D half also works in PowerShell with `.venv\Scripts\python`).
+
 ## Environment you need
-Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic (gz sim 8.x). Setup recipe: `docs/SETUP.md`. Verify with:
+Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic (gz sim 8.x) for the Gazebo half; the 2D half needs only Python. Setup recipe: `docs/SETUP.md`. Verify with:
 ```
 source /opt/ros/jazzy/setup.bash && python3 tools/check_env.py
 ```
@@ -50,6 +65,11 @@ records nothing (`live` / `live-only` also record videos to `runs/demo/`). Envir
 controller, e.g. `npz:runs/benchmark/dqn/final_s2/best.npz` or `rule`), `SNR_NAME` (output subfolder), `SNR_CAPTION` (overlay title),
 `SNR_SHIELD=0` (safety layer off), `SNR_RECORD=0` (set by `watch`). Without ROS on the host it re-runs itself in a distrobox
 (`SNR_CONTAINER`, default `ubuntu`).
+
+Comparison videos (PPO, DQN, rule controller on the same arenas; how `instructor_artifacts/2026-11-11_controller_videos/` was made):
+`bash tools/make_comparison_videos.sh` (designed arenas 9001-9005, about 10 minutes; the three controllers record in parallel in
+separate `GZ_PARTITION`s) -> `runs/demo/compare/final/{ppo,dqn,rule}_arenas.mp4`. Needs ffmpeg. Gazebo runs vary a little between
+runs, so per-robot results can differ from the committed README by a robot or two.
 
 ## What success looks like
 - `make test` ends with `shield tests passed` (and `PARITY OK (observations + action table)` if `.venv` exists).
