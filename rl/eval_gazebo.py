@@ -8,6 +8,7 @@ Environment variables:
   SNR_LIVE=1      open the Gazebo window; the world plays in real time instead of being stepped while paused
   SNR_SHIELD=0    switch the inter-robot safety layer off
   SNR_DEMO=se|sw  also record demo_seed{k}.avi from an angled camera south-east/south-west of the arena (rl/demo_video.py);
+                  SNR_RECORD=0 keeps the demo world (floor, coloured goal discs) and the window view but records nothing;
                   with SNR_LIVE=1 the Gazebo window is also aimed from that viewpoint
   SNR_LOG=1       print robot positions and collision signals once per simulated second and save every step to
                   log_seed{k}.csv (rl/run_log.py); read-only, the policy is not affected
@@ -30,6 +31,7 @@ OUT_DIR = pathlib.Path(os.environ.get("SNR_OUT_DIR", ROOT / "runs"))  # where vi
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 USE_SHIELD = os.environ.get("SNR_SHIELD", "1") != "0"  # inter-robot safety layer on/off
 DEMO = os.environ.get("SNR_DEMO")  # "se" / "sw": record a demo video from an angled camera (visual-only extras in the world)
+RECORD = os.environ.get("SNR_RECORD", "1") != "0"  # SNR_RECORD=0 with SNR_DEMO: demo view and coloured goal discs, but no video
 LOG = bool(os.environ.get("SNR_LOG"))  # per-second position / collision-signal table + per-step CSV (rl/run_log.py)
 import gen_world, layout as L, vision
 from gzsim import GzSim
@@ -99,7 +101,7 @@ def run_layout(policy, seed, video=None):
         vel = {i: np.zeros(2) for i in range(4)}
         status = {i: "running" for i in range(4)}
         t_done = {i: None for i in range(4)}
-        if DEMO:
+        if DEMO and RECORD:
             from demo_video import DemoRecorder
             rec = DemoRecorder(sim, OUT_DIR / f"demo_seed{seed}.avi", seed, status, t_done)
             sim.step(20)  # a moment of stillness before the robots start (they are not commanded yet)

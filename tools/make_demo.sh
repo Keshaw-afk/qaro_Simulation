@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Demo of one layout from the angled camera: records runs/demo/demo_seed{SEED}.mp4 (exact, stepped), then with "live"
 # plays the same layout in real time in the Gazebo window, opened on the same view. Pick layouts with tools/demo_layouts.py.
-#   bash tools/make_demo.sh SEED [se|sw] [live|live-only]      (live-only: skip recording, just play it in the window)
+#   bash tools/make_demo.sh SEED [se|sw] [live|live-only|watch]
+#     live-only: skip the stepped recording, play it in the window (still saves that live run's video)
+#     watch:     only the Gazebo window (angled view, coloured goal discs), nothing recorded or saved
 # Another controller: SNR_SPEC=SPEC (as in benchmark/evaluate_all.py, e.g. npz:runs/benchmark/dqn/final_s2/best.npz or rule)
 # and SNR_NAME=NAME; videos then go to runs/demo/NAME/ (default: PPO, weights/final_policy.npz, runs/demo/).
 # SNR_CAPTION sets the overlay text after "4 robots, " (default "one shared RL policy").
@@ -30,6 +32,11 @@ to_mp4() {  # DIR: demo_seed$SEED.avi -> H.264 .mp4 (plays everywhere); keeps th
         echo "no H.264 ffmpeg found: video left as $PWD/$1/demo_seed$SEED.avi"
     fi
 }
+
+if [ "$LIVE" = watch ]; then
+    run /tmp SNR_LIVE=1 SNR_RECORD=0
+    exit 0
+fi
 
 if [ "$LIVE" != live-only ]; then
     mkdir -p $D
