@@ -8,6 +8,11 @@ runs/
 checkpoints/*.zip
 *.log
 rl/pool_*.npz
+# ...except the two pools the published results use: pool_train.npz was built with an older generator and can NOT be
+# regenerated identically (benchmark/LOGBOOK.md); never delete or rebuild it
+!rl/pool_train.npz
+!rl/pool_eval.npz
+# runs/ stays ignored, but the benchmark's final models and logs are force-added (git add -f), see benchmark/RESULTS.md
 
 # local tooling
 .claude/

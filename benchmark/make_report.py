@@ -466,7 +466,10 @@ ul.tight li, ol.tight li {{ margin-bottom: 1.2mm; }}
 if __name__ == "__main__":
     OUT_HTML.parent.mkdir(parents=True, exist_ok=True)
     OUT_HTML.write_text(build())
-    chrome = "google-chrome"
+    import shutil
+    chrome = next((c for c in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser") if shutil.which(c)), None)
+    if chrome is None:
+        sys.exit(f"wrote {OUT_HTML}; no Chrome/Chromium found to print it to PDF (open it in a browser and print instead)")
     subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-pdf-header-footer", f"--print-to-pdf={OUT_PDF}",
                     "--virtual-time-budget=5000", OUT_HTML.as_uri()], check=True, capture_output=True)
     print("wrote", OUT_PDF, OUT_PDF.stat().st_size, "bytes", file=sys.stderr)

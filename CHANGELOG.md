@@ -3,6 +3,9 @@
 Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-policy`, `v0.4-gui`, `v1.0-navigation-demo`.
 
 ## Unreleased
+- Reproducibility: both layout pools and the benchmark's final models + training logs are now tracked (`rl/pool_*.npz`,
+  `runs/benchmark/{dqn,tabq}/*/{best.npz,best.json,log.csv}`, `runs/benchmark/rule_tuning.json`); `benchmark/RESULTS.md`
+  Reproduce section in three levels; AGENTS.md benchmark section; `make_report.py` also finds Chromium.
 - Benchmark (`benchmark/`, branch `benchmark-policies`): PPO vs tabular Q-learning, DQN, a sensor-only rule controller,
   the privileged DWA planner and go-to-goal, with a pre-registered protocol, held-out test layouts 100-199, bootstrap
   intervals, safety layer on/off, Gazebo confirmation, full time/energy logging. Results: `benchmark/RESULTS.md`.

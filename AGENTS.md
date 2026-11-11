@@ -38,6 +38,19 @@ If `.venv` does not exist, only the second group is unavailable; do not install 
 | Train | `.venv/bin/python rl/train.py RUN 8e6` (about 2 h on the development machine; writes `runs/RUN/`) |
 Argument conventions: `eval_gazebo.py WEIGHTS N_END [N_VIDEO_END]` runs layouts `SNR_FIRST .. N_END-1`. Full variable list in its docstring.
 
+## Benchmark and stress tests (branch `benchmark-policies`)
+PPO against DQN, a rule controller, tabular Q, DWA and go-to-goal: write-up `benchmark/RESULTS.md` (its **Reproduce** section has three
+levels: recompute tables from committed raw files in a minute; re-evaluate the committed models; retrain, hours, DQN on a GPU), protocol
+`benchmark/PROTOCOL.md`, logbook `benchmark/LOGBOOK.md`, PDF `benchmark/REPORT.pdf`. Hand-designed crossing layouts 9001-9005:
+`docs/DESIGNED_LAYOUTS.md`. Controller specs (`npz:PATH`, `tabq:PATH`, `rule`, `dwa`, `goto`) are documented in `benchmark/evaluate_all.py`.
+Never tune or select anything on the test layouts 100-199 or on the designed layouts 9001-9005.
+
+Watching runs: `bash tools/make_demo.sh SEED se watch` opens the Gazebo window from the angled demo view with coloured goal discs and
+records nothing (`live` / `live-only` also record videos to `runs/demo/`). Environment variables it passes on: `SNR_SPEC=SPEC` (another
+controller, e.g. `npz:runs/benchmark/dqn/final_s2/best.npz` or `rule`), `SNR_NAME` (output subfolder), `SNR_CAPTION` (overlay title),
+`SNR_SHIELD=0` (safety layer off), `SNR_RECORD=0` (set by `watch`). Without ROS on the host it re-runs itself in a distrobox
+(`SNR_CONTAINER`, default `ubuntu`).
+
 ## What success looks like
 - `make test` ends with `shield tests passed` (and `PARITY OK (observations + action table)` if `.venv` exists).
 - A Gazebo evaluation prints one line per layout, e.g. `seed   4: ['success', 'success', 'success', 'success']  (165 policy steps, 93s elapsed)`
@@ -51,7 +64,9 @@ Argument conventions: `eval_gazebo.py WEIGHTS N_END [N_VIDEO_END]` runs layouts 
 3. **Headless evaluation is lockstep**: the world is paused and stepped (`GzSim.step`); do not press play or call unpause. Live mode (`SNR_LIVE=1`) is the exception: it plays in real time (`GzSim.play`).
 4. **Observation, action table and layout generator are shared contracts** between the 2D env, deployment and Gazebo: change them in one place only (`rl/actions.py`, `OBS` code in `rl/arena_env.py` + `rl/deploy.py`, `tools/layout.py`) and run `tests/test_obs_parity.py`. Changing them invalidates trained weights.
 5. **Evaluation layouts are seeds 0-199; training uses seeds >= 1000.** Never train on, or tune against, evaluation seeds without saying so.
-6. **Do not commit** `runs/`, `rl/pool_*.npz`, `.venv/`, videos or screenshots (see `.gitignore`). The only tracked weights are `weights/final_policy.npz`.
+6. **Do not commit** `runs/`, `.venv/`, videos or screenshots (see `.gitignore`). Tracked on purpose: `weights/final_policy.npz`, both layout pools
+   `rl/pool_{train,eval}.npz`, and the benchmark's final models and logs under `runs/benchmark/` (force-added). **Never delete or rebuild
+   `rl/pool_train.npz`:** it comes from an older generator and cannot be regenerated identically (`benchmark/LOGBOOK.md`).
 7. Report results honestly: quote counts (e.g. 73/80 robots) and what was not diagnosed; do not round up. `runs/gazebo_results.json` is overwritten by every run, so copy results you want to keep (the app writes to `runs/gui/`).
 8. Gazebo runs are slow (about 1 minute per layout, 2-3 minutes in the big arena): run long jobs in the background and poll sparingly.
 

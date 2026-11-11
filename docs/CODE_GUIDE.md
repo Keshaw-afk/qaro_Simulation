@@ -44,7 +44,7 @@ Environment variables of `eval_gazebo.py` (full list in its docstring; also `SNR
 - **Change the actions**: edit only `rl/actions.py`; the network output size changes, so retrain; run the parity test.
 - **Change the reward**: `ArenaVecEnv.step_wait` in `arena_env.py`. Keep terms small relative to the +10 goal / -15 collision, retrain and compare using `docs/run10_eval.csv` as the reference curve.
 - **Change robot dimensions**: `config/robot.yaml`, plus the constants at the top of `arena_env.py` (`R_ROBOT`, `HEAD_R`, ...), `ROBOT_RADIUS` in `tools/layout.py`; rebuild the layout pools.
-- **Change layouts** (obstacle count/size, arena size): `tools/layout.py`; delete `rl/pool_*.npz`; `python3 tests/test_layout.py`.
+- **Change layouts** (obstacle count/size, arena size): `tools/layout.py`; `python3 tests/test_layout.py`. This invalidates the committed pools and every published result: write new pools to new file names (`rl/pool.py build(seeds, path)`) instead of deleting `rl/pool_train.npz`, which cannot be regenerated identically.
 - **Add a designed layout**: add an entry to `DESIGNS` in `tools/designed_layouts.py` (id 9001+, at most 8 boxes), run `python3 tools/designed_layouts.py docs/designed_layouts`; tools load layouts through `layout.get_layout(seed)`, so nothing else changes.
 - **Train a new model**: `.venv/bin/python rl/train.py run11 8e6`; the GUI lists any `runs/**/*.npz`; copy a good one to `weights/`.
 - **Tune the safety layer**: constants at the top of `rl/shield.py` (`HORIZON`, `MARGIN`); evaluate with the 2D CLI both with and without it.

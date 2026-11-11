@@ -1,0 +1,752 @@
+[
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.835,
+  "collision": 0.0125,
+  "timeout": 0.1525,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.884131736526946
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.765,
+  "collision": 0.02,
+  "timeout": 0.215,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.724183006535949
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.8225,
+  "collision": 0.0225,
+  "timeout": 0.155,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.911854103343465
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.7625,
+  "collision": 0.0275,
+  "timeout": 0.21,
+  "coll_obstacle": 0.025,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.771147540983607
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.84,
+  "collision": 0.015,
+  "timeout": 0.145,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.91904761904762
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.775,
+  "collision": 0.0225,
+  "timeout": 0.2025,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.820967741935483
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.79,
+  "collision": 0.015,
+  "timeout": 0.195,
+  "coll_obstacle": 0.0125,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.80981012658228
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.725,
+  "collision": 0.015,
+  "timeout": 0.26,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.646206896551725
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.7975,
+  "collision": 0.025,
+  "timeout": 0.1775,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.908150470219436
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.735,
+  "collision": 0.0225,
+  "timeout": 0.2425,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.74965986394558
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.8,
+  "collision": 0.015,
+  "timeout": 0.185,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.8990625
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.725,
+  "collision": 0.0225,
+  "timeout": 0.2525,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.731724137931035
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.8275,
+  "collision": 0.0225,
+  "timeout": 0.15,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.716314199395772
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.75,
+  "collision": 0.0275,
+  "timeout": 0.2225,
+  "coll_obstacle": 0.0275,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.941
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.82,
+  "collision": 0.0275,
+  "timeout": 0.1525,
+  "coll_obstacle": 0.0275,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.752743902439025
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.7425,
+  "collision": 0.0225,
+  "timeout": 0.235,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.892255892255893
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.8175,
+  "collision": 0.015,
+  "timeout": 0.1675,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.781957186544343
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.765,
+  "collision": 0.01,
+  "timeout": 0.225,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.973529411764707
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.8025,
+  "collision": 0.0125,
+  "timeout": 0.185,
+  "coll_obstacle": 0.0125,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.78753894080997
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.6975,
+  "collision": 0.015,
+  "timeout": 0.2875,
+  "coll_obstacle": 0.015,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 11.010035842293908
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.795,
+  "collision": 0.0125,
+  "timeout": 0.1925,
+  "coll_obstacle": 0.0125,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.731132075471699
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.705,
+  "collision": 0.01,
+  "timeout": 0.285,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.93581560283688
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.81,
+  "collision": 0.01,
+  "timeout": 0.18,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.932407407407409
+ },
+ {
+  "params": {
+   "horizon": 1.5,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.715,
+  "collision": 0.0125,
+  "timeout": 0.2725,
+  "coll_obstacle": 0.0125,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 11.001398601398602
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.835,
+  "collision": 0.0125,
+  "timeout": 0.1525,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 12.148502994011977
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.755,
+  "collision": 0.005,
+  "timeout": 0.24,
+  "coll_obstacle": 0.005,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.526821192052982
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.8275,
+  "collision": 0.01,
+  "timeout": 0.1625,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.035649546827795
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.7025,
+  "collision": 0.005,
+  "timeout": 0.2925,
+  "coll_obstacle": 0.005,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.484341637010678
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.7475,
+  "collision": 0.01,
+  "timeout": 0.2425,
+  "coll_obstacle": 0.01,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.206020066889632
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.5425,
+  "collision": 0.0075,
+  "timeout": 0.45,
+  "coll_obstacle": 0.0075,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.451612903225808
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.78,
+  "collision": 0.0025,
+  "timeout": 0.2175,
+  "coll_obstacle": 0.0025,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 11.944551282051282
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 0.5,
+   "w_head": 1.0
+  },
+  "success": 0.71,
+  "collision": 0.0025,
+  "timeout": 0.2875,
+  "coll_obstacle": 0.0025,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.567605633802819
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 0.3
+  },
+  "success": 0.795,
+  "collision": 0.005,
+  "timeout": 0.2,
+  "coll_obstacle": 0.005,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.147798742138365
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 1.0,
+   "w_head": 1.0
+  },
+  "success": 0.655,
+  "collision": 0.0025,
+  "timeout": 0.3425,
+  "coll_obstacle": 0.0025,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.502290076335878
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.7125,
+  "collision": 0.0075,
+  "timeout": 0.28,
+  "coll_obstacle": 0.005,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 12.356842105263159
+ },
+ {
+  "params": {
+   "horizon": 2.0,
+   "margin": 0.05,
+   "w_clear": 2.0,
+   "w_head": 1.0
+  },
+  "success": 0.515,
+  "collision": 0.005,
+  "timeout": 0.48,
+  "coll_obstacle": 0.005,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 12.509223300970874
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.01,
+   "w_clear": 0.5,
+   "w_head": 0.1
+  },
+  "success": 0.84,
+  "collision": 0.0725,
+  "timeout": 0.0875,
+  "coll_obstacle": 0.0725,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.573214285714286
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.01,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.83,
+  "collision": 0.06,
+  "timeout": 0.11,
+  "coll_obstacle": 0.06,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.529518072289157
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.01,
+   "w_clear": 2.0,
+   "w_head": 0.1
+  },
+  "success": 0.8575,
+  "collision": 0.06,
+  "timeout": 0.0825,
+  "coll_obstacle": 0.06,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.764139941690964
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.01,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.83,
+  "collision": 0.055,
+  "timeout": 0.115,
+  "coll_obstacle": 0.055,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.611746987951808
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.1
+  },
+  "success": 0.8575,
+  "collision": 0.03,
+  "timeout": 0.1125,
+  "coll_obstacle": 0.0275,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0025,
+  "time_s": 9.713702623906705
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.8475,
+  "collision": 0.0275,
+  "timeout": 0.125,
+  "coll_obstacle": 0.0275,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.653392330383483
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.1
+  },
+  "success": 0.8725,
+  "collision": 0.0225,
+  "timeout": 0.105,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.855587392550143
+ },
+ {
+  "params": {
+   "horizon": 0.7,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.8425,
+  "collision": 0.0225,
+  "timeout": 0.135,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.689614243323442
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.01,
+   "w_clear": 0.5,
+   "w_head": 0.1
+  },
+  "success": 0.835,
+  "collision": 0.06,
+  "timeout": 0.105,
+  "coll_obstacle": 0.0575,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.834131736526947
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.01,
+   "w_clear": 0.5,
+   "w_head": 0.3
+  },
+  "success": 0.8225,
+  "collision": 0.0425,
+  "timeout": 0.135,
+  "coll_obstacle": 0.04,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.809118541033435
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.01,
+   "w_clear": 2.0,
+   "w_head": 0.1
+  },
+  "success": 0.855,
+  "collision": 0.05,
+  "timeout": 0.095,
+  "coll_obstacle": 0.05,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 9.95906432748538
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.01,
+   "w_clear": 2.0,
+   "w_head": 0.3
+  },
+  "success": 0.8275,
+  "collision": 0.04,
+  "timeout": 0.1325,
+  "coll_obstacle": 0.0375,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.9583081570997
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 0.5,
+   "w_head": 0.1
+  },
+  "success": 0.85,
+  "collision": 0.025,
+  "timeout": 0.125,
+  "coll_obstacle": 0.0225,
+  "coll_wall": 0.0025,
+  "coll_robot": 0.0,
+  "time_s": 9.928529411764707
+ },
+ {
+  "params": {
+   "horizon": 1.0,
+   "margin": 0.02,
+   "w_clear": 2.0,
+   "w_head": 0.1
+  },
+  "success": 0.865,
+  "collision": 0.02,
+  "timeout": 0.115,
+  "coll_obstacle": 0.02,
+  "coll_wall": 0.0,
+  "coll_robot": 0.0,
+  "time_s": 10.000289017341041
+ }
+]

@@ -151,13 +151,42 @@ replay buffer) were the bottleneck. Colab's real contribution was extra RAM and 
 - CPU energy is an estimate; per-job CPU time and wall time are measured.
 
 ## Reproduce
+Everything the numbers depend on is in the repository: the raw per-robot results (`results/`), the trained models and
+their training logs (`runs/benchmark/{dqn,tabq}/*/best.npz`, `log.csv`, force-added although `runs/` is ignored), the
+rule controller's tuning (`runs/benchmark/rule_tuning.json`, `results/rule_best_params.json`) and both layout pools.
+**Never delete or rebuild `rl/pool_train.npz`:** it was built with an older layout generator (LOGBOOK.md); a rebuilt
+pool differs on 385 of 2000 layouts, which silently changes the validation layouts and any retraining.
+Run from the repository root unless a line says `cd benchmark`. Environments as in `AGENTS.md` (`.venv` for 2D and
+training, system `python3` with ROS sourced for Gazebo).
+
+**Level 1: recompute every table and the PDF from the committed raw files (about 1 minute)**
 ```
-bash benchmark/run_tabq_final.sh a                 # tabular Q finals (laptop, distrobox)
-bash benchmark/run_dqn_tuning.sh && bash benchmark/run_dqn_final.sh   # DQN (Colab, GPU)
-.venv/bin/python benchmark/rule.py tune 2 && .venv/bin/python benchmark/rule.py tune_ext 7
-cd benchmark && ../.venv/bin/python evaluate_all.py NAME=SPEC ...     # 2D test + reference, shield on/off
-bash benchmark/run_remaining.sh                     # evaluations + Gazebo (needs ROS)
-.venv/bin/python benchmark/make_results.py          # all tables above
-python3 benchmark/make_report.py                    # REPORT.pdf (host Python + Chrome)
-.venv/bin/python benchmark/test_benchmark.py --slow # harness tests (PPO regression 91.5/4.0/4.5)
+.venv/bin/python benchmark/make_results.py          # all tables above, rewrites results/summary.json (should not change)
+python3 benchmark/make_report.py                    # REPORT.pdf; plain Python 3 (no packages) + google-chrome or chromium on PATH
+.venv/bin/python benchmark/test_benchmark.py        # harness tests; add --slow for the PPO regression (91.5/4.0/4.5)
 ```
+
+**Level 2: re-evaluate the committed models (2D: about 2-8 minutes per model; Gazebo: about 20-30 minutes per model)**
+```
+cd benchmark && ../.venv/bin/python evaluate_all.py ppo=npz:../weights/final_policy.npz \
+    dqn_s2=npz:../runs/benchmark/dqn/final_s2/best.npz rule=rule tabq_s3=tabq:../runs/benchmark/tabq/final_s3/best.npz dwa=dwa goto=goto
+# -> results/raw/NAME__{test,ref0-99}__shield{1,0}.json (deterministic: identical files)
+source /opt/ros/jazzy/setup.bash
+GZ_PARTITION=bench_ppo .venv/bin/python benchmark/eval_gazebo_bench.py ppo npz:weights/final_policy.npz 100 120
+GZ_PARTITION=bench_dqn .venv/bin/python benchmark/eval_gazebo_bench.py dqn_s2 npz:runs/benchmark/dqn/final_s2/best.npz 100 120
+GZ_PARTITION=bench_rule .venv/bin/python benchmark/eval_gazebo_bench.py rule rule 100 120
+cd benchmark && ../.venv/bin/python eval_designed.py   # designed crossing layouts 9001-9005 (docs/DESIGNED_LAYOUTS.md)
+```
+2D results are deterministic. Gazebo results vary by a few robots between runs (real-time sensor timing), so expect
+the counts to differ slightly, not exactly.
+
+**Level 3: retrain (hours; DQN needs a GPU)**
+```
+bash benchmark/run_tabq_tuning.sh && bash benchmark/run_tabq_final.sh a   # tabular Q (CPU, about 6 h)
+bash benchmark/run_dqn_tuning.sh && bash benchmark/run_dqn_final.sh       # DQN (GPU; run on Colab: about 1.7 h per seed on a T4)
+.venv/bin/python benchmark/rule.py tune 2 && .venv/bin/python benchmark/rule.py tune_ext 7   # rule controller (about 2 h)
+bash benchmark/run_remaining.sh                     # evaluations + Gazebo, unattended (needs ROS)
+```
+Retrained models will not match bit for bit (GPU nondeterminism, thread scheduling); the protocol (PROTOCOL.md) fixes the
+seeds, budgets and selection rules, so results should land within the reported intervals. The DQN finals were stopped
+at 6M of the planned 8M steps (amendment 4); change `8e6` to `6e6` in `run_dqn_final.sh` to reproduce that.
