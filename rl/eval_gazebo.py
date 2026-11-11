@@ -69,7 +69,7 @@ def aim_gui(sim, pose, timeout=20.0):
 
 
 def run_layout(policy, seed, video=None):
-    lay = L.generate_layout(seed)
+    lay = L.get_layout(seed)
     sdf = TMP / f"eval_{seed}.sdf"
     sdf.write_text(gen_world.world_sdf(lay, real_time=LIVE, demo_cam=DEMO))
     simlog = TMP / f"eval_{seed}.simlog"  # simulator output, kept so a startup failure can be diagnosed

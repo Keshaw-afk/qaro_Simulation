@@ -114,4 +114,4 @@ def world_sdf(lay, real_time=False, demo_cam=None):
 
 if __name__ == "__main__":
     seed, out = int(sys.argv[1]), sys.argv[2]
-    open(out, "w").write(world_sdf(L.generate_layout(seed), real_time="--rt" in sys.argv, demo_cam="se" if "--demo" in sys.argv else None))
+    open(out, "w").write(world_sdf(L.get_layout(seed), real_time="--rt" in sys.argv, demo_cam="se" if "--demo" in sys.argv else None))

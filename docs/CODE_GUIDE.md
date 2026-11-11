@@ -20,6 +20,7 @@ check when you change something.
 | `tools/layout.py` | Random layout generator with the no-softlock guarantee and camera-visibility rule. Shared by Gazebo and the 2D env. | scipy |
 | `rl/run_log.py` | Per-second robot table (position, speed, distance to goal, clearance, near misses, safety-layer interventions) and per-step CSV for `SNR_LOG=1`. Read-only. | |
 | `rl/demo_video.py` | Records the angled demo camera to a video with a status overlay (`SNR_DEMO`). | ROS sourced |
+| `tools/designed_layouts.py` | Hand-designed crossing layouts 9001-9005 (`get_layout(seed)` in `layout.py` returns them); checks them and draws their maps. See `DESIGNED_LAYOUTS.md`. | scipy, OpenCV for maps |
 | `tools/make_demo.sh`, `tools/demo_layouts.py` | One-command demo (video, optional live view) and the ranked list of layouts that make good demos. | ROS sourced |
 | `tools/robot_sdf.py`, `tools/gen_world.py` | Generate the robot and the world SDF files (`world_sdf(..., demo_cam="se")` adds the visual-only demo camera, floor and goal discs). | |
 | `tools/gzsim.py` | Lockstep Gazebo control and sensor reads over gz-transport. | ROS sourced |
@@ -44,6 +45,7 @@ Environment variables of `eval_gazebo.py` (full list in its docstring; also `SNR
 - **Change the reward**: `ArenaVecEnv.step_wait` in `arena_env.py`. Keep terms small relative to the +10 goal / -15 collision, retrain and compare using `docs/run10_eval.csv` as the reference curve.
 - **Change robot dimensions**: `config/robot.yaml`, plus the constants at the top of `arena_env.py` (`R_ROBOT`, `HEAD_R`, ...), `ROBOT_RADIUS` in `tools/layout.py`; rebuild the layout pools.
 - **Change layouts** (obstacle count/size, arena size): `tools/layout.py`; delete `rl/pool_*.npz`; `python3 tests/test_layout.py`.
+- **Add a designed layout**: add an entry to `DESIGNS` in `tools/designed_layouts.py` (id 9001+, at most 8 boxes), run `python3 tools/designed_layouts.py docs/designed_layouts`; tools load layouts through `layout.get_layout(seed)`, so nothing else changes.
 - **Train a new model**: `.venv/bin/python rl/train.py run11 8e6`; the GUI lists any `runs/**/*.npz`; copy a good one to `weights/`.
 - **Tune the safety layer**: constants at the top of `rl/shield.py` (`HORIZON`, `MARGIN`); evaluate with the 2D CLI both with and without it.
 

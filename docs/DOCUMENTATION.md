@@ -28,6 +28,11 @@ slightly optimistic: on clean layouts 100-199 it is 90.2% (Gazebo 100-119: 91.2%
 The training pool `rl/pool_train.npz` predates the goal-visibility rule (built with `tools/layout.py` from 06418bd; 385 of 2000 layouts
 differ from today's generator); see `benchmark/LOGBOOK.md`.
 
+**Designed crossing layouts (2026-11-11, `DESIGNED_LAYOUTS.md`).** Five hand-made arenas (IDs 9001-9005: crossroads,
+roundabout, single door, pillar forest, corridor swap) force every robot to meet the others. 2D, safety layer on: PPO 70%,
+DQN 80%, rule controller 70% of 20 robots, only 2 robot-robot collisions in 120 robot runs; layer off: 80% of PPO's robots crash
+into another robot. Exploratory (5 layouts), not a ranking.
+
 ## 3. System overview
 ```
 overhead camera -> AprilTag detection (tools/vision.py) -> robot poses, goal positions, velocities (frame differencing)

@@ -6,6 +6,10 @@ Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-p
 - Benchmark (`benchmark/`, branch `benchmark-policies`): PPO vs tabular Q-learning, DQN, a sensor-only rule controller,
   the privileged DWA planner and go-to-goal, with a pre-registered protocol, held-out test layouts 100-199, bootstrap
   intervals, safety layer on/off, Gazebo confirmation, full time/energy logging. Results: `benchmark/RESULTS.md`.
+- Designed crossing layouts 9001-9005 (`tools/designed_layouts.py`, `docs/DESIGNED_LAYOUTS.md`): crossroads, roundabout,
+  single door, pillar forest, corridor swap; every robot must meet the others. `layout.get_layout(seed)` returns them
+  (random layouts unchanged); `benchmark/eval_designed.py` runs all controllers on them in 2D. Without the safety layer
+  80% of PPO's robots crash into each other there; with it, 2 robot-robot collisions in 120 robot runs.
 - Demos for any benchmark controller: `SNR_SPEC=... SNR_NAME=... bash tools/make_demo.sh SEED se live` (via
   `benchmark/demo_bench.py`, writes nothing into the benchmark results); `SNR_CAPTION` sets the video overlay title and
   the overlay box grows to fit it. PPO, DQN seed 2 and the rule controller all 4/4 on test layout 103.

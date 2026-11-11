@@ -153,6 +153,13 @@ def generate_layout(seed, n_obstacles=None):
     raise RuntimeError(f"could not generate a valid layout for seed {seed}")
 
 
+def get_layout(seed):
+    """The layout every tool should load for a seed: a hand-designed stress test for ids 9001-9005
+    (tools/designed_layouts.py), otherwise the random generate_layout(seed) (unchanged)."""
+    import designed_layouts
+    return designed_layouts.get(seed) or generate_layout(seed)
+
+
 def robot_radius_from_config():
     cfg = yaml.safe_load(open(__file__.replace("tools/layout.py", "config/robot.yaml")))
     return cfg["chassis_radius"] + abs(cfg["lidar_x"])

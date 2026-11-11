@@ -15,7 +15,7 @@ ROWS, COLS = int(L.ARENA_H / L.GRID_RES), int(L.ARENA_W / L.GRID_RES)
 
 
 def _one(seed):
-    lay = L.generate_layout(seed)
+    lay = L.get_layout(seed)
     obst = np.tile(np.array([100.0, 100.0, 0.01, 0.01, 0.0], np.float32), (K_MAX, 1))  # padding: far-away dummy box
     obst[: len(lay.obstacles)] = lay.obstacles
     labels, _ = ndimage.label(~L.blocked_map(lay, L.ROBOT_RADIUS + L.CLEARANCE_MARGIN))
