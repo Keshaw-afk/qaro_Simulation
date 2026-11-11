@@ -177,7 +177,13 @@ GZ_PARTITION=bench_dqn .venv/bin/python benchmark/eval_gazebo_bench.py dqn_s2 np
 GZ_PARTITION=bench_rule .venv/bin/python benchmark/eval_gazebo_bench.py rule rule 100 120
 cd benchmark && ../.venv/bin/python eval_designed.py   # designed crossing layouts 9001-9005 (docs/DESIGNED_LAYOUTS.md)
 ```
-2D results are deterministic. Gazebo results vary by a few robots between runs (real-time sensor timing), so expect
+2D results are deterministic for a given software build. Exact environment of the published numbers: Ubuntu 24.04, Python
+3.12.3, Ubuntu's numpy 1.26.4 and scipy 1.11.4 (apt, venv with `--system-site-packages`), torch 2.14.1 (CPU),
+stable-baselines3 2.9.0, gymnasium 1.4.0. A pip-only environment (pip's numpy wheel with its own BLAS, scipy 1.17.1,
+torch 2.15.0, sb3 2.9.2; checked 2026-11-11 on all 100 test layouts, safety layer on) gave identical outcomes for PPO and
+the rule controller on all 400 robots, and for DQN on 399 of 400 (success 89.75% instead of 90.0%): floating-point
+rounding differs between BLAS builds and occasionally flips a close decision. Designed layouts in that environment: same
+outcomes, DQN finish times shifted by a few steps on one layout. Gazebo results vary by a few robots between runs (real-time sensor timing), so expect
 the counts to differ slightly, not exactly.
 
 **Level 3: retrain (hours; DQN needs a GPU)**

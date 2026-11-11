@@ -26,6 +26,9 @@ python3 -m venv .venv
 .venv/bin/python benchmark/make_results.py      # recomputes every benchmark table (benchmark/RESULTS.md, Reproduce)
 ```
 `rl/pool_train.npz` and `rl/pool_eval.npz` are in the repository: never delete them (see `AGENTS.md` rule 6).
+A pip-only environment reproduces the published 2D outcomes for PPO and the rule controller exactly and DQN on 399 of 400
+test robots (floating-point differences between BLAS builds); for bit-identical numbers use the exact environment listed in
+`benchmark/RESULTS.md` (Reproduce).
 
 ## 1. System packages (Ubuntu 24.04)
 ```
