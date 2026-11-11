@@ -12,13 +12,10 @@ the held-out test layouts 100-199 in 2D), `docs/DESIGNED_LAYOUTS.md` (adversaria
 | PPO | 8M steps, about 2 h on the laptop CPU (original project) | 92,717 weights, 372 KB | 113 µs / 98 µs | 0.127 m/s | 0.97 | 10.9 s | 218 | 4% |
 | DQN (seed 2) | 6M steps, 1.7 h on a Colab T4 GPU (about 960 steps/s); tuning 6 x 1M steps, 1.0 h | 92,717 weights, 372 KB | 83 µs / 84 µs | 0.090 m/s | 0.96 | 16.1 s | 249 | 10% |
 | Rule controller | No training; 50 parameter sets tuned, 1.7 h (4.3 CPU-h) | 7 parameters | 160 µs / 1.25 ms | 0.085 m/s | 0.99 | 9.6 s | 12 | 1% |
-| Tabular Q (seed 3) | 13 training runs, 6.4 h (6.3 CPU-h) | 291,600-entry table, 1.2 MB | 144 µs / - | 0.087 m/s | 0.86 | 15.9 s | 204 | 12% |
 | DWA (privileged³) | None | none | not timed (needs simulator state) | 0.066 m/s | 0.93 | 11.9 s | 4 | 0% |
-| Go-to-goal | None | none | 22 µs / - | 0.118 m/s | 1.07⁴ | 8.9 s | 14 | 7% |
 
 ¹ Straight-line distance / distance driven (1.0 = perfectly direct). ² Mean over robots that reached their goal.
-³ Uses the true map of the arena, so it cannot be deployed on the real robots. ⁴ Can exceed 1: a robot may stop up to
-0.15 m short of the goal centre. Every model decides in under 2% of the 100 ms decision period.
+³ Uses the true map of the arena, so it cannot be deployed on the real robots. Every model decides in under 2% of the 100 ms decision period.
 
 ## Verdict
 
@@ -27,7 +24,6 @@ the held-out test layouts 100-199 in 2D), `docs/DESIGNED_LAYOUTS.md` (adversaria
 | PPO | Among the best: fast and direct, but its steering wobbles constantly. | Fine at open crossings; breaks down at doors and narrow gaps, and crashes into robots without the safety layer. |
 | DQN | On par with PPO but more cautious: slower, stops more, crashes less, wobbles as much. | Held up best in 2D; when it fails it gets stuck rather than crashes. |
 | Rule controller | Slightly behind the learned policies; the smoothest, steadiest driver, but gets trapped behind clusters of obstacles. | Good in corridors and at the door in 2D, but deadlocks around a central pillar and stalls in clutter. |
-| Tabular Q | Clearly weaker: indirect paths, frequent obstacle hits. | Fails almost everywhere except the easy crossroads. |
 | DWA (privileged) | Decent, very smooth but slow; not deployable (needs the true map). | Stalls often, even with the true map. |
 | Go-to-goal | Baseline only: crashes whenever something is in the way. | Fails almost everywhere. |
 
