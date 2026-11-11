@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Model comparison</title>
+<style>
+@page { size: A4 landscape; margin: 11mm 12mm; }
+:root { --ink:#1d2433; --muted:#5d6678; --line:#dfe3ea; --band:#f5f7fa; --accent:#2a78d6; }
+* { box-sizing: border-box; }
+body { font-family: "Noto Sans", "DejaVu Sans", sans-serif; color: var(--ink); margin: 0; font-size: 9.2pt; background:#fff; }
+header { display:flex; justify-content:space-between; align-items:flex-end; border-bottom: 2.5px solid var(--ink); padding-bottom: 5px; margin-bottom: 9px; }
+h1 { font-size: 17pt; margin: 0; letter-spacing: -0.2px; }
+.sub { color: var(--muted); font-size: 8.6pt; margin-top: 2px; }
+.tag { font-size: 8pt; color: var(--muted); text-align:right; }
+h2 { font-size: 10.5pt; margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 7.8pt; color: var(--muted); font-weight: 600; padding: 4px 6px; border-bottom: 1.5px solid var(--ink); vertical-align: bottom; }
+td { padding: 4.5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:nth-child(even) td { background: var(--band); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+th.num { text-align: right; }
+.m { white-space: nowrap; font-weight: 700; }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; vertical-align: 0px; }
+.small { color: var(--muted); font-size: 7.6pt; font-weight: 400; display:block; }
+.hi { font-weight: 700; }
+.note { color: var(--muted); font-size: 7.6pt; margin-top: 5px; line-height: 1.35; }
+.verdict td { font-size: 8.8pt; line-height: 1.3; }
+.verdict td:nth-child(2), .verdict td:nth-child(3) { width: 43%; }
+</style></head><body>
+<header>
+  <div><h1>Navigation models: cost, decision time and driving</h1>
+  <div class="sub">Four robots, shared policy, safety layer on. Driving figures: 400 robots on held-out test layouts 100&ndash;199 (2D). No success or collision figures on this page; those are in benchmark/RESULTS.md.</div></div>
+  <div class="tag">qaro swarm_nav_rl<br>benchmark 2026-11-10 &middot; arenas 9001&ndash;9005 2026-11-11</div>
+</header>
+
+<h2>Resources and driving</h2>
+<table>
+<tr><th>Model</th><th>Training / tuning cost</th><th>Model size</th><th class="num">Decision time<span class="small">2D / Gazebo, median</span></th><th class="num">Avg speed</th><th class="num">Path<br>efficiency&sup1;</th><th class="num">Time to<br>goal&sup2;</th><th class="num">Steering<br>flips / min</th><th class="num">Time<br>stopped</th></tr>
+<tr><td class="m"><span class="dot" style="background:#2a78d6"></span>PPO</td><td>8M steps, about 2 h, laptop CPU<span class="small">original project</span></td><td>92,717 weights<span class="small">372 KB</span></td><td class="num">113 &micro;s / 98 &micro;s</td><td class="num">0.127 m/s</td><td class="num">0.97</td><td class="num">10.9 s</td><td class="num hi">218</td><td class="num">4%</td></tr>
+<tr><td class="m"><span class="dot" style="background:#eb6834"></span>DQN <span class="small">seed 2</span></td><td>6M steps, 1.7 h, Colab T4 GPU<span class="small">about 960 steps/s; tuning 6 &times; 1M steps, 1.0 h</span></td><td>92,717 weights<span class="small">372 KB</span></td><td class="num">83 &micro;s / 84 &micro;s</td><td class="num">0.090 m/s</td><td class="num">0.96</td><td class="num">16.1 s</td><td class="num hi">249</td><td class="num">10%</td></tr>
+<tr><td class="m"><span class="dot" style="background:#1baf7a"></span>Rule controller</td><td>No training; 50 parameter sets tuned<span class="small">1.7 h (4.3 CPU-h)</span></td><td>7 parameters</td><td class="num">160 &micro;s / 1.25 ms</td><td class="num">0.085 m/s</td><td class="num">0.99</td><td class="num">9.6 s</td><td class="num">12</td><td class="num">1%</td></tr>
+<tr><td class="m"><span class="dot" style="background:#eda100"></span>Tabular Q <span class="small">seed 3</span></td><td>13 training runs<span class="small">6.4 h (6.3 CPU-h)</span></td><td>291,600-entry table<span class="small">1.2 MB</span></td><td class="num">144 &micro;s / &ndash;</td><td class="num">0.087 m/s</td><td class="num">0.86</td><td class="num">15.9 s</td><td class="num">204</td><td class="num">12%</td></tr>
+<tr><td class="m"><span class="dot" style="background:#e87ba4"></span>DWA <span class="small">privileged&sup3;</span></td><td>None</td><td>none</td><td class="num">not timed<span class="small">needs simulator state</span></td><td class="num">0.066 m/s</td><td class="num">0.93</td><td class="num">11.9 s</td><td class="num">4</td><td class="num">0%</td></tr>
+<tr><td class="m"><span class="dot" style="background:#008300"></span>Go-to-goal</td><td>None</td><td>none</td><td class="num">22 &micro;s / &ndash;</td><td class="num">0.118 m/s</td><td class="num">1.07&#8308;</td><td class="num">8.9 s</td><td class="num">14</td><td class="num">7%</td></tr>
+</table>
+<div class="note">&sup1; Straight-line distance / distance driven (1.0 = perfectly direct). &sup2; Mean over robots that reached their goal. &sup3; Uses the true map of the arena, so it cannot be deployed on the real robots. &#8308; Can exceed 1: a robot may stop up to 0.15 m short of the goal centre. Every model decides in under 2% of the 100 ms decision period, so computation is not a limit for any of them.</div>
+
+<h2>Verdict</h2>
+<table class="verdict">
+<tr><th>Model</th><th>Normal arenas</th><th>Adversarial arenas (9001&ndash;9005: robots must cross)</th></tr>
+<tr><td class="m"><span class="dot" style="background:#2a78d6"></span>PPO</td><td>Among the best: fast and direct, but its steering wobbles constantly.</td><td>Fine at open crossings; breaks down at doors and narrow gaps, and crashes into robots without the safety layer.</td></tr>
+<tr><td class="m"><span class="dot" style="background:#eb6834"></span>DQN</td><td>On par with PPO but more cautious: slower, stops more, crashes less, wobbles as much.</td><td>Held up best in 2D; when it fails it gets stuck rather than crashes.</td></tr>
+<tr><td class="m"><span class="dot" style="background:#1baf7a"></span>Rule controller</td><td>Slightly behind the learned policies; the smoothest, steadiest driver, but gets trapped behind clusters of obstacles.</td><td>Good in corridors and at the door in 2D, but deadlocks around a central pillar and stalls in clutter.</td></tr>
+<tr><td class="m"><span class="dot" style="background:#eda100"></span>Tabular Q</td><td>Clearly weaker: indirect paths, frequent obstacle hits.</td><td>Fails almost everywhere except the easy crossroads.</td></tr>
+<tr><td class="m"><span class="dot" style="background:#e87ba4"></span>DWA <span class="small">privileged</span></td><td>Decent, very smooth but slow; not deployable (needs the true map).</td><td>Stalls often, even with the true map.</td></tr>
+<tr><td class="m"><span class="dot" style="background:#008300"></span>Go-to-goal</td><td>Baseline only: crashes whenever something is in the way.</td><td>Fails almost everywhere.</td></tr>
+</table>
+<div class="note">Caveats: PPO's training cost is from the original project's documentation, not measured in the benchmark. DQN's cost is for the one seed kept; three seeds were trained at the same cost each. Adversarial verdicts rest on one episode per arena, mostly in 2D (Gazebo checks only for PPO): impressions, not measurements.</div>
+</body></html>
