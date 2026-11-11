@@ -27,4 +27,4 @@ printf '%s\n' "${LAYOUTS[@]}" | grep -q "^$X " || echo "note: layout $X is not i
 echo "playing layout $X live in the Gazebo window ..."
 # own partition: another simulator (e.g. a headless run on snr_demo) would otherwise pause/step this one
 export GZ_PARTITION="instructor_demo_$$"
-exec bash "$HERE/../tools/make_demo.sh" "$X" se live-only
+exec bash "$HERE/../../tools/make_demo.sh" "$X" se live-only

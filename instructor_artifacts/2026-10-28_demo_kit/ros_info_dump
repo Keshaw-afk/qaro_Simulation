@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Static info dump of the simulation's communication graph: every channel (topic) with its message type and what this
 # project uses it for, services, models, sensors with their rates, and the ROS 2 graph. No live values are read.
-#   instructor_artifacts/ros_info_dump [LAYOUT]     (default layout 29) -> prints the report and saves it next to this script
+#   instructor_artifacts/2026-10-28_demo_kit/ros_info_dump [LAYOUT]     (default layout 29) -> prints the report and saves it next to this script
 # It starts its own paused, headless simulator on its own GZ_PARTITION, so it cannot disturb a demo or evaluation that is
 # running, and it stops only that simulator. Read-only: no project file is changed. About 2 minutes (one query per topic).
 set -euo pipefail
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
-ROOT="$(cd "$HERE/.." && pwd)"
+ROOT="$(cd "$HERE/../.." && pwd)"
 LAYOUT=${1:-29}
 [[ "$LAYOUT" =~ ^[0-9]+$ ]] || { echo "usage: ros_info_dump [LAYOUT]"; exit 1; }
 if [ ! -f /opt/ros/jazzy/setup.bash ]; then  # on the Fedora host: run inside the container

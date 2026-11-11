@@ -13,7 +13,8 @@ Milestones, newest first. Tags: `v0.1-one-robot`, `v0.2-four-robots`, `v0.3-rl-p
   single door, pillar forest, corridor swap; every robot must meet the others. `layout.get_layout(seed)` returns them
   (random layouts unchanged); `benchmark/eval_designed.py` runs all controllers on them in 2D. Without the safety layer
   80% of PPO's robots crash into each other there; with it, 2 robot-robot collisions in 120 robot runs.
-- `instructor_artifacts/model_comparison.{pdf,md,html}`: one-page summary of training cost, decision time and driving
+- `instructor_artifacts/` reorganised into dated folders (`YYYY-MM-DD_topic`, index in its README.md); `2026-11-11_controller_videos/`: PPO, DQN and rule controller on the same 4 randomly drawn arenas.
+- `instructor_artifacts/2026-11-11_model_comparison/model_comparison.{pdf,md,html}`: one-page summary of training cost, decision time and driving
   metrics per model, with a verdict for normal and adversarial arenas (no accuracy figures).
 - `make_demo.sh SEED se watch`: live Gazebo window with the angled demo view and coloured goal discs, nothing recorded
   (`SNR_RECORD=0` in `rl/eval_gazebo.py`).

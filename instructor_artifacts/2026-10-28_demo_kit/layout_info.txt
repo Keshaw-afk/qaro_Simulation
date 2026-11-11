@@ -23,6 +23,6 @@ NOTE
   succeeding in a test. A policy step is 0.1 s of simulated time.
 
 HOW TO RUN (from the repository root)
-  instructor_artifacts/instructor_demo 29                 play layout 29 live in the Gazebo window
-  instructor_artifacts/instructor_demo_advanced log 29    same, plus per-second positions and collision signals
-  instructor_artifacts/instructor_demo                    list the ready layouts
+  instructor_artifacts/2026-10-28_demo_kit/instructor_demo 29                 play layout 29 live in the Gazebo window
+  instructor_artifacts/2026-10-28_demo_kit/instructor_demo_advanced log 29    same, plus per-second positions and collision signals
+  instructor_artifacts/2026-10-28_demo_kit/instructor_demo                    list the ready layouts
